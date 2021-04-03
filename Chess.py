@@ -13,10 +13,6 @@ WIDTH, HEIGHT = 1400, 950
 WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Szachy')
 
-#
-# Game_State = str(Chess.board)
-# print (Game_State)
-
 def drawing_board():
     # DRAWING BOARD
     WINDOW.fill(PINK)
