@@ -19,15 +19,16 @@ def get_game_coord_from_mouse():
     coord = ((mouse_pos[0] - BOARD_POSITION[1])//TILE_SIZE, (mouse_pos[1] - BOARD_POSITION[0])//TILE_SIZE)
     if BOARD_END_POSITION >= mouse_pos >= BOARD_POSITION:
         return coord
+    else:
+        return None
 
-
-def selecting_tile(coord):  
+def selecting_piece(coord):
     row, col = coord[0], coord[1]
     piece = game.board[col][row]
-    if piece == "--":
-        get_game_coord_from_mouse()
-    else:
+    if piece != "--":
         return piece
+    else:
+        return None
 
 def making_move(piece_selected, base_coord, target_coord):
     row, col = target_coord[0], target_coord[1]
@@ -38,13 +39,11 @@ def making_move(piece_selected, base_coord, target_coord):
         for i in range (len(game.board)):
             print(game.board[i])
         print("\n")
-   
-def clear_click():
-    return None
 
 def main():
     clock = pygame.time.Clock()
     piece_selected = None
+    coord_selected = None
     run = True
     drawing_board()
     drawing_pieces(game.board)
@@ -53,18 +52,19 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-            if event.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed()[0]:# jezeli wcisniety LEFT MOUSE BUTTON
+            if event.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed()[0]:#jezeli wcisniety LEFT MOUSE BUTTON
                 coord = get_game_coord_from_mouse()
-                if piece_selected == None and coord != None:
-                    piece_selected = selecting_tile(coord)
+                if piece_selected == None :  # Wchodzi jeżeli nic nie jest zaznaczone i nie pozwala zaznaczyć pustego pola
+                    piece_selected = selecting_piece(coord)
                     if piece_selected == '--':
                         piece_selected = None
                         break
                     coord_selected = coord
-                elif piece_selected != "--" and piece_selected != None and coord != None:
+                elif piece_selected != None: # Wchodzi jeżeli zaznaczona jest jakas figura
                     making_move(piece_selected, coord_selected, target_coord=coord)
                     drawing_pieces(game.board)   
-                    piece_selected = clear_click()
+                    piece_selected = None
+
                     pygame.display.update()
     pygame.quit()
 
