@@ -46,7 +46,6 @@ def main():
 if __name__ == "__main__":
    main()
 
-
 #Zrobic porzadek
 #przezroczystosc pol
 # zrobic poprawne poprawnie grafike z odswiezaniem
