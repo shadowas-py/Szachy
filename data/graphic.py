@@ -12,7 +12,7 @@ def drawing_board():
     from .chessboard import Game
     WINDOW.fill(PINK)
     BOARD_WHITE_BG = pygame.transform.scale(pygame.image.load(
-        os.path.join('F:\projekty\Szachy VS\Images','white_tiles.jpg')),
+        os.path.join('Images', 'white_tiles.jpg')),
         (B_BACKGROUND_WIDTH, B_BACKGROUND_HEIGHT))
     WINDOW.blit(BOARD_WHITE_BG, (BOARD_BACKGROUND_POSITION))
     for i in range (GRID_SIZE):
