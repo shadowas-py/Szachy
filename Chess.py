@@ -29,7 +29,7 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-            if event.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed()[0]:  # jezeli wcisniety LEFT MOUSE BUTTON
+            if event.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed(3)[0]:  # jezeli wcisniety LEFT MOUSE BUTTON
                 coord = get_game_coord_from_mouse()
                 if piece_selected is None:  # Wchodzi jeżeli nic nie jest zaznaczone
                     piece_selected = selecting_piece(game.board, coord, active_player)
@@ -51,7 +51,6 @@ def main():
 if __name__ == "__main__":
     main()
 
-# zrobic poprawne poprawnie grafike z odswiezaniem
 # przezroczystosc pol
 # 1.Zdefiniowac figury
 # 2.Promocja piona
