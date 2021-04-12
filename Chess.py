@@ -24,6 +24,7 @@ def main():
     drawing_pieces(game.board)
     pygame.display.update()
     while run:
+        refresh_flag = False
         clock.tick(FPS)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -32,18 +33,18 @@ def main():
                 coord = get_game_coord_from_mouse()
                 if piece_selected is None:  # Wchodzi jeżeli nic nie jest zaznaczone
                     piece_selected = selecting_piece(game.board, coord, active_player)
-                    if piece_selected is None:
-                        break
-                    coord_selected = coord
+                    if piece_selected is not None:
+                        refresh_flag = True
+                        coord_selected = coord
                 elif piece_selected != None:  # Wchodzi jeżeli zaznaczona jest jakas figura
                     if making_move(game.board, piece_selected, coord_selected, target_coord=coord) is None:
                         drawing_board()
                         drawing_pieces(game.board)
-                    else:
-                        break
-                    active_player = switching_turns(active_player)
+                        active_player = switching_turns(active_player)
                     piece_selected = None
-                pygame.display.update()
+                    refresh_flag = True
+        if refresh_flag:
+            pygame.display.update()
     pygame.quit()
 
 
@@ -52,7 +53,6 @@ if __name__ == "__main__":
 
 # zrobic poprawne poprawnie grafike z odswiezaniem
 # przezroczystosc pol
-# 1.Zrobic tury
-# 2.Zrobić poruszanie się figur
-# 3.Zrobic bicie
-# 4.Promocja piona
+# 1.Zdefiniowac figury
+# 2.Promocja piona
+# 3.Bicie w przelocie
