@@ -9,3 +9,6 @@ class Game:
             ['--','--','--','--','--','--','--','--'],         
             ['wP','wP','wP','wP','wP','wP','wP','wP'],
             ['wR','wN','wB','wQ','wK','wB','wN','wR']]
+
+    def __str__(self):
+        return '\n'.join(map(','.join, self.board))

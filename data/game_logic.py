@@ -17,11 +17,10 @@ def selecting_piece(board, coord, active_player): # Zwraca None jeżeli nie jest
     else:
         return None
 
-def making_move(board, piece_selected, base_coord, target_coord, ):
+def making_move(board, piece_selected, base_coord, target_coord):
     row, col = target_coord
     target_tile = board[col][row]
     if target_tile[0] != piece_selected[0]: # pole na które przemieszczam figure musi być puste albo zajęte przez figure przeciwnika
-        print("test")
         board[base_coord[1]][base_coord[0]] = "--"
         board[target_coord[1]][target_coord[0]] = piece_selected
         for i in range(len(board)):
