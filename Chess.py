@@ -4,6 +4,7 @@ from data.chessboard import Game
 from data.settings import *
 from data.game_logic import *
 from data.graphic import *
+from data.pieces import *
 
 pygame.init()
 
@@ -29,14 +30,14 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-            if event.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed(3)[0]:  # jezeli wcisniety LEFT MOUSE BUTTON
+            if event.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed()[0]:  # jezeli wcisniety LEFT MOUSE BUTTON
                 coord = get_game_coord_from_mouse()
                 if piece_selected is None:  # Wchodzi jeżeli nic nie jest zaznaczone
                     piece_selected = selecting_piece(game.board, coord, active_player)
                     if piece_selected is not None:
                         refresh_flag = True
                         coord_selected = coord
-                elif piece_selected != None:  # Wchodzi jeżeli zaznaczona jest jakas figura
+                elif piece_selected is not None:  # Wchodzi jeżeli zaznaczona jest jakas figura
                     if making_move(game.board, piece_selected, coord_selected, target_coord=coord) is None:
                         drawing_board()
                         drawing_pieces(game.board)
@@ -51,6 +52,7 @@ def main():
 if __name__ == "__main__":
     main()
 
+# zrobic poprawne poprawnie grafike z odswiezaniem
 # przezroczystosc pol
 # 1.Zdefiniowac figury
 # 2.Promocja piona
