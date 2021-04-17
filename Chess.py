@@ -2,7 +2,7 @@
 a=0
 import pygame
 from data.constants import *
-from data.chessboard import Game
+from data.chessboard import GameState
 from data.settings import *
 from data.game_logic import *
 from data.graphic import *
@@ -11,7 +11,7 @@ from data.pieces import *
 pygame.init()
 
 # IMPORTS
-game = Game()
+game = GameState()
 
 # SETTINGS
 pygame.display.set_caption('Szachy')
