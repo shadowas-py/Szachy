@@ -1,5 +1,4 @@
-#COMMIT TEST 2
-a=0
+
 import pygame
 from data.constants import *
 from data.chessboard import GameState

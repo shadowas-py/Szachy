@@ -1,9 +1,5 @@
-
 class GameState:
     def __init__ (self):
-=======
-from .pieces import *
-
 
 class Game:
     def __init__(self):
