@@ -17,11 +17,11 @@ class Pawn(Piece):
         if self.color == 'w':
             pawn_moves = [N]
             if self.coord[1] == WHITE_PAWN_STARTING_TILE: # Jezeli pionek jest na polu startowym
-                pawn_moves = extend(UPx2)
-            if boord.coord + (UP + LEFT) == black
-                pawn_moves = extend(UP + LEFT)
-            if boord.coord + (UP + RIGHT) == black
-                pawn_moves = extend(UP + RIGHT)
+                pawn_moves.extend(adding_directions(N,N))
+            if self.board(adding_directions(self.board.coord, (adding_directions(N,W))) == 'b':### DO POPRAWY
+                pawn_moves.extend(adding_directions(N,W))
+            if self.coord + (UP + RIGHT) == black
+                pawn_moves.extend(adding_directions(N,E))
         elif self.color == 'b':
             pawn_moves = [S]
             if self.coord[1] == BLACK_PAWN_STARTING_TILE: # Jezeli pionek jest na polu startowym
