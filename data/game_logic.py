@@ -25,7 +25,6 @@ def listing_valid_moves(piece_selected, piece_coord,target_content, target_coord
     else:
         pass
 
-
 def making_move(board, piece_selected, base_coord, target_coord):
     row, col = target_coord
     target_content = board[col][row]
