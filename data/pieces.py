@@ -1,5 +1,7 @@
 from .constants import LEFT, RIGHT, UP, DOWN
 
+
+
 MOVEMENT ={
     'wP': (UP, (0, -2)),
     'wR': (UP, RIGHT, LEFT, DOWN),

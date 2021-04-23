@@ -33,11 +33,11 @@ GRAPHICS_NAMES = {'wP': 'white_pawn',
                   'bQ': 'black_queen',
                   'bK': 'black_king',
                   }
-#DIRECTIONS
-LEFT = (-1, 0)
-UP = (0, -1)
-RIGHT = (1, 0)
-DOWN = (0, 1)
+# DIRECTIONS
+N = [0, -1]
+S = [0, 1]
+W = [-1, 0]
+E = [1, 0]
 
 # DIRS = {
 #     'LEFT': (-1, 0),
