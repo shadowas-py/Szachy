@@ -7,7 +7,7 @@ class Piece:
         self.piece_coord = piece_coord
 
 class Pawn(Piece):
-    __init__(self, piece, piece_coord):
+    __init__(self):
 
 
 MOVEMENT ={
