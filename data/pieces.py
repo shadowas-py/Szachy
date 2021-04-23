@@ -1,5 +1,13 @@
-from .constants import LEFT, RIGHT, UP, DOWN
+from .constants import N, E, W, E
 
+class Piece:
+    __init__(self, piece_selected, piece_coord)
+        self.piece = piece_selected[1]
+        self.piece_color = piece_selected[0]
+        self.piece_coord = piece_coord
+
+class Pawn(Piece):
+    __init__(self, piece, piece_coord):
 
 
 MOVEMENT ={
