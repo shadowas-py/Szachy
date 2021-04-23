@@ -39,8 +39,11 @@ def making_move(board, piece_selected, base_coord, target_coord):
         # for i in range(len(board)):
         #     print(board[i])
         # print("\n")
-    else:
+        print("making move", piece_selected[0])
         return None
+    else:
+        print("not making move")
+        return 0
 
 def switching_turns(active_player):
     if active_player == "w":

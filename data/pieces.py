@@ -58,7 +58,6 @@ def valid_pawn_moves(piece_selected, piece_coord, target_content, target_coord):
                 moves_allowed = ONLY_CAPTURING_MOVEMENT['bP']
                 return moves_allowed
         elif piece_coord[1] == 1:  # JEZELI JEST TO PIERWSZY RUCH TEJ BIERKI
-            print("dupa")
             if target_content[0] == '-':
                 moves_allowed = (MOVEMENT['bP'])
                 return moves_allowed
