@@ -1,4 +1,6 @@
 from .constants import N, E, W, E
+WHITE_PAWN_STARTING_TILE = 6
+
 
 class Piece:
     __init__(self, piece_selected, piece_coord)
@@ -7,7 +9,24 @@ class Piece:
         self.piece_coord = piece_coord
 
 class Pawn(Piece):
-    __init__(self):
+    __init__(self, board):
+        self.board = board
+
+    def building_pawn_moves_list(self):
+        if self.color == 'w':
+            if self.coord[1] == white_pawn_starting_tile # JEZELI
+                pawn_moves = extend(UPx2)
+            if boord.coord + (UP + LEFT) == black
+                pawn_moves = extend(UP + LEFT)
+            if boord.coord + (UP + RIGHT) == black
+                pawn_moves = extend(UP + RIGHT)
+        elif self.color == 'b':
+            if row == black_pawn_starting_tile
+                pawn_moves = extend(UPx2)
+            if boord.coord + (UP + LEFT) == black
+                pawn_moves = extend(UP + LEFT)
+            if boord.coord + (UP + RIGHT) == black
+                pawn_moves = extend(UP + RIGHT)
 
 
 MOVEMENT ={
