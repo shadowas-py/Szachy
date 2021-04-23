@@ -16,10 +16,11 @@ class Pawn(Piece):
     def __init__(self, board):
         self.board = board
 
+
     def building_pawn_moves_list(self):
         if self.color == 'w':
             pawn_moves = [N]
-            if self.coord[1] == WHITE_PAWN_STARTING_TILE: # Jezeli pionek jest na polu startowym
+            if self.piece_coord[1] == WHITE_PAWN_STARTING_TILE: # Jezeli pionek znajduje sie w rzedzie startowym
                 # uzyc tego - tuple(map(sum, zip(a, b)))
                 pawn_moves.extend(adding_directions(N,N))
 
