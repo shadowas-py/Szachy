@@ -1,5 +1,6 @@
-from .constants import N, E, W, E
+from .constants import N, S, W, E
 WHITE_PAWN_STARTING_TILE = 6
+BLACK_PAWN_STARTING_TILE = 1
 
 
 class Piece:
@@ -14,14 +15,16 @@ class Pawn(Piece):
 
     def building_pawn_moves_list(self):
         if self.color == 'w':
-            if self.coord[1] == white_pawn_starting_tile # JEZELI
+            pawn_moves = [N]
+            if self.coord[1] == WHITE_PAWN_STARTING_TILE: # Jezeli pionek jest na polu startowym
                 pawn_moves = extend(UPx2)
             if boord.coord + (UP + LEFT) == black
                 pawn_moves = extend(UP + LEFT)
             if boord.coord + (UP + RIGHT) == black
                 pawn_moves = extend(UP + RIGHT)
         elif self.color == 'b':
-            if row == black_pawn_starting_tile
+            pawn_moves = [S]
+            if self.coord[1] == BLACK_PAWN_STARTING_TILE: # Jezeli pionek jest na polu startowym
                 pawn_moves = extend(UPx2)
             if boord.coord + (UP + LEFT) == black
                 pawn_moves = extend(UP + LEFT)
