@@ -18,16 +18,15 @@ class Pawn(Piece):
 
 
     def building_pawn_moves_list(self):
-        if self.color == 'w':
+        if self.piece_color == 'w':
             pawn_moves = [N]
             if self.piece_coord[1] == WHITE_PAWN_STARTING_TILE: # Jezeli pionek znajduje sie w rzedzie startowym
-                # uzyc tego - tuple(map(sum, zip(a, b)))
                 pawn_moves.extend(sum_directions(N,N))
-            if self.board(sum_directions(self.board.coord, (sum_directions(N,W))) == 'b':### DO POPRAWY
+            if self.board(sum_directions(self.board.coord, (sum_directions(N,W)))) == 'b':
                 pawn_moves.extend(sum_directions(N,W))
-            if self.coord + (UP + RIGHT) == black
+            if self.board(sum_directions(self.board.coord, (sum_directions(N,E)))) == 'b':
                 pawn_moves.extend(sum_directions(N,E))
-        elif self.color == 'b':
+        elif self.piece_color == 'b':
             pawn_moves = [S]
             if self.coord[1] == BLACK_PAWN_STARTING_TILE: # Jezeli pionek jest na polu startowym
                 pawn_moves = extend(UPx2)
