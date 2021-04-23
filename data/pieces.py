@@ -7,13 +7,13 @@ def adding_directions(direction1, direction2):
 
 
 class Piece:
-    __init__(self, piece_selected, piece_coord)
+    def __init__(self, piece_selected, piece_coord):
         self.piece = piece_selected[1]
         self.piece_color = piece_selected[0]
         self.piece_coord = piece_coord
 
 class Pawn(Piece):
-    __init__(self, board):
+    def __init__(self, board):
         self.board = board
 
     def building_pawn_moves_list(self):
