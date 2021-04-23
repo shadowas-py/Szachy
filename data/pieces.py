@@ -2,7 +2,7 @@ from .constants import N, S, W, E
 WHITE_PAWN_STARTING_TILE = 6
 BLACK_PAWN_STARTING_TILE = 1
 
-def adding_directions(direction1, direction2):
+def sum_directions(direction1, direction2):
     return tuple(map(sum, zip(direction1, direction2)))
 
 
@@ -22,12 +22,11 @@ class Pawn(Piece):
             pawn_moves = [N]
             if self.piece_coord[1] == WHITE_PAWN_STARTING_TILE: # Jezeli pionek znajduje sie w rzedzie startowym
                 # uzyc tego - tuple(map(sum, zip(a, b)))
-                pawn_moves.extend(adding_directions(N,N))
-
-            if self.board(adding_directions(self.board.coord, (adding_directions(N,W))) == 'b':### DO POPRAWY
-                pawn_moves.extend(adding_directions(N,W))
+                pawn_moves.extend(sum_directions(N,N))
+            if self.board(sum_directions(self.board.coord, (sum_directions(N,W))) == 'b':### DO POPRAWY
+                pawn_moves.extend(sum_directions(N,W))
             if self.coord + (UP + RIGHT) == black
-                pawn_moves.extend(adding_directions(N,E))
+                pawn_moves.extend(sum_directions(N,E))
         elif self.color == 'b':
             pawn_moves = [S]
             if self.coord[1] == BLACK_PAWN_STARTING_TILE: # Jezeli pionek jest na polu startowym
