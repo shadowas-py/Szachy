@@ -3,7 +3,7 @@ from .constants import N, S, W, E
 WHITE_PAWN_STARTING_ROW = 6
 BLACK_PAWN_STARTING_ROW = 1
 
-
+# Może wychodzić po za skale/plansze gry
 def sum_directions(direction1, direction2):
     return tuple(map(sum, zip(direction1, direction2)))
 
@@ -20,17 +20,16 @@ class Pawn(Piece):
         super().__init__(piece_selected, piece_coord)
         print (board)   ### Dlaczego mi tutaj nie wypisuje
 
-
         def listing_pawn_moves_list(piece_coord):
             if self.piece_color == 'w':
                 pawn_moves = [N]
                 if self.piece_coord[1] == WHITE_PAWN_STARTING_ROW:  # Jezeli pionek znajduje sie w rzedzie startowym
                     pawn_moves.extend(sum_directions(N, N))
                 new_coord = sum_directions(self.piece_coord, (sum_directions(N, W)))
-                if board[new_coord[0]][new_coord[1]] == 'b':
+                if board[new_coord[1]][new_coord[0]][0] == 'b':
                     pawn_moves.extend(sum_directions(N, W))
                 new_coord = sum_directions(self.piece_coord, (sum_directions(N, E)))
-                if board[new_coord[0]][new_coord[1]] == 'b':
+                if board[new_coord[1]][new_coord[0]][0] == 'b':
                     pawn_moves.extend(sum_directions(N, E))
                 print(pawn_moves)
                 return pawn_moves
@@ -39,10 +38,10 @@ class Pawn(Piece):
                 if self.piece_coord[1] == BLACK_PAWN_STARTING_ROW:  # Jezeli pionek znajduje sie w rzedzie startowym
                     pawn_moves.extend(sum_directions(S, S))
                 new_coord = sum_directions(self.piece_coord, (sum_directions(S, W)))
-                if board[new_coord[0]][new_coord[1]] == 'w':
+                if board[new_coord[1]][new_coord[0]][0] == 'w':
                     pawn_moves.extend(sum_directions(S, W))
                 new_coord = sum_directions(self.piece_coord, (sum_directions(S, E)))
-                if board[new_coord[0]][new_coord[1]] == 'w':
+                if board[new_coord[1]][new_coord[0]][0] == 'w':
                     pawn_moves.extend(sum_directions(S, E))
                 return pawn_moves
 
