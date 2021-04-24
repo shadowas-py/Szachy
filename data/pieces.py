@@ -6,22 +6,21 @@ def sum_directions(direction1, direction2):
     return tuple(map(sum, zip(direction1, direction2)))
 
 
-class Piece:
+class Piece(object):
     def __init__(self, piece_selected, piece_coord):
         self.piece = piece_selected[1]
         self.piece_color = piece_selected[0]
         self.piece_coord = piece_coord
 
 class Pawn(Piece):
-    def __init__(self, board):
-
+    def __init__(self, board, piece_selected, piece_coord):  ### ///////////////////////////////////
+        super().__init__(piece_selected, piece_coord)
         self.board = board
-
 
     def listing_pawn_moves_list(self):
         if self.piece_color == 'w':
             pawn_moves = [N]
-            if self.piece_coord[1] == WHITE_PAWN_STARTING_TILE: # Jezeli pionek znajduje sie w rzedzie startowym
+            if self.piece_coord[1] == WHITE_PAWN_STARTING_ROW: # Jezeli pionek znajduje sie w rzedzie startowym
                 pawn_moves.extend(sum_directions(N, N))
             if self.board(sum_directions(self.board.coord, (sum_directions(N, W)))) == 'b':
                 pawn_moves.extend(sum_directions(N, W))
@@ -30,7 +29,7 @@ class Pawn(Piece):
             return pawn_moves
         elif self.piece_color == 'b':
             pawn_moves = [S]
-            if self.piece_coord[1] == WHITE_PAWN_STARTING_TILE: # Jezeli pionek znajduje sie w rzedzie startowym
+            if self.piece_coord[1] == BLACK_PAWN_STARTING_ROW: # Jezeli pionek znajduje sie w rzedzie startowym
                 pawn_moves.extend(sum_directions(S, S))
             if self.board(sum_directions(self.board.coord, (sum_directions(S, W)))) == 'b':
                 pawn_moves.extend(sum_directions(S, W))

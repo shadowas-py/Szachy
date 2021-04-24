@@ -5,7 +5,7 @@ from data.chessboard import GameState
 from data.settings import *
 from data.game_logic import *
 from data.graphic import *
-from data.pieces import *
+from data.pieces import Piece
 
 pygame.init()
 
