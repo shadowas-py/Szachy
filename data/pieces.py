@@ -79,6 +79,7 @@ class Knight(Piece):
                           sum_directions(W, W, N), sum_directions(W, W, S), \
                           sum_directions(S, S, E), sum_directions(S, S, W)
 
+
 # MOVEMENT ={
 #     'wP': (UP, (0, -2)),
 #     'wR': (UP, RIGHT, LEFT, DOWN),
