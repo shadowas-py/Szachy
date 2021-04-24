@@ -1,6 +1,6 @@
 import pygame
 from .constants import BOARD_POSITION, TILE_SIZE, BOARD_END_POSITION
-from .pieces import valid_pawn_moves
+# from .pieces import valid_pawn_moves
 
 def get_game_coord_from_mouse():
     mouse_pos = pygame.mouse.get_pos()
@@ -18,12 +18,12 @@ def selecting_piece(board, coord, active_player): # Zwraca None jeżeli nie jest
     else:
         return None
 
-def listing_valid_moves(piece_selected, piece_coord,target_content, target_coord):# active_player
-    if piece_selected[1] == 'P':
-        valid_moves = valid_pawn_moves(piece_selected, piece_coord, target_content, target_coord)
-        return valid_moves
-    else:
-        pass
+# def listing_valid_moves(piece_selected, piece_coord,target_content, target_coord):# active_player
+#     if piece_selected[1] == 'P':
+#         valid_moves = valid_pawn_moves(piece_selected, piece_coord, target_content, target_coord)
+#         return valid_moves
+#     else:
+#         pass
 
 def making_move(board, piece_selected, base_coord, target_coord):
     row, col = target_coord
@@ -49,12 +49,3 @@ def switching_turns(active_player):
         return 'b'
     else:
         return "w"
-
-
-# W_PAWN_MOVES = ((0,-1),(0,-2))
-# KING_MOVES = (0,abs(1)),(abs(1),0),(abs(1),abs(1))
-# B_PAWN_MOVES = ((0,1),(0,2))
-# if  y=0 and (0:abs(7)):
-# ROOK_MOVES = ()
-
-
