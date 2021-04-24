@@ -20,7 +20,7 @@ class Pawn(Piece):
         super().__init__(piece_selected, piece_coord)
         self.movement_range = 1           # domyslna ilosc pól o jakie dana figura moze sie poruszac
         # Kolizje z innymi bierkami beda liczone gdzie indziej
-        def listing_pawn_moves_list(piece_coord):
+        def listing_pawn_moves():
             if self.piece_color == 'w':
                 pawn_moves = N
                 if self.piece_coord[1] == WHITE_PAWN_STARTING_ROW:  # Jezeli pionek znajduje sie w rzedzie startowym
@@ -44,9 +44,13 @@ class Pawn(Piece):
                     pawn_moves.extend(sum_directions(S, E))
                 return pawn_moves
 
-        self.moves_list = listing_pawn_moves_list(piece_coord)
+        self.moves_list = listing_pawn_moves()
 
+class King(Piece):
+    def __init__(self, board, piece_selected, piece_coord):
+        super().__init__(piece_selected, piece_coord)
 
+        self.moves_list =
 # MOVEMENT ={
 #     'wP': (UP, (0, -2)),
 #     'wR': (UP, RIGHT, LEFT, DOWN),
