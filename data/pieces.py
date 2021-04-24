@@ -18,11 +18,11 @@ class Piece(object):
 class Pawn(Piece):
     def __init__(self, board, piece_selected, piece_coord):  ### ///////////////////////////////////
         super().__init__(piece_selected, piece_coord)
-        print (board)   ### Dlaczego mi tutaj nie wypisuje
 
+        # Kolizje z innymi bierkami beda liczone gdzie indziej
         def listing_pawn_moves_list(piece_coord):
             if self.piece_color == 'w':
-                pawn_moves = [N]
+                pawn_moves = N
                 if self.piece_coord[1] == WHITE_PAWN_STARTING_ROW:  # Jezeli pionek znajduje sie w rzedzie startowym
                     pawn_moves.extend(sum_directions(N, N))
                 new_coord = sum_directions(self.piece_coord, (sum_directions(N, W)))
@@ -34,7 +34,7 @@ class Pawn(Piece):
                 print(pawn_moves)
                 return pawn_moves
             elif self.piece_color == 'b':
-                pawn_moves = [S]
+                pawn_moves = S
                 if self.piece_coord[1] == BLACK_PAWN_STARTING_ROW:  # Jezeli pionek znajduje sie w rzedzie startowym
                     pawn_moves.extend(sum_directions(S, S))
                 new_coord = sum_directions(self.piece_coord, (sum_directions(S, W)))
