@@ -1,7 +1,4 @@
-from .constants import N, S, W, E
-
-WHITE_PAWN_STARTING_ROW = 6
-BLACK_PAWN_STARTING_ROW = 1
+from .constants import N, S, W, E, GRID_SIZE
 
 # Może wychodzić po za skale/plansze gry
 def sum_directions(direction1, direction2):
@@ -16,14 +13,16 @@ class Piece(object):
 
 
 class Pawn(Piece):
+
     def __init__(self, board, piece_selected, piece_coord):  ### ///////////////////////////////////
         super().__init__(piece_selected, piece_coord)
         self.movement_range = 1           # domyslna ilosc pól o jakie dana figura moze sie poruszac
         # Kolizje z innymi bierkami beda liczone gdzie indziej
         def listing_pawn_moves():
             if self.piece_color == 'w':
+                white_pawn_starting_row = 6
                 pawn_moves = N
-                if self.piece_coord[1] == WHITE_PAWN_STARTING_ROW:  # Jezeli pionek znajduje sie w rzedzie startowym
+                if self.piece_coord[1] == white_pawn_starting_row:  # Jezeli pionek znajduje sie w rzedzie startowym
                     pawn_moves.extend(sum_directions(N, N))
                 new_coord = sum_directions(self.piece_coord, (sum_directions(N, W)))
                 if board[new_coord[1]][new_coord[0]][0] == 'b':   # jeżeli czarny pion to moze bić w gore lewo
@@ -33,8 +32,9 @@ class Pawn(Piece):
                     pawn_moves.extend(sum_directions(N, E))
                 return pawn_moves
             elif self.piece_color == 'b':                   #  to samo dla czarnego piona
+                black_pawn_starting_row = 1
                 pawn_moves = S
-                if self.piece_coord[1] == BLACK_PAWN_STARTING_ROW:  # Jezeli pionek znajduje sie w rzedzie startowym
+                if self.piece_coord[1] == black_pawn_starting_row:  # Jezeli pionek znajduje sie w rzedzie startowym
                     pawn_moves.extend(sum_directions(S, S))
                 new_coord = sum_directions(self.piece_coord, (sum_directions(S, W)))
                 if board[new_coord[1]][new_coord[0]][0] == 'w':
@@ -50,7 +50,10 @@ class King(Piece):
     def __init__(self, board, piece_selected, piece_coord):
         super().__init__(piece_selected, piece_coord)
 
-        self.moves_list =
+        self.movement_range = GRID_SIZE
+        self.moves_list = (N, S, E, W,
+                           sum_directions(N, E),sum_directions(N, W), sum_directions(S, W), sum_directions(S, W))
+
 # MOVEMENT ={
 #     'wP': (UP, (0, -2)),
 #     'wR': (UP, RIGHT, LEFT, DOWN),
