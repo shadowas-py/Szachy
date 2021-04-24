@@ -3,6 +3,7 @@ import pygame
 from Szachy.data.chessboard import GameState
 from Szachy.data.game_logic import selecting_piece, get_game_coord_from_mouse, making_move, switching_turns
 from Szachy.data.graphic import drawing_board, drawing_pieces
+from Szachy.data.pieces import Piece
 from Szachy.data.settings import FPS
 
 pygame.init()
@@ -33,10 +34,10 @@ def main():
                 coord = get_game_coord_from_mouse()
                 if piece_selected is None:  # Wchodzi jeżeli nic nie jest zaznaczone
                     piece_selected = selecting_piece(game.board, coord, active_player)
-
                     if piece_selected is not None:
                         refresh_flag = True
                         coord_selected = coord
+                        obj_piece = Piece(piece_selected, coord_selected)  # stworzenie obiektu piece
                 elif piece_selected is not None:  # Wchodzi jeżeli zaznaczona jest jakas figura
                     if making_move(game.board, piece_selected, coord_selected, target_coord=coord) is None:
                         drawing_board()
