@@ -18,29 +18,35 @@ class Piece(object):
 class Pawn(Piece):
     def __init__(self, board, piece_selected, piece_coord):  ### ///////////////////////////////////
         super().__init__(piece_selected, piece_coord)
-        self.board = board
+        print (board)   ### Dlaczego mi tutaj nie wypisuje
 
-        def listing_pawn_moves_list():
+
+        def listing_pawn_moves_list(piece_coord):
             if self.piece_color == 'w':
                 pawn_moves = [N]
                 if self.piece_coord[1] == WHITE_PAWN_STARTING_ROW:  # Jezeli pionek znajduje sie w rzedzie startowym
                     pawn_moves.extend(sum_directions(N, N))
-                if self.board(sum_directions(self.board.piece_coord, (sum_directions(N, W)))) == 'b':
+                new_coord = sum_directions(self.piece_coord, (sum_directions(N, W)))
+                if board[new_coord[0]][new_coord[1]] == 'b':
                     pawn_moves.extend(sum_directions(N, W))
-                if self.board(sum_directions(self.board.piece_coord, (sum_directions(N, E)))) == 'b':
+                new_coord = sum_directions(self.piece_coord, (sum_directions(N, E)))
+                if board[new_coord[0]][new_coord[1]] == 'b':
                     pawn_moves.extend(sum_directions(N, E))
+                print(pawn_moves)
                 return pawn_moves
             elif self.piece_color == 'b':
                 pawn_moves = [S]
                 if self.piece_coord[1] == BLACK_PAWN_STARTING_ROW:  # Jezeli pionek znajduje sie w rzedzie startowym
                     pawn_moves.extend(sum_directions(S, S))
-                if self.board(sum_directions(self.board.piece_coord, (sum_directions(S, W)))) == 'b':
+                new_coord = sum_directions(self.piece_coord, (sum_directions(S, W)))
+                if board[new_coord[0]][new_coord[1]] == 'w':
                     pawn_moves.extend(sum_directions(S, W))
-                if self.board(sum_directions(self.board.piece_coord, (sum_directions(S, E)))) == 'b':
+                new_coord = sum_directions(self.piece_coord, (sum_directions(S, E)))
+                if board[new_coord[0]][new_coord[1]] == 'w':
                     pawn_moves.extend(sum_directions(S, E))
                 return pawn_moves
 
-        self.moves_list = listing_pawn_moves_list()
+        self.moves_list = listing_pawn_moves_list(piece_coord)
 
 
 # MOVEMENT ={

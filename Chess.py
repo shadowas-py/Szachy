@@ -38,7 +38,7 @@ def main():
                         refresh_flag = True
                         coord_selected = coord
                         valid_moves = Pawn(game.board, piece_selected, coord_selected) # stworzenie obiektu piece
-                        print(valid_moves)
+                        # print(valid_moves)
                 elif piece_selected is not None:  # Wchodzi jeżeli zaznaczona jest jakas figura
                     if making_move(game.board, piece_selected, coord_selected, target_coord=coord) is None:
                         drawing_board()

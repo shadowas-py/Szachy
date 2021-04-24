@@ -31,8 +31,8 @@ def making_move(board, piece_selected, base_coord, target_coord):
     piece_shift_col = target_coord[0] - base_coord[0]
     piece_shift_row = target_coord[1] - base_coord[1]
     piece_shift = (piece_shift_col, piece_shift_row)
-    valid_moves = listing_valid_moves(piece_selected, base_coord, target_content, target_coord)
-    if target_content[0] != piece_selected[0] and piece_shift in valid_moves: # pole na które przemieszczam figure musi być puste albo zajęte przez figure przeciwnika
+    # valid_moves = listing_valid_moves(piece_selected, base_coord, target_content, target_coord)
+    if target_content[0] != piece_selected[0]: #and piece_shift in valid_moves:  pole na które przemieszczam figure musi być puste albo zajęte przez figure przeciwnika
         board[base_coord[1]][base_coord[0]] = "--"
         board[target_coord[1]][target_coord[0]] = piece_selected
         # for i in range(len(board)):
