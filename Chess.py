@@ -11,6 +11,7 @@ pygame.init()
 
 # IMPORTS
 game = GameState()
+piece = Piece()
 
 # SETTINGS
 pygame.display.set_caption('Szachy')
@@ -35,6 +36,7 @@ def main():
                 coord = get_game_coord_from_mouse()
                 if piece_selected is None:  # Wchodzi jeżeli nic nie jest zaznaczone
                     piece_selected = selecting_piece(game.board, coord, active_player)
+
                     if piece_selected is not None:
                         refresh_flag = True
                         coord_selected = coord
