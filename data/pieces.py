@@ -26,13 +26,13 @@ class Pawn(Piece):
                 if self.piece_coord[1] == WHITE_PAWN_STARTING_ROW:  # Jezeli pionek znajduje sie w rzedzie startowym
                     pawn_moves.extend(sum_directions(N, N))
                 new_coord = sum_directions(self.piece_coord, (sum_directions(N, W)))
-                if board[new_coord[1]][new_coord[0]][0] == 'b':   # jeżeli pion moze bić w gore lewo
+                if board[new_coord[1]][new_coord[0]][0] == 'b':   # jeżeli czarny pion to moze bić w gore lewo
                     pawn_moves.extend(sum_directions(N, W))
                 new_coord = sum_directions(self.piece_coord, (sum_directions(N, E)))
-                if board[new_coord[1]][new_coord[0]][0] == 'b':   # jeżeli pion moze bić w gore prawo
+                if board[new_coord[1]][new_coord[0]][0] == 'b':   # jeżeli czarny pion to moze bić w gore prawo
                     pawn_moves.extend(sum_directions(N, E))
                 return pawn_moves
-            elif self.piece_color == 'b':
+            elif self.piece_color == 'b':                   #  to samo dla czarnego piona
                 pawn_moves = S
                 if self.piece_coord[1] == BLACK_PAWN_STARTING_ROW:  # Jezeli pionek znajduje sie w rzedzie startowym
                     pawn_moves.extend(sum_directions(S, S))
