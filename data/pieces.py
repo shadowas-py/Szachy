@@ -1,4 +1,5 @@
 from .constants import N, S, W, E
+
 WHITE_PAWN_STARTING_ROW = 6
 BLACK_PAWN_STARTING_ROW = 1
 
@@ -12,6 +13,7 @@ class Piece(object):
         self.piece = piece_selected[1]
         self.piece_color = piece_selected[0]
         self.piece_coord = piece_coord
+
 
 class Pawn(Piece):
     def __init__(self, board, piece_selected, piece_coord):  ### ///////////////////////////////////
