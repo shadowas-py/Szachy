@@ -1,6 +1,6 @@
 from .constants import N, S, W, E
-WHITE_PAWN_STARTING_TILE = 6
-BLACK_PAWN_STARTING_TILE = 1
+WHITE_PAWN_STARTING_ROW = 6
+BLACK_PAWN_STARTING_ROW = 1
 
 def sum_directions(direction1, direction2):
     return tuple(map(sum, zip(direction1, direction2)))
@@ -14,6 +14,7 @@ class Piece:
 
 class Pawn(Piece):
     def __init__(self, board):
+
         self.board = board
 
 
