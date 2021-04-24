@@ -18,7 +18,7 @@ class Piece(object):
 class Pawn(Piece):
     def __init__(self, board, piece_selected, piece_coord):  ### ///////////////////////////////////
         super().__init__(piece_selected, piece_coord)
-
+        self.movement_range = 1           # domyslna ilosc pól o jakie dana figura moze sie poruszac
         # Kolizje z innymi bierkami beda liczone gdzie indziej
         def listing_pawn_moves_list(piece_coord):
             if self.piece_color == 'w':
@@ -26,12 +26,11 @@ class Pawn(Piece):
                 if self.piece_coord[1] == WHITE_PAWN_STARTING_ROW:  # Jezeli pionek znajduje sie w rzedzie startowym
                     pawn_moves.extend(sum_directions(N, N))
                 new_coord = sum_directions(self.piece_coord, (sum_directions(N, W)))
-                if board[new_coord[1]][new_coord[0]][0] == 'b':
+                if board[new_coord[1]][new_coord[0]][0] == 'b':   # jeżeli pion moze bić w gore lewo
                     pawn_moves.extend(sum_directions(N, W))
                 new_coord = sum_directions(self.piece_coord, (sum_directions(N, E)))
-                if board[new_coord[1]][new_coord[0]][0] == 'b':
+                if board[new_coord[1]][new_coord[0]][0] == 'b':   # jeżeli pion moze bić w gore prawo
                     pawn_moves.extend(sum_directions(N, E))
-                print(pawn_moves)
                 return pawn_moves
             elif self.piece_color == 'b':
                 pawn_moves = S
