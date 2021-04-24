@@ -1,17 +1,14 @@
-
 import pygame
-from data.constants import *
-from data.chessboard import GameState
-from data.settings import *
-from data.game_logic import *
-from data.graphic import *
-from data.pieces import Piece
+
+from Szachy.data.chessboard import GameState
+from Szachy.data.game_logic import selecting_piece, get_game_coord_from_mouse, making_move, switching_turns
+from Szachy.data.graphic import drawing_board, drawing_pieces
+from Szachy.data.settings import FPS
 
 pygame.init()
 
 # IMPORTS
 game = GameState()
-piece = Piece()
 
 # SETTINGS
 pygame.display.set_caption('Szachy')
@@ -36,7 +33,7 @@ def main():
                 coord = get_game_coord_from_mouse()
                 if piece_selected is None:  # Wchodzi jeżeli nic nie jest zaznaczone
                     piece_selected = selecting_piece(game.board, coord, active_player)
-                    print(piece, "klasa piece")
+
                     if piece_selected is not None:
                         refresh_flag = True
                         coord_selected = coord
