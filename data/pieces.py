@@ -1,8 +1,8 @@
 from .constants import N, S, W, E, GRID_SIZE
 
 # Może wychodzić po za skale/plansze gry
-def sum_directions(direction1, direction2):
-    return tuple(map(sum, zip(direction1, direction2)))
+def sum_directions(direction1, direction2, direction3=(0, 0)):
+    return tuple(map(sum, zip(direction1, direction2, direction3)))
 
 
 class Piece(object):
@@ -45,14 +45,32 @@ class Pawn(Piece):
                 return pawn_moves
 
         self.moves_list = listing_pawn_moves()
+        #TO DO
+        # bicie w przelocie
 
 class King(Piece):
-    def __init__(self, board, piece_selected, piece_coord):
+    def __init__(self, piece_selected, piece_coord): # czy ja potrzebuje tych argumentow
+        super().__init__(piece_selected, piece_coord)
+        self.movement_range = 1
+        self.moves_list = (N, S, E, W,
+                           sum_directions(N, E), sum_directions(N, W), sum_directions(S, W), sum_directions(S, W))
+        # TO DO
+        # dodac znaczniki roszad dla bialego i czarnego
+
+class Rook(Piece):
+    def __init__(self, piece_selected, piece_coord):
         super().__init__(piece_selected, piece_coord)
 
         self.movement_range = GRID_SIZE
-        self.moves_list = (N, S, E, W,
-                           sum_directions(N, E),sum_directions(N, W), sum_directions(S, W), sum_directions(S, W))
+        self.moves_list = (N, S, E, W)
+
+class Knight(Piece):
+    def __init__(self, piece_selected, piece_coord):
+        super().__init__(piece_selected, piece_coord)
+
+        self.movement_range = GRID_SIZE
+        self.moves_list = (sum_directions(N, E))
+
 
 # MOVEMENT ={
 #     'wP': (UP, (0, -2)),
