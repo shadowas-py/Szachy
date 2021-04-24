@@ -25,22 +25,22 @@ class Pawn(Piece):
                 pawn_moves = [N]
                 if self.piece_coord[1] == WHITE_PAWN_STARTING_ROW:  # Jezeli pionek znajduje sie w rzedzie startowym
                     pawn_moves.extend(sum_directions(N, N))
-                if self.board(sum_directions(self.board.coord, (sum_directions(N, W)))) == 'b':
+                if self.board(sum_directions(self.board.piece_coord, (sum_directions(N, W)))) == 'b':
                     pawn_moves.extend(sum_directions(N, W))
-                if self.board(sum_directions(self.board.coord, (sum_directions(N, E)))) == 'b':
+                if self.board(sum_directions(self.board.piece_coord, (sum_directions(N, E)))) == 'b':
                     pawn_moves.extend(sum_directions(N, E))
                 return pawn_moves
             elif self.piece_color == 'b':
                 pawn_moves = [S]
                 if self.piece_coord[1] == BLACK_PAWN_STARTING_ROW:  # Jezeli pionek znajduje sie w rzedzie startowym
                     pawn_moves.extend(sum_directions(S, S))
-                if self.board(sum_directions(self.board.coord, (sum_directions(S, W)))) == 'b':
+                if self.board(sum_directions(self.board.piece_coord, (sum_directions(S, W)))) == 'b':
                     pawn_moves.extend(sum_directions(S, W))
-                if self.board(sum_directions(self.board.coord, (sum_directions(S, E)))) == 'b':
+                if self.board(sum_directions(self.board.piece_coord, (sum_directions(S, E)))) == 'b':
                     pawn_moves.extend(sum_directions(S, E))
                 return pawn_moves
 
-        self.moves_list = listing_pawn_moves_list(self)
+        self.moves_list = listing_pawn_moves_list()
 
 
 # MOVEMENT ={
