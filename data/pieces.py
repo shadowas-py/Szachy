@@ -7,7 +7,8 @@ def listing_all_posible_moves_for_the_piece(piece_movement, movement_range, piec
     moves_list = []
     for i in range(movement_range):
         for j in range(len(piece_movement)):
-            coords_to_check = sum_directions(piece_coord, piece_movement[j])
+            increased_piece_movement = sum_directions(piece_movement[j], (i, i))
+            coords_to_check = sum_directions(piece_coord, increased_piece_movement)
             if min(coords_to_check) >= 0 and max(coords_to_check) < 8:
                 moves_list.append(piece_movement[j])
             else:
@@ -103,8 +104,10 @@ class Bishop():
     def __init__(self, board, piece_color, piece_coord):
 
         self.movement_range = GRID_SIZE
-        self.moves_list = sum_directions(N, E), sum_directions(N, W), \
+        self.movement = sum_directions(N, E), sum_directions(N, W), \
                           sum_directions(S, E), sum_directions(S, W), \
+
+        self.all_moves = listing_all_posible_moves_for_the_piece(self.movement, self.movement_range, piece_coord)
 
 class Queen():
     def __init__(self, board, piece_color, piece_coord):
