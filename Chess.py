@@ -43,6 +43,8 @@ def main():
                         print(piece_movement,"piece_movement")
                 elif piece_selected is not None:  # Wchodzi jeżeli zaznaczona jest jakas figura
                     if making_move(game.board, piece_selected, coord_selected, target_coord=coord) is None:
+                        # ruch sie bedzie wykonywal jezeli przemieszczenie jakie ma byc wykonane
+                        # bedzie na liscie moves allowed zwroconej z Pieces.Piece_class
                         drawing_board()
                         drawing_pieces(game.board)
                         active_player = switching_turns(active_player)
