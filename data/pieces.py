@@ -16,7 +16,6 @@ def listing_all_posible_moves_for_the_piece(piece_movement, movement_range, piec
 
 class Pieces(object):
     def __init__(self, board, piece_coord, piece_selected):
-        self.piece_symbol = piece_selected[1]
         self.piece_color = piece_selected[0]
         self.piece_coord = piece_coord
         self.board = board
@@ -30,7 +29,7 @@ class Pieces(object):
                          'Q': Queen(self.board, self.piece_color,self.piece_coord),
                          'K': King(self.board, self.piece_color,self.piece_coord),
                          }
-        return PIECE_OBJECTS[self.piece_symbol]
+        return PIECE_OBJECTS[piece_selected[1]]
 
 
 class Pawn():
@@ -67,16 +66,19 @@ class Pawn():
                     pawn_moves.extend(sum_directions(S, E))
                 return pawn_moves
 
-        self.moves_list = listing_pawn_moves()
+        self.all_moves = listing_pawn_moves()
+        print(self.all_moves)
         # TO DO
         # bicie w przelocie
 
 
 class King():
-    def __init__(self, board, piece_color, piece_coord):
+    def __init__(self, board, piece_color, piece_coord): # parametry do poprawienia
         self.movement_range = 1
-        self.moves_list = N, S, E, W, \
+        self.movement = N, S, E, W, \
                           sum_directions(N, E), sum_directions(N, W), sum_directions(S, W), sum_directions(S, W)
+
+        self.all_moves = listing_all_posible_moves_for_the_piece(self.movement, self.movement_range, piece_coord)
         # TO DO
         # dodac znaczniki i ruch roszady dla bialego i czarnego
 
@@ -84,18 +86,19 @@ class King():
 class Rook():
     def __init__(self, board, piece_color, piece_coord):
         self.movement_range = GRID_SIZE
-        self.moves_list = (N, S, E, W)
-
+        self.movement = (N, S, E, W)
+        self.all_moves = listing_all_posible_moves_for_the_piece(self.movement, self.movement_range, piece_coord)
 
 class Knight():
     def __init__(self, board, piece_color, piece_coord):
 
         self.movement_range = GRID_SIZE
-        self.moves_list = sum_directions(N, N, E), sum_directions(N, N, W), \
+        self.movement = sum_directions(N, N, E), sum_directions(N, N, W), \
                           sum_directions(E, E, N), sum_directions(E, E, S), \
                           sum_directions(W, W, N), sum_directions(W, W, S), \
                           sum_directions(S, S, E), sum_directions(S, S, W)
 
+        self.all_moves = listing_all_posible_moves_for_the_piece(self.movement, self.movement_range, piece_coord)
 
 class Bishop():
     def __init__(self, board, piece_color, piece_coord):
@@ -108,8 +111,10 @@ class Queen():
     def __init__(self, board, piece_color, piece_coord):
 
         self.movement_range = GRID_SIZE
-        self.moves_list = N, S, E, W, sum_directions(N, E), sum_directions(N, W), \
+        self.movement = N, S, E, W, sum_directions(N, E), sum_directions(N, W), \
                           sum_directions(S, E), sum_directions(S, W), \
+
+        self.all_moves = listing_all_posible_moves_for_the_piece(self.movement, self.movement_range, piece_coord)
 
 #
 # ONLY_CAPTURING_MOVEMENT = {
