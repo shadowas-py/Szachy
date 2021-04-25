@@ -1,10 +1,18 @@
 from .constants import N, S, W, E, GRID_SIZE
 
-
-# Może wychodzić po za skale/plansze gry
 def sum_directions(direction1, direction2, direction3=(0, 0)):
     return tuple(map(sum, zip(direction1, direction2, direction3)))
 
+def listing_all_posible_moves_for_the_piece(piece_movement, movement_range, piece_coord):
+    moves_list = []
+    for i in range(movement_range):
+        for j in range(len(piece_movement)):
+            coords_to_check = sum_directions(piece_coord, piece_movement[j])
+            if min(coords_to_check) >= 0 and max(coords_to_check) < 8:
+                moves_list.append(piece_movement[j])
+            else:
+                continue   # jak wyjde poza zakres planszy to zaczynam sprawdzac kolejne kierunki(piece_movement)
+    return moves_list
 
 class Pieces(object):
     def __init__(self, board, piece_coord, piece_selected):
