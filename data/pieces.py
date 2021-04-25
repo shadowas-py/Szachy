@@ -67,7 +67,6 @@ class Pawn():
                 return pawn_moves
 
         self.all_moves = listing_pawn_moves()
-        print(self.all_moves)
         # TO DO
         # bicie w przelocie
 
