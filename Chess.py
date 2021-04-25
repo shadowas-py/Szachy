@@ -3,7 +3,7 @@ import pygame
 from Szachy.data.chessboard import GameState
 from Szachy.data.game_logic import selecting_piece, get_game_coord_from_mouse, making_move, switching_turns
 from Szachy.data.graphic import drawing_board, drawing_pieces
-from Szachy.data.pieces import Piece, Pawn
+from Szachy.data.pieces import Pieces, Pawn,
 from Szachy.data.settings import FPS
 
 pygame.init()
@@ -37,6 +37,7 @@ def main():
                     if piece_selected is not None:
                         refresh_flag = True
                         coord_selected = coord
+                        pieces = Pieces(coord_selected, piece_selected)
                         valid_moves = Pawn(game.board, piece_selected, coord_selected) # stworzenie obiektu piece
                         # print(valid_moves)
                 elif piece_selected is not None:  # Wchodzi jeżeli zaznaczona jest jakas figura

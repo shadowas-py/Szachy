@@ -1,17 +1,33 @@
 from .constants import N, S, W, E, GRID_SIZE
 
 
+
 # Może wychodzić po za skale/plansze gry
 def sum_directions(direction1, direction2, direction3=(0, 0)):
     return tuple(map(sum, zip(direction1, direction2, direction3)))
 
 
-class Piece(object):
+class Pieces(object):
     def __init__(self, piece_selected, piece_coord):
-        self.piece = piece_selected[1]
+        self.piece_symbol = piece_selected[1]
         self.piece_color = piece_selected[0]
         self.piece_coord = piece_coord
 
+
+    def swap_piece_symbol_to_object(self):
+
+        PIECE_OBJECTS = {'P': Pawn(board, piece_coord, picked_piece),
+                         'R': Rook(),
+                         'N': Knight(),
+                         'B': Bishop(),
+                         'Q': Queen(),
+                         'K': King(),
+                         }
+        return PIECE_OBJECTS[self.piece_symbol]
+
+
+
+    swap_piece_symbol_to_object(board, piece_coord, picked_piece)
 
 class Pawn(Piece):
 
