@@ -8,7 +8,7 @@ def sum_directions(direction1, direction2, direction3=(0, 0)):
 
 
 class Pieces(object):
-    def __init__(self, piece_selected, piece_coord):
+    def __init__(self, piece_selected, piece_coord, board):
         self.piece_symbol = piece_selected[1]
         self.piece_color = piece_selected[0]
         self.piece_coord = piece_coord
@@ -29,7 +29,7 @@ class Pieces(object):
 
     swap_piece_symbol_to_object(board, piece_coord, picked_piece)
 
-class Pawn(Piece):
+class Pawn(Pieces):
 
     def __init__(self, board, piece_selected, piece_coord):  ### ///////////////////////////////////
         super().__init__(piece_selected, piece_coord)
@@ -67,7 +67,7 @@ class Pawn(Piece):
         # bicie w przelocie
 
 
-class King(Piece):
+class King(Pieces):
     def __init__(self, piece_selected, piece_coord):  # czy ja potrzebuje tych argumentow
         super().__init__(piece_selected, piece_coord)
         self.movement_range = 1
@@ -77,7 +77,7 @@ class King(Piece):
         # dodac znaczniki i ruch roszady dla bialego i czarnego
 
 
-class Rook(Piece):
+class Rook(Pieces):
     def __init__(self, piece_selected, piece_coord):
         super().__init__(piece_selected, piece_coord)
 
@@ -85,7 +85,7 @@ class Rook(Piece):
         self.moves_list = (N, S, E, W)
 
 
-class Knight(Piece):
+class Knight(Pieces):
     def __init__(self, piece_selected, piece_coord):
         super().__init__(piece_selected, piece_coord)
 
@@ -96,7 +96,7 @@ class Knight(Piece):
                           sum_directions(S, S, E), sum_directions(S, S, W)
 
 
-class Bishop(Piece):
+class Bishop(Pieces):
     def __init__(self, piece_selected, piece_coord):
         super().__init__(piece_selected, piece_coord)
 
@@ -104,7 +104,7 @@ class Bishop(Piece):
         self.moves_list = sum_directions(N, E), sum_directions(N, W), \
                           sum_directions(S, E), sum_directions(S, W), \
 
-class Queen(Piece):
+class Queen(Pieces):
     def __init__(self, piece_selected, piece_coord):
         super().__init__(piece_selected, piece_coord)
 
