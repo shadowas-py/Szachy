@@ -1,6 +1,5 @@
 import pygame
 
-from Szachy.data.converter import convert_piece_string_to_object
 from .constants import BOARD_POSITION, TILE_SIZE, BOARD_END_POSITION
 # from .pieces import valid_pawn_moves
 
@@ -22,7 +21,7 @@ def get_game_coord_from_mouse():
 
 def selecting_piece(board, coord, active_player): # Zwraca None jeżeli nie jest klikniete pole z figura aktywnego gracza
     row, col = coord
-    piece = convert_piece_string_to_object(board, coord)
+    piece = board[col][row]
     if piece[0] == active_player:
         return piece
     else:

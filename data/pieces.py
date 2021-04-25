@@ -12,27 +12,24 @@ class Pieces(object):
         self.piece_symbol = piece_selected[1]
         self.piece_color = piece_selected[0]
         self.piece_coord = piece_coord
-
+        self.board = board
 
     def swap_piece_symbol_to_object(self):
 
-        PIECE_OBJECTS = {'P': Pawn(board, piece_coord, picked_piece),
-                         'R': Rook(),
-                         'N': Knight(),
-                         'B': Bishop(),
-                         'Q': Queen(),
-                         'K': King(),
+        PIECE_OBJECTS = {'P': Pawn(self.board, self.piece_coord, self.piece_color),
+                         'R': Rook(self.board, self.piece_coord),
+                         'N': Knight(self.board, self.piece_coord),
+                         'B': Bishop(self.board, self.piece_coord),
+                         'Q': Queen(self.board, self.piece_coord),
+                         'K': King(self.board, self.piece_coord),
                          }
         return PIECE_OBJECTS[self.piece_symbol]
 
 
-
-    swap_piece_symbol_to_object(board, piece_coord, picked_piece)
-
 class Pawn(Pieces):
 
     def __init__(self, board, piece_selected, piece_coord):  ### ///////////////////////////////////
-        super().__init__(piece_selected, piece_coord)
+        super().__init__(piece_selected, piece_coord, board)
         self.movement_range = 1  # domyslna ilosc pól o jakie dana figura moze sie poruszac
 
         # Kolizje z innymi bierkami beda liczone gdzie indziej
@@ -68,8 +65,8 @@ class Pawn(Pieces):
 
 
 class King(Pieces):
-    def __init__(self, piece_selected, piece_coord):  # czy ja potrzebuje tych argumentow
-        super().__init__(piece_selected, piece_coord)
+    def __init__(self, piece_selected, piece_coord, board):  # czy ja potrzebuje tych argumentow
+        super().__init__(piece_selected, piece_coord, board)
         self.movement_range = 1
         self.moves_list = N, S, E, W, \
                           sum_directions(N, E), sum_directions(N, W), sum_directions(S, W), sum_directions(S, W)
@@ -78,16 +75,16 @@ class King(Pieces):
 
 
 class Rook(Pieces):
-    def __init__(self, piece_selected, piece_coord):
-        super().__init__(piece_selected, piece_coord)
+    def __init__(self, piece_selected, piece_coord, board):
+        super().__init__(piece_selected, piece_coord, board)
 
         self.movement_range = GRID_SIZE
         self.moves_list = (N, S, E, W)
 
 
 class Knight(Pieces):
-    def __init__(self, piece_selected, piece_coord):
-        super().__init__(piece_selected, piece_coord)
+    def __init__(self, piece_selected, piece_coord, board):
+        super().__init__(piece_selected, piece_coord, board)
 
         self.movement_range = GRID_SIZE
         self.moves_list = sum_directions(N, N, E), sum_directions(N, N, W), \
@@ -97,35 +94,21 @@ class Knight(Pieces):
 
 
 class Bishop(Pieces):
-    def __init__(self, piece_selected, piece_coord):
-        super().__init__(piece_selected, piece_coord)
+    def __init__(self, piece_selected, piece_coord, board):
+        super().__init__(piece_selected, piece_coord, board)
 
         self.movement_range = GRID_SIZE
         self.moves_list = sum_directions(N, E), sum_directions(N, W), \
                           sum_directions(S, E), sum_directions(S, W), \
 
 class Queen(Pieces):
-    def __init__(self, piece_selected, piece_coord):
-        super().__init__(piece_selected, piece_coord)
+    def __init__(self, piece_selected, piece_coord, board):
+        super().__init__(piece_selected, piece_coord, board)
 
         self.movement_range = GRID_SIZE
         self.moves_list = N, S, E, W, sum_directions(N, E), sum_directions(N, W), \
                           sum_directions(S, E), sum_directions(S, W), \
 
-# MOVEMENT ={
-#     'wP': (UP, (0, -2)),
-#     'wR': (UP, RIGHT, LEFT, DOWN),
-#     'wB': UP,
-#     'wN': UP,
-#     'wQ': UP,
-#     'wK': UP,
-#     'bP': (DOWN, (0, 2)),
-#     'bR': UP,
-#     'bN': UP,
-#     'bB': UP,
-#     'bQ': UP,
-#     'bK': UP,
-# }
 #
 # ONLY_CAPTURING_MOVEMENT = {
 #     'wP':(UP+LEFT,UP+RIGHT),
