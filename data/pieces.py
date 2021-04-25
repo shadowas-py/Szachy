@@ -58,7 +58,7 @@ class King(Piece):
         self.moves_list = N, S, E, W, \
                           sum_directions(N, E), sum_directions(N, W), sum_directions(S, W), sum_directions(S, W)
         # TO DO
-        # dodac znaczniki roszad dla bialego i czarnego
+        # dodac znaczniki i ruch roszady dla bialego i czarnego
 
 
 class Rook(Piece):
@@ -79,6 +79,22 @@ class Knight(Piece):
                           sum_directions(W, W, N), sum_directions(W, W, S), \
                           sum_directions(S, S, E), sum_directions(S, S, W)
 
+
+class Bishop(Piece):
+    def __init__(self, piece_selected, piece_coord):
+        super().__init__(piece_selected, piece_coord)
+
+        self.movement_range = GRID_SIZE
+        self.moves_list = sum_directions(N, E), sum_directions(N, W), \
+                          sum_directions(S, E), sum_directions(S, W), \
+
+class Queen(Piece):
+    def __init__(self, piece_selected, piece_coord):
+        super().__init__(piece_selected, piece_coord)
+
+        self.movement_range = GRID_SIZE
+        self.moves_list = N, S, E, W, sum_directions(N, E), sum_directions(N, W), \
+                          sum_directions(S, E), sum_directions(S, W), \
 
 # MOVEMENT ={
 #     'wP': (UP, (0, -2)),
