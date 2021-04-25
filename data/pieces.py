@@ -8,28 +8,29 @@ def sum_directions(direction1, direction2, direction3=(0, 0)):
 
 
 class Pieces(object):
-    def __init__(self, piece_selected, piece_coord, board):
-        self.piece_symbol = piece_selected[1]
+    def __init__(self, board, piece_coord, piece_selected):
+        self.piece_selected = piece_selected
+        self.piece_symbol = self.piece_selected[1]
         self.piece_color = piece_selected[0]
         self.piece_coord = piece_coord
         self.board = board
 
     def swap_piece_symbol_to_object(self):
 
-        PIECE_OBJECTS = {'P': Pawn(self.board, self.piece_coord, self.piece_color),
-                         'R': Rook(self.board, self.piece_coord),
-                         'N': Knight(self.board, self.piece_coord),
-                         'B': Bishop(self.board, self.piece_coord),
-                         'Q': Queen(self.board, self.piece_coord),
-                         'K': King(self.board, self.piece_coord),
+        PIECE_OBJECTS = {'P': Pawn(self.board, self.piece_coord, self.piece_selected),
+                         'R': Rook(self.board, self.piece_coord, self.piece_selected),
+                         'N': Knight(self.board, self.piece_coord, self.piece_selected),
+                         'B': Bishop(self.board, self.piece_coord, self.piece_selected),
+                         'Q': Queen(self.board, self.piece_coord, self.piece_selected),
+                         'K': King(self.board, self.piece_coord, self.piece_selected),
                          }
         return PIECE_OBJECTS[self.piece_symbol]
 
 
 class Pawn(Pieces):
 
-    def __init__(self, board, piece_selected, piece_coord):  ### ///////////////////////////////////
-        super().__init__(piece_selected, piece_coord, board)
+    def __init__(self, board, piece_coord, piece_selected):  ### ///////////////////////////////////
+        super().__init__(board, piece_coord, piece_selected)
         self.movement_range = 1  # domyslna ilosc pól o jakie dana figura moze sie poruszac
 
         # Kolizje z innymi bierkami beda liczone gdzie indziej
