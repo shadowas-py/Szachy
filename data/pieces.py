@@ -109,7 +109,7 @@ class Rook():
 class Knight():
     def __init__(self, board, piece_color, piece_coord):
 
-        self.movement_range = GRID_SIZE-1
+        self.movement_range = 1
         self.movement = sum_directions(N, N, E), sum_directions(N, N, W), \
                           sum_directions(E, E, N), sum_directions(E, E, S), \
                           sum_directions(W, W, N), sum_directions(W, W, S), \
