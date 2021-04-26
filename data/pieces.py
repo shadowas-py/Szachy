@@ -7,12 +7,11 @@ def listing_all_posible_moves_for_the_piece(piece_movement, movement_range, piec
     moves_list = []
     for i in range(movement_range):
         for j in range(len(piece_movement)):
-            increased_piece_movement = sum_directions(piece_movement[j], (i, i))  # kierunek ruchu z mnoznikiem
-            coords_to_check = sum_directions(piece_coord, increased_piece_movement)
-            if min(coords_to_check) >= 0:
-                moves_list.append(piece_movement[j])
-            # else:
-            #     continue   # jak wyjde poza zakres planszy to zaczynam sprawdzac kolejne kierunki(piece_movement)
+            increased_piece_movement = sum_directions(piece_movement[j], (i, i))  # kierunek ruchu z mnoznikiem 'i'
+            coords_after_move = sum_directions(piece_coord, increased_piece_movement)
+            if min(coords_after_move) >= 0 and max(coords_after_move) < 18:
+                moves_list.append(increased_piece_movement)
+             # jak wyjde poza zakres planszy to zaczynam sprawdzac kolejne kierunki(piece_movement)
     return moves_list
 
 class Pieces(object):
