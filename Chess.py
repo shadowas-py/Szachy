@@ -58,8 +58,18 @@ def main():
 if __name__ == "__main__":
     main()
 
-# zrobic poprawne poprawnie grafike z odswiezaniem
-# przezroczystosc pol
-# 1.Zdefiniowac figury
+#TO DO
+# zrobic porzadek w koordynatach bo raz sa to listy a raz tuple
+# poprawic generowanie ruchów dla skoczka i innych
+# uporzadkowac kod w miare mozliwosci
+# zrobic przeźroczystość pol szachownicy
+
+#later
+# 1. generowanie ruchow z uwzglednieniem innych figur
 # 2.Promocja piona
 # 3.Bicie w przelocie
+# 4.generowac notacje szachowa
+# 5.cofanie ruchow
+# 6.sprawdzanie szacha
+# 7.sprawdzanie mata i pata
+# 8.zegary
