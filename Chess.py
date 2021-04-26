@@ -73,4 +73,3 @@ if __name__ == "__main__":
 # 6.sprawdzanie szacha
 # 7.sprawdzanie mata i pata
 # 8.zegary
-
