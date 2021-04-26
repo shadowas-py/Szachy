@@ -3,17 +3,19 @@ from .constants import N, S, W, E, GRID_SIZE
 def sum_directions(direction1, direction2, direction3=(0, 0)):
     return tuple(map(sum, zip(direction1, direction2, direction3)))
 
+def multiply_direction(direction, multiplier):
+    multiplied_direction = (direction[0]*multiplier, direction[1]*multiplier)
+    return multiplied_direction
+
 def listing_moves_for_the_piece(piece_movement, movement_range, piece_coord):
     print(piece_movement, "a")
     moves_list = []
     for i in range(movement_range):
         for j in range(len(piece_movement)):
-            increased_piece_movement = sum_directions(piece_movement[j], (i, i))  # kierunek ruchu z mnoznikiem 'i'
+            increased_piece_movement = multiply_direction(piece_movement[j], i+1)  # kierunek ruchu z mnoznikiem 'i'
             coords_after_move = sum_directions(piece_coord, increased_piece_movement)
             if min(coords_after_move) >= 0 and max(coords_after_move) < 8:
                 moves_list.append(increased_piece_movement)
-            else:
-                continue
     return moves_list
 
 class Pieces(object):
