@@ -5,10 +5,9 @@ def sum_directions(direction1, direction2, direction3=(0, 0)):
 
 def multiply_direction(direction, multiplier):
     multiplied_direction = (direction[0]*multiplier, direction[1]*multiplier)
-    return multiplied_direction
+    return list(multiplied_direction)
 
 def listing_moves_for_the_piece(piece_movement, movement_range, piece_coord):
-    print(piece_movement, "a")
     moves_list = []
     for i in range(movement_range):
         for j in range(len(piece_movement)):
@@ -88,7 +87,6 @@ class Pawn():
         # TO DO
         # bicie w przelocie
 
-
 class King():
     def __init__(self, board, piece_color, piece_coord): # parametry do poprawienia
         self.movement_range = 1
@@ -103,7 +101,7 @@ class King():
 class Rook():
     def __init__(self, board, piece_color, piece_coord):
         self.movement_range = GRID_SIZE-1
-        self.movement = (N, S, E, W)
+        self.movement = N, S, E, W
         self.all_moves = listing_moves_for_the_piece(self.movement, self.movement_range, piece_coord)
 
 class Knight():

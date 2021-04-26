@@ -59,7 +59,7 @@ if __name__ == "__main__":
     main()
 
 #TO DO
-# zrobic porzadek w koordynatach bo raz sa to listy a raz tuple
+# logger
 # poprawic generowanie ruchów
 # uporzadkowac kod w miare mozliwosci
 # zrobic przeźroczystość pol szachownicy
