@@ -36,6 +36,6 @@ GRAPHICS_NAMES = {'wP': 'white_pawn',
 # DIRECTIONS
 N = [0, -1]
 S = [0, 1]
-W = [-1, 0]
 E = [1, 0]
+W = [-1, 0]
 # AttributeError: 'tuple' object has no attribute 'extend'

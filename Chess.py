@@ -38,7 +38,7 @@ def main():
                         refresh_flag = True
                         coord_selected = coord
                         pieces = Pieces(game.board, coord_selected, piece_selected)# kolejnosc argumentow
-                        specific_piece = pieces.swap_piece_symbol_to_object(piece_selected)# tu sie wczytuje instancja konkretnej figury
+                        specific_piece = pieces.swap_piece_symbol_to_object(piece_selected[1])# tu sie wczytuje instancja konkretnej figury
                         piece_movement = specific_piece.all_moves
                         print(piece_movement, "piece_movement")
                 elif piece_selected is not None:  # Wchodzi jeżeli zaznaczona jest jakas figura
