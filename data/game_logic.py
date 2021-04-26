@@ -1,7 +1,6 @@
 import pygame
 
 from .constants import BOARD_POSITION, TILE_SIZE, BOARD_END_POSITION
-# from .pieces import valid_pawn_moves
 
 def get_game_coord_from_mouse():
     mouse_pos = pygame.mouse.get_pos()
