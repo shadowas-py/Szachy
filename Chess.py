@@ -1,4 +1,5 @@
 import pygame
+import logging
 
 from Szachy.data.chessboard import GameState
 from Szachy.data.game_logic import selecting_piece, get_game_coord_from_mouse, making_move, switching_turns
@@ -13,7 +14,8 @@ game = GameState()
 
 # SETTINGS
 pygame.display.set_caption('Szachy')
-
+logging.basicConfig(filename='logs.log', level=logging.DEBUG,
+                    format = '%(asctime)s,:%(levelname)s:%(module)s:,%(message)s')
 
 def main():
     run = True
@@ -59,7 +61,6 @@ if __name__ == "__main__":
     main()
 
 #TO DO
-# logger
 # poprawic generowanie ruchów
 # uporzadkowac kod w miare mozliwosci
 # zrobic przeźroczystość pol szachownicy
