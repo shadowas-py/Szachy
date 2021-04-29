@@ -58,3 +58,6 @@ def switching_turns(active_player):
         return 'b'
     else:
         return "w"
+
+def generating_all_possible_moves():
+    pass
