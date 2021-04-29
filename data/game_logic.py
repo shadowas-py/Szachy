@@ -33,6 +33,7 @@ def selecting_piece(board, coord, active_player): # Zwraca None jeżeli nie jest
 #     else:
 #         pass
 
+# zeby nie wywalalo jak kliknie sie poza plansze
 def making_move(board, piece_selected, base_coord, target_coord):
     row, col = target_coord
     target_content = board[col][row]

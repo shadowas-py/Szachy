@@ -61,7 +61,6 @@ if __name__ == "__main__":
     main()
 
 #TO DO
-# poprawic generowanie ruchów
 # uporzadkowac kod w miare mozliwosci
 # zrobic przeźroczystość pol szachownicy
 

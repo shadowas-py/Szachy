@@ -21,9 +21,6 @@ def drawing_board():
                                 TILE_SIZE, TILE_SIZE))
 
 def drawing_pieces(board):
-    # for i in range(len(board)):
-    #     print(board[i])
-    # print("\n")
     for col in range(GRID_SIZE):
         for row in range(GRID_SIZE):
             if board[col][row] != "--":
