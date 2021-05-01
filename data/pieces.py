@@ -22,37 +22,37 @@ def listing_moves_for_the_piece(piece_movement, movement_range, piece_coord):
                 moves_list.append(increased_piece_movement)
     return moves_list
 
-class Pieces:
-    def __init__(self, board, piece_coord, piece_selected):
-        self.piece_color = piece_selected[0]
-        self.piece_coord = piece_coord
-        self.board = board
+# class Pieces:
+#     def __init__(self, board, piece_coord, piece_selected):
+#         self.piece_color = piece_selected[0]
+#         self.piece_coord = piece_coord
+#         self.board = board
 
-    def swap_piece_symbol_to_object(self, piece_selected):# sam symbol figury bez koloru
-
-        if piece_selected == "P":
-            piece_object = Pawn(self.board, self.piece_color, self.piece_coord)
-        elif piece_selected == "R":
-            piece_object = Rook(self.board, self.piece_color,self.piece_coord)
-        elif piece_selected == "N":
-            piece_object = Knight(self.board, self.piece_color,self.piece_coord)
-        elif piece_selected == "B":
-            piece_object = Bishop(self.board, self.piece_color,self.piece_coord)
-        elif piece_selected == "Q":
-            piece_object = Queen(self.board, self.piece_color,self.piece_coord)
-        elif piece_selected == "K":
-            piece_object = King(self.board, self.piece_color,self.piece_coord)
-
-        # PIECE_OBJECTS = {'P': Pawn(self.board, self.piece_color, self.piece_coord),
-        #                  'R': Rook(self.board, self.piece_color,self.piece_coord),
-        #                  'N': Knight(self.board, self.piece_color,self.piece_coord),
-        #                  'B': Bishop(self.board, self.piece_color,self.piece_coord),
-        #                  'Q': Queen(self.board, self.piece_color,self.piece_coord),
-        #                  'K': King(self.board, self.piece_color,self.piece_coord),
-        #                  }
-        # return PIECE_OBJECTS[piece_selected]
-        # sam symbol figury bez koloru
-        return piece_object
+    # def swap_piece_symbol_to_object(self, piece_selected):# sam symbol figury bez koloru
+    #
+    #     if piece_selected == "P":
+    #         piece_object = Pawn(self.board, self.piece_color, self.piece_coord)
+    #     elif piece_selected == "R":
+    #         piece_object = Rook(self.board, self.piece_color,self.piece_coord)
+    #     elif piece_selected == "N":
+    #         piece_object = Knight(self.board, self.piece_color,self.piece_coord)
+    #     elif piece_selected == "B":
+    #         piece_object = Bishop(self.board, self.piece_color,self.piece_coord)
+    #     elif piece_selected == "Q":
+    #         piece_object = Queen(self.board, self.piece_color,self.piece_coord)
+    #     elif piece_selected == "K":
+    #         piece_object = King(self.board, self.piece_color,self.piece_coord)
+    #
+    #     # PIECE_OBJECTS = {'P': Pawn(self.board, self.piece_color, self.piece_coord),
+    #     #                  'R': Rook(self.board, self.piece_color,self.piece_coord),
+    #     #                  'N': Knight(self.board, self.piece_color,self.piece_coord),
+    #     #                  'B': Bishop(self.board, self.piece_color,self.piece_coord),
+    #     #                  'Q': Queen(self.board, self.piece_color,self.piece_coord),
+    #     #                  'K': King(self.board, self.piece_color,self.piece_coord),
+    #     #                  }
+    #     # return PIECE_OBJECTS[piece_selected]
+    #     # sam symbol figury bez koloru
+    #     return piece_object
 
 class Pawn:
 
@@ -100,7 +100,7 @@ class King:
         self.movement = N, S, E, W, \
                           sum_directions(N, E), sum_directions(N, W), sum_directions(S, W), sum_directions(S, W)
 
-        self.all_moves = listing_moves_for_the_piece(self.movement, self.movement_range, piece_coord)
+        # self.all_moves = listing_moves_for_the_piece(self.movement, self.movement_range, piece_coord)
         # TO DO
         # dodac znaczniki i ruch roszady dla bialego i czarnego
 
@@ -109,7 +109,7 @@ class Rook:
         self.color = color
         self.movement_range = GRID_SIZE-1
         self.movement = N, S, E, W
-        self.all_moves = listing_moves_for_the_piece(self.movement, self.movement_range, piece_coord)
+        # self.all_moves = listing_moves_for_the_piece(self.movement, self.movement_range, piece_coord)
 
 class Knight:
     def __init__(self, board, piece_color, piece_coord):
@@ -120,7 +120,7 @@ class Knight:
                           sum_directions(W, W, N), sum_directions(W, W, S), \
                           sum_directions(S, S, E), sum_directions(S, S, W)
 
-        self.all_moves = listing_moves_for_the_piece(self.movement, self.movement_range, piece_coord)
+        # self.all_moves = listing_moves_for_the_piece(self.movement, self.movement_range, piece_coord)
 
 class Bishop():
     def __init__(self, board, piece_color, piece_coord):
@@ -129,7 +129,7 @@ class Bishop():
         self.movement = sum_directions(N, E), sum_directions(N, W), \
                           sum_directions(S, E), sum_directions(S, W), \
 
-        self.all_moves = listing_moves_for_the_piece(self.movement, self.movement_range, piece_coord)
+        # self.all_moves = listing_moves_for_the_piece(self.movement, self.movement_range, piece_coord)
 
 class Queen:
     def __init__(self, board, piece_color, piece_coord):
@@ -138,7 +138,7 @@ class Queen:
         self.movement = N, S, E, W, sum_directions(N, E), sum_directions(N, W), \
                           sum_directions(S, E), sum_directions(S, W), \
 
-        self.all_moves = listing_moves_for_the_piece(self.movement, self.movement_range, piece_coord)
+        # self.all_moves = listing_moves_for_the_piece(self.movement, self.movement_range, piece_coord)
 
 
 

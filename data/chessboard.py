@@ -13,5 +13,7 @@ class GameState:
             [Pawn('w'), Pawn('w'), Pawn('w'), Pawn('w'), Pawn('w'), Pawn('w'), Pawn('w'), Pawn('w')],
             [Rook('w'), Knight('w'), Bishop('w'), Queen('w'), King('w'), Bishop('w'), Knight('w'), Rook('w')]]
 
+
+
     def __str__(self):
         return '\n'.join(map(','.join, self.board))
