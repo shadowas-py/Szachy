@@ -56,13 +56,15 @@ class Pieces:
 
 class Pawn:
 
-    def __init__(self, board, piece_color, piece_coord):
-        self.movement_range = 1  # domyslna ilosc pól o jakie dana figura moze sie poruszac
+    def __init__(self, board, piece_color, piece_coord): # domyslna ilosc pól o jakie dana figura moze sie poruszac
         self.piece_color = piece_color
         self.piece_coord = piece_coord
 
+        #MOVEMENT
+        self.movement_range = 1
+
         # Kolizje z innymi bierkami beda liczone gdzie indziej
-        def listing_pawn_moves():
+        def generating_pawn_moves():
             if self.piece_color == 'w':
                 white_pawn_starting_row = 6
                 pawn_moves = N
@@ -88,7 +90,7 @@ class Pawn:
                     pawn_moves.extend(sum_directions(S, E))
                 return pawn_moves
 
-        self.all_moves = listing_pawn_moves()
+        self.all_moves = generating_pawn_moves()
         # TO DO
         # bicie w przelocie
 
@@ -103,7 +105,8 @@ class King:
         # dodac znaczniki i ruch roszady dla bialego i czarnego
 
 class Rook:
-    def __init__(self, board, piece_color, piece_coord):
+    def __init__(self, color):
+        self.color = color
         self.movement_range = GRID_SIZE-1
         self.movement = N, S, E, W
         self.all_moves = listing_moves_for_the_piece(self.movement, self.movement_range, piece_coord)
