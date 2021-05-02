@@ -24,7 +24,10 @@ class GameState:
                 if min(coords_after_move) >= 0 and max(coords_after_move) < 8:
                     "dodac if zapobiega generowaniu sie wspolrzednych poza polem z bierka przeciwnego koloru?"
                     moves_list.append(increased_piece_movement)
-        return moves_list
+        if not len(moves_list) == 0:
+            return moves_list
+        else:
+            return None
 
     def __str__(self):
         return '\n'.join(map(','.join, self.board))
