@@ -19,20 +19,6 @@ DARK_GRAY = (50, 50, 50)
 PINK = (240, 50, 210)
 BROWN = (100, 50, 0)
 
-# PIECES IMAGES
-GRAPHICS_NAMES = {'wP': 'white_pawn',
-                  'wR': 'white_rook',
-                  'wN': 'white_knight',
-                  'wB': 'white_bishop',
-                  'wQ': 'white_queen',
-                  'wK': 'white_king',
-                  'bP': 'black_pawn',
-                  'bR': 'black_rook',
-                  'bN': 'black_knight',
-                  'bB': 'black_bishop',
-                  'bQ': 'black_queen',
-                  'bK': 'black_king',
-                  }
 # DIRECTIONS
 N = [0, -1]
 S = [0, 1]
