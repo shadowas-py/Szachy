@@ -4,7 +4,7 @@ import logging
 from Szachy.data.chessboard import GameState
 from Szachy.data.game_logic import selecting_piece, get_game_coord_from_mouse, making_move, switching_turns
 from Szachy.data.graphic import drawing_board, drawing_pieces
-from Szachy.data.pieces import Pieces
+# from Szachy.data.pieces import Pieces
 from Szachy.data.settings import FPS
 
 pygame.init()
@@ -39,10 +39,8 @@ def main():
                     if piece_selected is not None:
                         refresh_flag = True
                         coord_selected = coord
-                        pieces = Pieces(game.board, coord_selected, piece_selected)# kolejnosc argumentow
-                        specific_piece = pieces.swap_piece_symbol_to_object(piece_selected[1])# tu sie wczytuje instancja konkretnej figury
-                        piece_movement = specific_piece.all_moves
-                        print(piece_movement, "piece_movement")
+
+
                 elif piece_selected is not None:  # Wchodzi jeżeli zaznaczona jest jakas figura
                     if making_move(game.board, piece_selected, coord_selected, target_coord=coord) is None:
                         # ruch sie bedzie wykonywal jezeli przemieszczenie jakie ma byc wykonane
