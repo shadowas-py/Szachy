@@ -36,9 +36,12 @@ def main():
                 coord = get_game_coord_from_mouse()
                 if piece_selected is None:  # Wchodzi jeżeli nic nie jest zaznaczone
                     piece_selected = selecting_piece(game.board, coord, active_player)
-                    selected_piece_moves = game.generating_all_moves_for_piece(piece_selected, coord_selected)
-                    if selected_piece_moves is not None: # Wchodzi jak juz jest zaznaczony piece
+                    if piece_selected is not None: # Wchodzi jak juz jest zaznaczony piece // generuje jego ruchy
+                        '''moznaby przypisac coord do obiektu piece'''
+                        selected_piece_moves = game.generating_all_moves_for_piece(game.board, piece_selected, coord)
+                        print(selected_piece_moves)
                         refresh_flag = True# zmienna do odswiezania ekranu
+                        '''FINISH IT!!!'''
                         coord_selected = coord
                 elif piece_selected is not None:  # Wchodzi jeżeli zaznaczona jest jakas figura
                     if making_move(game.board, piece_selected, coord_selected, target_coord=coord) is None:
