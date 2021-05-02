@@ -39,8 +39,7 @@ def main():
                     if piece_selected is not None:
                         refresh_flag = True
                         coord_selected = coord
-
-
+                        print(game.generating_all_moves_for_piece(game.board(coord_selected), coord_selected))
                 elif piece_selected is not None:  # Wchodzi jeżeli zaznaczona jest jakas figura
                     if making_move(game.board, piece_selected, coord_selected, target_coord=coord) is None:
                         # ruch sie bedzie wykonywal jezeli przemieszczenie jakie ma byc wykonane

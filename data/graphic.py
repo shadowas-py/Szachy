@@ -3,6 +3,7 @@ import pygame
 
 from .constants import *
 from .settings import WIDTH, HEIGHT
+from .pieces import *
 
 WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
    
@@ -23,10 +24,10 @@ def drawing_board():
 def drawing_pieces(board):
     for col in range(GRID_SIZE):
         for row in range(GRID_SIZE):
-            if board[col][row] != "--":
-                tile = str(board[col][row])
-                name = GRAPHICS_NAMES[tile]
+            if board[col][row] is not None:
+                file_name = board[col][row].file_name
+                print(file_name)
                 piece = pygame.transform.scale(pygame.image.load(
-                    os.path.join('Images', name+'.png')),
+                    os.path.join('Images', file_name+'.png')),
                     (TILE_SIZE, TILE_SIZE))
                 WINDOW.blit(piece, (BOARD_POSITION[0]+(TILE_SIZE*row), BOARD_POSITION[1]+(TILE_SIZE*col)))

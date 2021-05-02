@@ -109,6 +109,12 @@ class Rook:
         self.color = color
         self.movement_range = GRID_SIZE-1
         self.movement = N, S, E, W
+
+        # GRAPHIC
+        if self.color == 'b':
+            self.file_name = 'black_rook'
+        else:
+            self.file_name = 'white_rook'
         # self.all_moves = listing_moves_for_the_piece(self.movement, self.movement_range, piece_coord)
 
 class Knight:

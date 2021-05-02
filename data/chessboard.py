@@ -13,7 +13,7 @@ class GameState:
             [Pawn('w'), Pawn('w'), Pawn('w'), Pawn('w'), Pawn('w'), Pawn('w'), Pawn('w'), Pawn('w')],
             [Rook('w'), Knight('w'), Bishop('w'), Queen('w'), King('w'), Bishop('w'), Knight('w'), Rook('w')]]
 
-    def generating_all_moves_for_piece(board, piece, piece_coord=click, active_player='w'):  # WYPISYWANIE KOLEJNYCH KOLUMN
+    def generating_all_moves_for_piece(board, piece, coord, active_player='w'):  # WYPISYWANIE KOLEJNYCH KOLUMN
         moves_list = []
         for j in range(len(piece.movement)):
             for i in range(piece.movement_range):
