@@ -1,19 +1,20 @@
+from .game_logic import sum_directions
 from .constants import N, S, W, E, GRID_SIZE
 
 
-"""WYCZYSCIC LISTE DOSTEPNYCH RUCHOW JEZELI NIE MA ZADNYCH RUCHOW LUB KLIKNIETE
- BEDZIE POLE NIEDOSTEPNE NA LISCIE DOZWOLONYXH RUCHOW"""
-def listing_moves_for_the_piece(piece_movement, movement_range, piece_coord):
-    moves_list = []
-    for j in range(len(piece_movement)):
-        for i in range(movement_range):
-            increased_piece_movement = multiply_direction(piece_movement[j], i+1)  # kierunek ruchu z mnoznikiem 'i'
-            coords_after_move = sum_directions(piece_coord, increased_piece_movement)
-            # if pilnujacy zeby generowane ruchy nie wychodzilo poza zakres planszy
-            if min(coords_after_move) >= 0 and max(coords_after_move) < 8:
-                "dodac if zapobiega generowaniu sie wspolrzednych poza polem z bierka przeciwnego koloru?"
-                moves_list.append(increased_piece_movement)
-    return moves_list
+# """WYCZYSCIC LISTE DOSTEPNYCH RUCHOW JEZELI NIE MA ZADNYCH RUCHOW LUB KLIKNIETE
+#  BEDZIE POLE NIEDOSTEPNE NA LISCIE DOZWOLONYXH RUCHOW"""
+# def listing_moves_for_the_piece(piece_movement, movement_range, piece_coord):
+#     moves_list = []
+#     for j in range(len(piece_movement)):
+#         for i in range(movement_range):
+#             increased_piece_movement = multiply_direction(piece_movement[j], i+1)  # kierunek ruchu z mnoznikiem 'i'
+#             coords_after_move = sum_directions(piece_coord, increased_piece_movement)
+#             # if pilnujacy zeby generowane ruchy nie wychodzilo poza zakres planszy
+#             if min(coords_after_move) >= 0 and max(coords_after_move) < 8:
+#                 "dodac if zapobiega generowaniu sie wspolrzednych poza polem z bierka przeciwnego koloru?"
+#                 moves_list.append(increased_piece_movement)
+#     return moves_list
 
 # class Pieces:
 #     def __init__(self, board, piece_coord, piece_selected):

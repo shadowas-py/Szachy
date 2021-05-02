@@ -1,4 +1,5 @@
 from .pieces import Pawn, Rook, Knight, Bishop, Queen, King
+from .game_logic import sum_directions, multiply_direction
 
 class GameState:
     def __init__ (self):
@@ -17,10 +18,8 @@ class GameState:
         moves_list = []
         for j in range(len(piece.movement)):
             for i in range(piece.movement_range):
-                increased_piece_movement = multiply_direction(piece.movement[j],
-                                                              i + 1)  # kierunek ruchu z mnoznikiem 'i'\
-                print(piece_coord)
-                coords_after_move = sum_directions(piece_coord, increased_piece_movement)
+                increased_piece_movement = multiply_direction(piece.movement[j], i + 1) # i jest mnoznikiem odleglosci
+                coords_after_move = sum_directions(coord, increased_piece_movement)
                 # if pilnujacy zeby generowane ruchy nie wychodzilo poza zakres planszy
                 if min(coords_after_move) >= 0 and max(coords_after_move) < 8:
                     "dodac if zapobiega generowaniu sie wspolrzednych poza polem z bierka przeciwnego koloru?"
