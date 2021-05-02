@@ -59,5 +59,10 @@ def switching_turns(active_player):
     else:
         return "w"
 
-def generating_all_possible_moves():
-    pass
+def sum_directions(direction1, direction2, direction3=(0, 0)):
+    return tuple(map(sum, zip(direction1, direction2, direction3)))
+
+def multiply_direction(direction, multiplier):
+    multiplied_direction = (direction[0]*multiplier, direction[1]*multiplier)
+    return list(multiplied_direction)
+
