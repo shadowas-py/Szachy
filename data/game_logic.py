@@ -21,8 +21,7 @@ def get_game_coord_from_mouse():
 def selecting_piece(board, coord, active_player): # Zwraca None jeżeli nie jest klikniete pole z figura aktywnego gracza
     row, col = coord
     piece = board[col][row]
-    print(piece)
-    if piece[0] == active_player:
+    if piece.color == active_player:
         return piece
     else:
         return None
