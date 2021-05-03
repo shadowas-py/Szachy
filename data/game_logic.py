@@ -2,6 +2,13 @@ import pygame
 
 from .constants import BOARD_POSITION, TILE_SIZE, BOARD_END_POSITION
 
+def sum_directions(direction1, direction2, direction3=(0, 0)):
+    return tuple(map(sum, zip(direction1, direction2, direction3)))
+
+def multiply_direction(direction, multiplier):
+    multiplied_direction = (direction[0]*multiplier, direction[1]*multiplier)
+    return list(multiplied_direction)
+
 def get_game_coord_from_mouse():
     mouse_pos = pygame.mouse.get_pos()
     coord = ((mouse_pos[0] - BOARD_POSITION[1])//TILE_SIZE, (mouse_pos[1] - BOARD_POSITION[0])//TILE_SIZE)
@@ -34,24 +41,15 @@ def selecting_piece(board, coord, active_player): # Zwraca None jeżeli nie jest
 #         pass
 
 # zeby nie wywalalo jak kliknie sie poza plansze
-def making_move(board, piece_selected, base_coord, target_coord):
-    row, col = target_coord
-    target_content = board[col][row]
-    piece_shift_col = target_coord[0] - base_coord[0]
-    piece_shift_row = target_coord[1] - base_coord[1]
-    piece_shift = (piece_shift_col, piece_shift_row)
-    # valid_moves = listing_valid_moves(piece_selected, base_coord, target_content, target_coord)
-    if target_content[0] != piece_selected[0]: #and piece_shift in valid_moves:  pole na które przemieszczam figure musi być puste albo zajęte przez figure przeciwnika
-        board[base_coord[1]][base_coord[0]] = "--"
+def making_move(board, piece_selected, base_coord, target_coord, moves_list):
+    piece_shift =
+    if piece_shift in moves_list:#
+        print("test")
+        board[base_coord[1]][base_coord[0]] = None
         board[target_coord[1]][target_coord[0]] = piece_selected
-        # for i in range(len(board)):
-        #     print(board[i])
-        # print("\n")
-        print("making move", piece_selected[0])
-        return None
+        return True
     else:
-        print("not making move")
-        return 0
+        return False
 
 def switching_turns(active_player):
     if active_player == "w":
@@ -59,10 +57,5 @@ def switching_turns(active_player):
     else:
         return "w"
 
-def sum_directions(direction1, direction2, direction3=(0, 0)):
-    return tuple(map(sum, zip(direction1, direction2, direction3)))
 
-def multiply_direction(direction, multiplier):
-    multiplied_direction = (direction[0]*multiplier, direction[1]*multiplier)
-    return list(multiplied_direction)
 
