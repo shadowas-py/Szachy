@@ -5,8 +5,12 @@ class GameState:
     def __init__ (self, gameFilePath="classic_new_game.csv"):
         with open(gameFilePath,'r') as f:
             self.nextMoveColor, *boardRowsText = f.read()
-        self.board = [[pieceClassesDict[None if pieceKey is '' else pieceKey[0]](pieceKey[1]) for pieceColor, pieceTag in pieceRowText.split(',')] for pieceRowText in pieceRowsText]
-        
+        pieceClassesDict = {pieceClass.tag: pieceClass for pieceClass in [Pawn, Rook, Knight, Bishop, Queen, King]}
+        self.board = [[None if pieceKey is '' else pieceClassesDict[pieceKey[0]](pieceKey[1]) for pieceColor, pieceTag in pieceRowText.split(',')] for pieceRowText in pieceRowsText]
+
+    def __str__(self):
+        return '\n'.join([' '.join(map(str,boardRow)) for boardRow in self.board])
+
 
     def generating_all_moves_for_piece(self, board, piece, coord,):  # WYPISYWANIE KOLEJNYCH KOLUMN
         moves_list = []

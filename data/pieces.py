@@ -48,8 +48,12 @@ from .constants import N, S, W, E, GRID_SIZE
     #     # sam symbol figury bez koloru
     #     return piece_object
 
-class Pawn:
+class Piece:
+    def __str__(self):
+        return tag+self.color
 
+class Pawn(Piece):
+    tag = 'P'
     def __init__(self, color): # domyslna ilosc pól o jakie dana figura moze sie poruszac
         self.color = color
         # self.piece_coord = piece_coord
@@ -93,7 +97,8 @@ class Pawn:
         # TO DO
         # bicie w przelocie
 
-class King:
+class King(Piece):
+    tag = 'K'
     def __init__(self, color): # parametry do poprawienia
         self.color = color
         self.movement_range = 1
@@ -108,7 +113,8 @@ class King:
         # TO DO
         # dodac znaczniki i ruch roszady dla bialego i czarnego
 
-class Rook:
+class Rook(Piece):
+    tag = 'R'
     def __init__(self, color):
         self.color = color
         self.movement_range = GRID_SIZE-1
@@ -121,7 +127,8 @@ class Rook:
             self.file_name = 'white_rook'
         # self.all_moves = listing_moves_for_the_piece(self.movement, self.movement_range, piece_coord)
 
-class Knight:
+class Knight(Piece):
+    tag = 'N'
     def __init__(self, color):
         self.color = color
         self.movement_range = 1
@@ -137,7 +144,8 @@ class Knight:
 
         # self.all_moves = listing_moves_for_the_piece(self.movement, self.movement_range, piece_coord)
 
-class Bishop:
+class Bishop(Piece):
+    tag = 'B'
     def __init__(self, color):
         self.color = color
         self.movement_range = GRID_SIZE-1
@@ -150,7 +158,8 @@ class Bishop:
             self.file_name = 'white_bishop'
         # self.all_moves = listing_moves_for_the_piece(self.movement, self.movement_range, piece_coord)
 
-class Queen:
+class Queen(Piece):
+    tag = 'Q'
     def __init__(self, color):
         self.color = color
         self.movement_range = GRID_SIZE-1
