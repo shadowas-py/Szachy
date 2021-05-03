@@ -5,6 +5,9 @@ from .constants import BOARD_POSITION, TILE_SIZE, BOARD_END_POSITION
 def sum_directions(direction1, direction2, direction3=(0, 0)):
     return tuple(map(sum, zip(direction1, direction2, direction3)))
 
+def sub_directions(direction1, direction2, direction3=(0, 0)):### dokonczyc
+    return tuple(map(sum, zip(direction1, direction2, direction3)))
+
 def multiply_direction(direction, multiplier):
     multiplied_direction = (direction[0]*multiplier, direction[1]*multiplier)
     return list(multiplied_direction)
@@ -42,9 +45,9 @@ def selecting_piece(board, coord, active_player): # Zwraca None jeżeli nie jest
 
 # zeby nie wywalalo jak kliknie sie poza plansze
 def making_move(board, piece_selected, base_coord, target_coord, moves_list):
-    piece_shift =
+    piece_shift = sum_directions(base_coord, target_coord)
+    '''DOKONCZYC'''
     if piece_shift in moves_list:#
-        print("test")
         board[base_coord[1]][base_coord[0]] = None
         board[target_coord[1]][target_coord[0]] = piece_selected
         return True
