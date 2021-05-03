@@ -2,16 +2,11 @@ from .pieces import Pawn, Rook, Knight, Bishop, Queen, King
 from .game_logic import sum_directions, multiply_direction
 
 class GameState:
-    def __init__ (self):
-        self.board = [
-            [Rook('b'), Knight('b'), Bishop('b'), Queen('b'), King('b'), Bishop('b'), Knight('b'), Rook('b')],
-            [Pawn('b'), Pawn('b'), Pawn('b'), Pawn('b'), Pawn('b'), Pawn('b'), Pawn('b'), Pawn('b')],
-            [None, None, None, None, None, None, None, None],
-            [None, None, None, None, None, None, None, None],
-            [None, None, None, None, None, None, None, None],
-            [None, None, None, None, None, None, None, None],
-            [Pawn('w'), Pawn('w'), Pawn('w'), Pawn('w'), Pawn('w'), Pawn('w'), Pawn('w'), Pawn('w')],
-            [Rook('w'), Knight('w'), Bishop('w'), Queen('w'), King('w'), Bishop('w'), Knight('w'), Rook('w')]]
+    def __init__ (self, gameFilePath="classic_new_game.csv"):
+        with open(gameFilePath,'r') as f:
+            self.nextMoveColor, *boardRowsText = f.read()
+        self.board = [[pieceClassesDict[None if pieceKey is '' else pieceKey[0]](pieceKey[1]) for pieceColor, pieceTag in pieceRowText.split(',')] for pieceRowText in pieceRowsText]
+        
 
     def generating_all_moves_for_piece(self, board, piece, coord,):  # WYPISYWANIE KOLEJNYCH KOLUMN
         moves_list = []
