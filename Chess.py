@@ -20,6 +20,7 @@ logging.basicConfig(filename='logs.log', level=logging.DEBUG,
 def main():
     run = True
     clock = pygame.time.Clock()
+    possible_moves = None
     piece_selected = None
     coord_selected = None
     active_player = 'w'
@@ -36,14 +37,15 @@ def main():
                 coord = get_game_coord_from_mouse()
                 if piece_selected is None:  # Wchodzi jeżeli nic nie jest zaznaczone
                     piece_selected = selecting_piece(game.board, coord, active_player)
-                    if piece_selected is not None: # Wchodzi jak juz jest zaznaczony piece // generuje jego ruchy
+                    if piece_selected is not None: # Sprawdzam czy nie zaznaczam None
                         '''moznaby przypisac coord do obiektu piece'''
-                        selected_piece_moves = game.generating_all_moves_for_piece(game.board, piece_selected, coord)
-                        print(selected_piece_moves)
-                        refresh_flag = True# zmienna do odswiezania ekranu
-                        '''FINISH IT!!!'''
-                        coord_selected = coord
-                elif piece_selected is not None:  # Wchodzi jeżeli zaznaczona jest jakas figura
+                        possible_moves = game.generating_all_moves_for_piece(game.board, piece_selected, coord)
+                        if possible_moves is not None:
+                            refresh_flag = True# zmienna do odswiezania ekranu
+                            coord_selected = coord # zapisuje w pamieci koordynaty prawidlowo wybranej figury
+                        else:
+                            piece_selected = None  # odznacza figury jak nie ma mozliwosci ruchu
+                elif possible_moves is not None:  # Wchodzi jezeli jest mozliwosc ruchu dla zaznaczonej figury
                     if making_move(game.board, piece_selected, coord_selected, target_coord=coord) is None:
                         # ruch sie bedzie wykonywal jezeli przemieszczenie jakie ma byc wykonane
                         # bedzie na liscie moves allowed zwroconej z Pieces.Piece_class
