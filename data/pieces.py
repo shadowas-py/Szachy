@@ -49,48 +49,18 @@ from .constants import N, S, W, E, GRID_SIZE
     #     return piece_object
 
 class Pawn:
-
+    """zrobic zczytywanie wspolrzednych obiektu"""
+    # nie moge generowac ruchow Piona tutaj bo potrzebuje jego wspolrzedne i kompleatny stan boarda
     def __init__(self, color): # domyslna ilosc pól o jakie dana figura moze sie poruszac
         self.color = color
         #MOVEMENT
         self.movement_range = 1
-
         if self.color == 'b':
             self.file_name = 'black_pawn'
-            self.movement = N, sum_directions(N, N)
         else:
             self.file_name = 'white_pawn'
-            self.movement = S, sum_directions(S, S)
-        # Kolizje z innymi bierkami beda liczone gdzie indziej
-        # def generating_pawn_moves(board, piece_coord):
-        #     if self.piece_color == 'w':
-        #         white_pawn_starting_row = 6
-        #         pawn_moves = N
-        #         if piece_coord[1] == white_pawn_starting_row:  # Jezeli pionek znajduje sie w rzedzie startowym
-        #             pawn_moves.extend(sum_directions(N, N))
-        #         new_coord = sum_directions(piece_coord, (sum_directions(N, W)))
-        #         if board[new_coord[1]][new_coord[0]][0] == 'b':  # jeżeli czarny pion to moze bić w gore lewo
-        #             pawn_moves.extend(sum_directions(N, W))
-        #         new_coord = sum_directions(piece_coord, (sum_directions(N, E)))
-        #         if board[new_coord[1]][new_coord[0]][0] == 'b':  # jeżeli czarny pion to moze bić w gore prawo
-        #             pawn_moves.extend(sum_directions(N, E))
-        #         return pawn_moves
-        #     elif self.piece_color == 'b':  # to samo dla czarnego piona
-        #         black_pawn_starting_row = 1
-        #         pawn_moves = S
-        #         if piece_coord[1] == black_pawn_starting_row:  # Jezeli pionek znajduje sie w rzedzie startowym
-        #             pawn_moves.extend(sum_directions(S, S))
-        #         new_coord = sum_directions(piece_coord, (sum_directions(S, W)))
-        #         if board[new_coord[1]][new_coord[0]][0] == 'w':
-        #             pawn_moves.extend(sum_directions(S, W))
-        #         new_coord = sum_directions(piece_coord, (sum_directions(S, E)))
-        #         if board[new_coord[1]][new_coord[0]][0] == 'w':
-        #             pawn_moves.extend(sum_directions(S, E))
-        #         return pawn_moves
-        #
-        # self.all_moves = generating_pawn_moves()
-        # TO DO
-        # bicie w przelocie
+        #TO DO
+        #bicie w przelocie
 
 class King:
     def __init__(self, color): # parametry do poprawienia
