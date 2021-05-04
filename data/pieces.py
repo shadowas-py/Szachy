@@ -171,23 +171,3 @@ class Queen(Piece):
         else:
             self.file_name = 'white_queen'
         # self.all_moves = listing_moves_for_the_piece(self.movement, self.movement_range, piece_coord)
-
-
-
-
-# if piece = king
-#     long_castling_flag = False
-#     short_castling_flag = False
-
-#     long_castling_flag = True
-#     short_castling_flag = True
-
-#     def castling ():
-#         if move == (2,0):
-#             board(7,7) = '--'
-#             board(6,7) = self.king()
-#             board(5,7) = self.rook()
-#             rook = (king.coord[0]-1)
-#         else:
-#             board(0,7) = '--'
-#             board(2,7) = self.king()
