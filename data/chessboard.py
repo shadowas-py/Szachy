@@ -4,12 +4,10 @@ from .game_logic import sum_directions, multiply_direction
 class GameState:
     def __init__ (self, gameFilePath="classic_new_game.csv"):
         with open(gameFilePath,'r') as f:
-            self.nextMoveColor, *boardRowsText = f.read()
+            self.nextMoveColor, *boardRowsText = f.read().split('\n')
         pieceClassesDict = {pieceClass.tag: pieceClass for pieceClass in [Pawn, Rook, Knight, Bishop, Queen, King]}
-        self.board = [[None if pieceKey is '' else pieceClassesDict[pieceKey[0]](pieceKey[1]) for pieceColor, pieceTag in pieceRowText.split(',')] for pieceRowText in pieceRowsText]
+        self.board = [[None if pieceKey is '' else pieceClassesDict[pieceKey[1]](pieceKey[0]) for pieceKey in pieceRowText.split(',')] for pieceRowText in pieceRowsText]
 
-    def __str__(self):
-        return '\n'.join([' '.join(map(str,boardRow)) for boardRow in self.board])
 
 
     def generating_all_moves_for_piece(self, board, piece, coord,):  # WYPISYWANIE KOLEJNYCH KOLUMN
@@ -35,5 +33,8 @@ class GameState:
         else:
             return None
 
+
     def __str__(self):
-        return '\n'.join(map(','.join, self.board))
+        return '\n'.join([' '.join(map(lambda x:'  ' if x is None else str(x),boardRow)) for boardRow in self.board])
+
+

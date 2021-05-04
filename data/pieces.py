@@ -50,7 +50,7 @@ from .constants import N, S, W, E, GRID_SIZE
 
 class Piece:
     def __str__(self):
-        return tag+self.color
+        return self.color+self.tag
 
 class Pawn(Piece):
     tag = 'P'
