@@ -40,6 +40,7 @@ def main():
                     if piece_selected is not None: # Sprawdzam czy nie zaznaczam None
                         '''moznaby przypisac coord do obiektu piece'''
                         possible_moves = game.generating_all_moves_for_piece(game.board, piece_selected, coord)
+                        print(possible_moves)
                         if possible_moves is not None:
                             refresh_flag = True# zmienna do odswiezania ekranu
                             coord_selected = coord # zapisuje w pamieci koordynaty prawidlowo wybranej figury
@@ -47,8 +48,7 @@ def main():
                             piece_selected = None  # odznacza figury jak nie ma mozliwosci ruchu
                 elif possible_moves is not None:  # Wchodzi jezeli jest mozliwosc ruchu dla zaznaczonej figury
                     if making_move(game.board, piece_selected, coord_selected, coord, possible_moves) is True:
-                        # ruch sie bedzie wykonywal jezeli przemieszczenie jakie ma byc wykonane
-                        # bedzie na liscie moves allowed zwroconej z Pieces.Piece_class
+                        # ruch sie bedzie wykonywal jezeli bedzie na liscie moves allowed
                         drawing_board()
                         drawing_pieces(game.board)
                         active_player = switching_turns(active_player)

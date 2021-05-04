@@ -15,6 +15,7 @@ class GameState:
 
     def generating_all_moves_for_piece(self, board, piece, coord,):  # WYPISYWANIE KOLEJNYCH KOLUMN
         moves_list = []
+        print(piece.movement, piece.movement_range)
         for j in range(len(piece.movement)):
             for i in range(piece.movement_range):
                 increased_piece_movement = multiply_direction(piece.movement[j], i + 1) # i jest mnoznikiem odleglosci
@@ -30,7 +31,6 @@ class GameState:
                             break
                     else:
                         moves_list.append(increased_piece_movement)
-
         if not len(moves_list) == 0:
             return moves_list
         else:

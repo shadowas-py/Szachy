@@ -52,16 +52,15 @@ class Pawn:
 
     def __init__(self, color): # domyslna ilosc pól o jakie dana figura moze sie poruszac
         self.color = color
-        # self.piece_coord = piece_coord
-
         #MOVEMENT
         self.movement_range = 1
-        self.movement = N, S    # testowo do wywalenia
 
         if self.color == 'b':
             self.file_name = 'black_pawn'
+            self.movement = N, sum_directions(N, N)
         else:
             self.file_name = 'white_pawn'
+            self.movement = S, sum_directions(S, S)
         # Kolizje z innymi bierkami beda liczone gdzie indziej
         # def generating_pawn_moves(board, piece_coord):
         #     if self.piece_color == 'w':
