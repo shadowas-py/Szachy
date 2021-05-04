@@ -1,7 +1,6 @@
 from .game_logic import sum_directions
 from .constants import N, S, W, E, GRID_SIZE
 
-
 # """WYCZYSCIC LISTE DOSTEPNYCH RUCHOW JEZELI NIE MA ZADNYCH RUCHOW LUB KLIKNIETE
 #  BEDZIE POLE NIEDOSTEPNE NA LISCIE DOZWOLONYXH RUCHOW"""
 # def listing_moves_for_the_piece(piece_movement, movement_range, piece_coord):
@@ -21,32 +20,6 @@ from .constants import N, S, W, E, GRID_SIZE
 #         self.piece_color = piece_selected[0]
 #         self.piece_coord = piece_coord
 #         self.board = board
-
-    # def swap_piece_symbol_to_object(self, piece_selected):# sam symbol figury bez koloru
-    #
-    #     if piece_selected == "P":
-    #         piece_object = Pawn(self.board, self.piece_color, self.piece_coord)
-    #     elif piece_selected == "R":
-    #         piece_object = Rook(self.board, self.piece_color,self.piece_coord)
-    #     elif piece_selected == "N":
-    #         piece_object = Knight(self.board, self.piece_color,self.piece_coord)
-    #     elif piece_selected == "B":
-    #         piece_object = Bishop(self.board, self.piece_color,self.piece_coord)
-    #     elif piece_selected == "Q":
-    #         piece_object = Queen(self.board, self.piece_color,self.piece_coord)
-    #     elif piece_selected == "K":
-    #         piece_object = King(self.board, self.piece_color,self.piece_coord)
-    #
-    #     # PIECE_OBJECTS = {'P': Pawn(self.board, self.piece_color, self.piece_coord),
-    #     #                  'R': Rook(self.board, self.piece_color,self.piece_coord),
-    #     #                  'N': Knight(self.board, self.piece_color,self.piece_coord),
-    #     #                  'B': Bishop(self.board, self.piece_color,self.piece_coord),
-    #     #                  'Q': Queen(self.board, self.piece_color,self.piece_coord),
-    #     #                  'K': King(self.board, self.piece_color,self.piece_coord),
-    #     #                  }
-    #     # return PIECE_OBJECTS[piece_selected]
-    #     # sam symbol figury bez koloru
-    #     return piece_object
 
 class Pawn:
     """zrobic zczytywanie wspolrzednych obiektu"""

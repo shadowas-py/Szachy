@@ -45,6 +45,3 @@ def switching_turns(active_player):
         return 'b'
     else:
         return "w"
-
-
-

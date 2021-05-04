@@ -64,12 +64,12 @@ class GameState:
         else:
             for j in range(len(piece.movement)):
                 for i in range(piece.movement_range):
-                    increased_piece_movement = multiply_direction(piece.movement[j],
-                                                                  i + 1)  # i jest mnoznikiem odleglosci
+                    increased_piece_movement = multiply_direction(piece.movement[j], i + 1)
+                    # i jest mnoznikiem odleglosci
                     coords_after_move = sum_directions(coord, increased_piece_movement)
                     # if pilnujacy zeby generowane ruchy nie wychodzilo poza zakres planszy
                     if min(coords_after_move) >= 0 and max(coords_after_move) < 8:
-                        if board[coords_after_move[1]][coords_after_move[0]] != None:
+                        if board[coords_after_move[1]][coords_after_move[0]] is not None:
                             # jezeli napotka na przeszkode przerywa iteracje po dlugosci ruchu
                             if board[coords_after_move[1]][coords_after_move[0]].color == piece.color:
                                 break
