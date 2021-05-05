@@ -20,8 +20,7 @@ PINK = (240, 50, 210)
 BROWN = (100, 50, 0)
 
 # DIRECTIONS
-N = [0, -1]
-S = [0, 1]
-E = [1, 0]
-W = [-1, 0]
-# AttributeError: 'tuple' object has no attribute 'extend'
+N = (0, -1)
+S = (0, 1)
+E = (1, 0)
+W = (-1, 0)

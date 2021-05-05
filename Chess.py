@@ -45,10 +45,10 @@ def main():
                             coord_selected = coord # zapisuje w pamieci koordynaty prawidlowo wybranej figury
                         else:
                             piece_selected = None  # odznacza figury jak nie ma mozliwosci ruchu
+                    print(possible_moves)
                 elif possible_moves is not None:  # Wchodzi jezeli jest mozliwosc ruchu dla zaznaczonej figury
                     if making_move(game.board, piece_selected, coord_selected, coord, possible_moves) is True:
-                        # ruch sie bedzie wykonywal jezeli przemieszczenie jakie ma byc wykonane
-                        # bedzie na liscie moves allowed zwroconej z Pieces.Piece_class
+                        # ruch sie bedzie wykonywal jezeli bedzie na liscie moves allowed
                         drawing_board()
                         drawing_pieces(game.board)
                         active_player = switching_turns(active_player)
@@ -63,15 +63,19 @@ if __name__ == "__main__":
     main()
 
 #TO DO
-# uporzadkowac kod w miare mozliwosci
 # zrobic przeźroczystość pol szachownicy
+# podswietlanie wybranej bierki
+# podswietlanie ostatnio wykonanego ruchu
+# dodac troche grafiki (wspolrzedne, tlo, ui)
 
 #later
-# 1. generowanie ruchow z uwzglednieniem innych figur
-# 2.Promocja piona
+# uporzadkowac kod generujacy ruchy - Pawn
+# 1.Roszady(bez sprawdzania legalnosci)
+# 2.Promocja piona (interfejs wyboru figury)
 # 3.Bicie w przelocie
 # 4.generowac notacje szachowa
 # 5.cofanie ruchow
 # 6.sprawdzanie szacha
 # 7.sprawdzanie mata i pata
+# 8.spradzanie legalnosci roszady
 # 8.zegary
