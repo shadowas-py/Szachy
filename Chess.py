@@ -63,13 +63,15 @@ if __name__ == "__main__":
     main()
 
 #TO DO
-# uporzadkowac kod generujacy ruchy - Pawn
 # zrobic przeźroczystość pol szachownicy
+# podswietlanie wybranej bierki
+# podswietlanie ostatnio wykonanego ruchu
 # dodac troche grafiki (wspolrzedne, tlo, ui)
 
 #later
+# uporzadkowac kod generujacy ruchy - Pawn
 # 1.Roszady(bez sprawdzania legalnosci)
-# 2.Promocja piona
+# 2.Promocja piona (interfejs wyboru figury)
 # 3.Bicie w przelocie
 # 4.generowac notacje szachowa
 # 5.cofanie ruchow
