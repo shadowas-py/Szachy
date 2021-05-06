@@ -11,6 +11,7 @@ pygame.init()
 
 # IMPORTS
 game = GameState()
+print(game.board)
 
 # SETTINGS
 pygame.display.set_caption('Szachy')
