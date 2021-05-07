@@ -5,7 +5,7 @@ from .game_logic import sum_directions, multiply_direction
 class GameState:
     def __init__ (self, gameFilePath="classic_new_game.csv"):
         with open(gameFilePath,'r') as f:
-            self.nextMoveColor, *boardRowsText = f.read().split('\n')
+            self.nextMoveColor, *pieceRowsText = f.read().split('\n')
         pieceClassesDict = {pieceClass.tag: pieceClass for pieceClass in [Pawn, Rook, Knight, Bishop, Queen, King]}
         self.board = [[None if pieceKey is '' else pieceClassesDict[pieceKey[1]](pieceKey[0]) for pieceKey in pieceRowText.split(',')] for pieceRowText in pieceRowsText]
 
