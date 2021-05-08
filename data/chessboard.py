@@ -1,6 +1,6 @@
 from Szachy.data.constants import N, W, E, S
-from .pieces import Pawn, Rook, Knight, Bishop, Queen, King
-from .game_logic import sum_directions, multiply_direction
+from Szachy.data.pieces import Pawn, Rook, Knight, Bishop, Queen, King
+from Szachy.data.game_logic import sum_directions, multiply_direction
 
 class GameState:
     def __init__ (self, gameFilePath="data/classic_new_game.csv"):
