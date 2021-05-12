@@ -3,28 +3,31 @@ from .constants import N, S, W, E, GRID_SIZE
 
 class Piece:
     def __str__(self):
-        return self.color+self.tag
+        return self.color + self.tag
 
 class Pawn(Piece):
     tag = 'P'
-    def __init__(self, color): # domyslna ilosc pól o jakie dana figura moze sie poruszac
+
+    def __init__(self, color):  # domyslna ilosc pól o jakie dana figura moze sie poruszac
         self.color = color
-        #MOVEMENT
+        # MOVEMENT
         self.movement_range = 1
         if self.color == 'b':
             self.file_name = 'black_pawn'
         else:
             self.file_name = 'white_pawn'
-        #TO DO
-        #bicie w przelocie
+        # TO DO
+        # bicie w przelocie
 
 class King(Piece):
     tag = 'K'
-    def __init__(self, color): # parametry do poprawienia
+
+    def __init__(self, color):  # parametry do poprawienia
         self.color = color
         self.movement_range = 1
         self.movement = N, S, E, W, \
-                          sum_directions(N, E), sum_directions(N, W), sum_directions(S, E), sum_directions(S, W)
+                        sum_directions(N, E), sum_directions(N, W),\
+                        sum_directions(S, E), sum_directions(S, W)
 
         if self.color == 'b':
             self.file_name = 'black_king'
@@ -36,9 +39,10 @@ class King(Piece):
 
 class Rook(Piece):
     tag = 'R'
+
     def __init__(self, color):
         self.color = color
-        self.movement_range = GRID_SIZE-1
+        self.movement_range = GRID_SIZE - 1
         self.movement = N, S, E, W
 
         # GRAPHIC
@@ -50,13 +54,14 @@ class Rook(Piece):
 
 class Knight(Piece):
     tag = 'N'
+
     def __init__(self, color):
         self.color = color
         self.movement_range = 1
         self.movement = sum_directions(N, N, E), sum_directions(N, N, W), \
-                          sum_directions(E, E, N), sum_directions(E, E, S), \
-                          sum_directions(W, W, N), sum_directions(W, W, S), \
-                          sum_directions(S, S, E), sum_directions(S, S, W)
+                        sum_directions(E, E, N), sum_directions(E, E, S), \
+                        sum_directions(W, W, N), sum_directions(W, W, S), \
+                        sum_directions(S, S, E), sum_directions(S, S, W)
 
         if self.color == 'b':
             self.file_name = 'black_knight'
@@ -67,11 +72,12 @@ class Knight(Piece):
 
 class Bishop(Piece):
     tag = 'B'
+
     def __init__(self, color):
         self.color = color
-        self.movement_range = GRID_SIZE-1
+        self.movement_range = GRID_SIZE - 1
         self.movement = sum_directions(N, E), sum_directions(N, W), \
-                          sum_directions(S, E), sum_directions(S, W), \
+                        sum_directions(S, E), sum_directions(S, W)
 
         if self.color == 'b':
             self.file_name = 'black_bishop'
@@ -81,12 +87,12 @@ class Bishop(Piece):
 
 class Queen(Piece):
     tag = 'Q'
+
     def __init__(self, color):
         self.color = color
-        self.movement_range = GRID_SIZE-1
+        self.movement_range = GRID_SIZE - 1
         self.movement = N, S, E, W, sum_directions(N, E), sum_directions(N, W), \
-                          sum_directions(S, E), sum_directions(S, W), \
-
+                        sum_directions(S, E), sum_directions(S, W)
         if self.color == 'b':
             self.file_name = 'black_queen'
         else:
