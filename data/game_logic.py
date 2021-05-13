@@ -1,6 +1,6 @@
 import pygame
 
-from .constants import BOARD_POSITION, TILE_SIZE, BOARD_END_POSITION
+from .constants import BOARD_POSITION, TILE_SIZE, BOARD_END_POSITION, W, E
 
 '''moze uzyc numpy'''
 def sum_directions(direction1, direction2, direction3=(0, 0)):
@@ -25,7 +25,7 @@ def get_game_coord_from_mouse():
 def selecting_piece(board, coord, active_player): # Zwraca None jeżeli nie jest klikniete pole z figura aktywnego gracza
     row, col = coord
     piece = board[col][row]
-    if piece != None:  # obiekt nie moze byc None
+    if piece is not None:  # obiekt nie moze byc None
         if piece.color == active_player:
             return piece
         return None
@@ -33,7 +33,7 @@ def selecting_piece(board, coord, active_player): # Zwraca None jeżeli nie jest
 # zeby nie wywalalo jak kliknie sie poza plansze
 def making_move(board, piece_selected, base_coord, target_coord, moves_list):
     piece_shift = list(sub_directions(target_coord, base_coord))
-    if piece_shift in moves_list:#
+    if piece_shift in moves_list:
         board[base_coord[1]][base_coord[0]] = None
         board[target_coord[1]][target_coord[0]] = piece_selected
         return True
@@ -45,3 +45,24 @@ def switching_turns(active_player):
         return 'b'
     else:
         return "w"
+
+class SpecialMoves:
+    def __init__(self):
+        self.w_long_castling_flag = True
+        self.w_short_castling_flag = True
+        self.b_long_castling_flag = True
+        self.b_short_castling_flag = True
+        en_passant_flag = False
+
+    def castling(self):
+        short_castling = sum_directions(E, E)
+        long_castling = sum_directions(W, W)
+        if self.w_long_castling_flag:
+            if self.w_short_castling_flag:
+                return short_castling, long_castling
+        else:
+            if self.w_short_castling_flag :
+                return short_castling
+
+    def en_passant():
+        pass
