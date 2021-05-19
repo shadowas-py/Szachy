@@ -47,6 +47,7 @@ def main():
                         else:
                             piece_selected = None  # odznacza figury jak nie ma mozliwosci ruchu
                     print(possible_moves)
+                    '''if piece_shift in moves_list(possible_moves) TO WSTAWIC GDZIES TUTAJ'''
                 elif possible_moves is not None:  # Wchodzi jezeli jest mozliwosc ruchu dla zaznaczonej figury
                     if making_move(game.board, piece_selected, coord_selected, coord, possible_moves) is True:
                         # ruch sie bedzie wykonywal jezeli bedzie na liscie moves allowed
@@ -80,3 +81,6 @@ if __name__ == "__main__":
 # 7.sprawdzanie mata i pata
 # 8.spradzanie legalnosci roszady
 # 8.zegary
+
+# Knows bugs
+#. Klikniecie poza szachownice crashuje

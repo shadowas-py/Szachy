@@ -30,15 +30,13 @@ def selecting_piece(board, coord, active_player): # Zwraca None jeżeli nie jest
             return piece
         return None
 
+
 # zeby nie wywalalo jak kliknie sie poza plansze
-def making_move(board, piece_selected, base_coord, target_coord, moves_list):
-    piece_shift = list(sub_directions(target_coord, base_coord))
-    if piece_shift in moves_list:
-        board[base_coord[1]][base_coord[0]] = None
-        board[target_coord[1]][target_coord[0]] = piece_selected
-        return True
-    else:
-        return False
+def making_move(board, moves_list):
+    for coord in moves_list:
+        piece = board[[coord][0]]
+        board[[coord][0]] = None
+        board[[coord][1]] = piece
 
 def switching_turns(active_player):
     if active_player == "w":
@@ -46,23 +44,23 @@ def switching_turns(active_player):
     else:
         return "w"
 
-class SpecialMoves:
-    def __init__(self):
-        self.w_long_castling_flag = True
-        self.w_short_castling_flag = True
-        self.b_long_castling_flag = True
-        self.b_short_castling_flag = True
-        en_passant_flag = False
-
-    def castling(self):
-        short_castling = sum_directions(E, E)
-        long_castling = sum_directions(W, W)
-        if self.w_long_castling_flag:
-            if self.w_short_castling_flag:
-                return short_castling, long_castling
-        else:
-            if self.w_short_castling_flag :
-                return short_castling
-
-    def en_passant():
-        pass
+# class SpecialMoves:
+#     def __init__(self):
+#         self.w_long_castling_flag = True
+#         self.w_short_castling_flag = True
+#         self.b_long_castling_flag = True
+#         self.b_short_castling_flag = True
+#         en_passant_flag = False
+#
+#     def castling(self):
+#         short_castling = sum_directions(E, E)
+#         long_castling = sum_directions(W, W)
+#         if self.w_long_castling_flag:
+#             if self.w_short_castling_flag:
+#                 return short_castling, long_castling
+#         else:
+#             if self.w_short_castling_flag :
+#                 return short_castling
+#
+#     def en_passant():
+#         pass
