@@ -38,18 +38,16 @@ def main():
                 coord = get_game_coord_from_mouse()
                 if piece_selected is None:  # Wchodzi jeżeli nic nie jest zaznaczone
                     piece_selected = selecting_piece(game.board, coord, active_player)
-                    if piece_selected is not None: # Sprawdzam czy nie zaznaczam None
+                    possible_moves = game.generating_all_moves_for_piece(game.board, piece_selected, coord)
+                    if (piece_selected, possible_moves) is not None : # Sprawdzam czy sa mozliwe ruchy dla danego zaznaczenia
                         '''moznaby przypisac coord do obiektu piece'''
-                        possible_moves = game.generating_all_moves_for_piece(game.board, piece_selected, coord)
-                        if possible_moves is not None:
-                            refresh_flag = True# zmienna do odswiezania ekranu
-                            coord_selected = coord # zapisuje w pamieci koordynaty prawidlowo wybranej figury
-                        else:
-                            piece_selected = None  # odznacza figury jak nie ma mozliwosci ruchu
-                    print(possible_moves)
+                        refresh_flag = True # zmienna do odswiezania ekranu
+                        coord_selected = coord # zapisuje w pamieci koordynaty prawidlowo wybranej figury
+                    else:
+                        piece_selected = None  # odznacza figury jak nie ma mozliwosci ruchu
                     '''if piece_shift in moves_list(possible_moves) TO WSTAWIC GDZIES TUTAJ'''
                 elif possible_moves is not None:  # Wchodzi jezeli jest mozliwosc ruchu dla zaznaczonej figury
-                    if making_move(game.board, piece_selected, coord_selected, coord, possible_moves) is True:
+                    if making_move(game.board, piece_selected, coord_selected, coord, ) is True:
                         # ruch sie bedzie wykonywal jezeli bedzie na liscie moves allowed
                         drawing_board()
                         drawing_pieces(game.board)
