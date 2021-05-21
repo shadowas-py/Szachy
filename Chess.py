@@ -16,7 +16,8 @@ print(game.board)
 # SETTINGS
 pygame.display.set_caption('Szachy')
 logging.basicConfig(filename='logs.log', level=logging.DEBUG,
-                    format = '%(asctime)s,:%(levelname)s:%(module)s:,%(message)s')
+                    format='%(asctime)s,:%(levelname)s:%(module)s:,%(message)s')
+
 
 def main():
     run = True
@@ -34,15 +35,17 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-            if event.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed()[0]:  # jezeli wcisniety LEFT MOUSE BUTTON
+            if event.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed()[
+                0]:  # jezeli wcisniety LEFT MOUSE BUTTON
                 coord = get_game_coord_from_mouse()
                 if piece_selected is None:  # Wchodzi jeżeli nic nie jest zaznaczone
                     piece_selected = selecting_piece(game.board, coord, active_player)
                     possible_moves = game.generating_all_moves_for_piece(game.board, piece_selected, coord)
-                    if (piece_selected, possible_moves) is not None : # Sprawdzam czy sa mozliwe ruchy dla danego zaznaczenia
+                    if (piece_selected,
+                        possible_moves) is not None:  # Sprawdzam czy sa mozliwe ruchy dla danego zaznaczenia
                         '''moznaby przypisac coord do obiektu piece'''
-                        refresh_flag = True # zmienna do odswiezania ekranu
-                        coord_selected = coord # zapisuje w pamieci koordynaty prawidlowo wybranej figury
+                        refresh_flag = True  # zmienna do odswiezania ekranu
+                        coord_selected = coord  # zapisuje w pamieci koordynaty prawidlowo wybranej figury
                     else:
                         piece_selected = None  # odznacza figury jak nie ma mozliwosci ruchu
                     '''if piece_shift in moves_list(possible_moves) TO WSTAWIC GDZIES TUTAJ'''
@@ -62,14 +65,14 @@ def main():
 if __name__ == "__main__":
     main()
 
-#TO DO
+# TO DO
 # zrobic przeźroczystość pol szachownicy
 # podswietlanie wybranej bierki
 # podswietlanie ostatnio wykonanego ruchu
 # dodac troche grafiki (wspolrzedne, tlo, ui)
 # 1.Roszady(bez sprawdzania legalnosci)
 
-#later
+# later
 # uporzadkowac kod generujacy ruchy - Pawn
 # 2.Promocja piona (interfejs wyboru figury)
 # 3.Bicie w przelocie
@@ -81,4 +84,4 @@ if __name__ == "__main__":
 # 8.zegary
 
 # Knows bugs
-#. Klikniecie poza szachownice crashuje
+# . Klikniecie poza szachownice crashuje

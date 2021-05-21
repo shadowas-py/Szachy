@@ -1,16 +1,15 @@
-from Szachy.data.constants import N, W, E, S
-from Szachy.data.pieces import Pawn, Rook, Knight, Bishop, Queen, King
-from Szachy.data.game_logic import sum_directions, multiply_direction
+from data.constants import N, W, E, S
+from data.pieces import Pawn, Rook, Knight, Bishop, Queen, King
+from data.game_logic import sum_directions, multiply_direction
+
 
 class GameState:
-    def __init__ (self, gameFilePath="data/classic_new_game.csv"):
-        with open(gameFilePath,'r') as f:
+    def __init__(self, game_filepath="data/classic_new_game.csv"):
+        with open(game_filepath, 'r') as f:
             self.nextMoveColor, *pieceRowsText = f.read().split('\n')
-        pieceClassesDict = {pieceClass.tag: pieceClass for pieceClass in [Pawn, Rook, Knight, Bishop, Queen, King]}
-        self.board = [[None if pieceKey is '' else pieceClassesDict[pieceKey[1]](pieceKey[0]) for pieceKey in pieceRowText.split(',')] for pieceRowText in pieceRowsText]
-
-
-
+        piece_classesDict = {pieceClass.tag: pieceClass for pieceClass in [Pawn, Rook, Knight, Bishop, Queen, King]}
+        self.board = [[None if pieceKey is '' else piece_classesDict[pieceKey[1]](pieceKey[0]) for pieceKey in
+                       pieceRowText.split(',')] for pieceRowText in pieceRowsText]
 
     def generating_all_moves_for_piece(self, board, piece, coord):  # WYPISYWANIE KOLEJNYCH KOLUMN
         # PAWN MOVES
@@ -23,7 +22,8 @@ class GameState:
                 if board[new_coord[1]][new_coord[0]] is None:
                     moves_list.append(list(N))
                     new_coord = sum_directions(coord, (sum_directions(N, N)))
-                    if coord[1] == white_pawn_starting_row and board[new_coord[1]][new_coord[0]] is None:  # Jezeli pionek znajduje sie w rzedzie startowym
+                    # Jezeli pionek znajduje sie w rzedzie startowym
+                    if coord[1] == white_pawn_starting_row and board[new_coord[1]][new_coord[0]] is None:
                         moves_list.append(list(sum_directions(N, N)))
                 new_coord = sum_directions(coord, (sum_directions(N, W)))
                 if board[new_coord[1]][new_coord[0]] is not None and board[new_coord[1]][new_coord[0]].color == 'b':
@@ -44,7 +44,8 @@ class GameState:
                 if board[new_coord[1]][new_coord[0]] is None:
                     moves_list.append(list(S))
                     new_coord = sum_directions(coord, (sum_directions(S, S)))
-                    if coord[1] == black_pawn_starting_row and board[new_coord[1]][new_coord[0]] is None:  # Jezeli pionek znajduje sie w rzedzie startowym
+                    # Jezeli pionek znajduje sie w rzedzie startowym
+                    if coord[1] == black_pawn_starting_row and board[new_coord[1]][new_coord[0]] is None:
                         moves_list.append(list(sum_directions(S, S)))
                 new_coord = sum_directions(coord, (sum_directions(S, W)))
                 if board[new_coord[1]][new_coord[0]] is not None and board[new_coord[1]][new_coord[0]].color == 'w':
@@ -80,8 +81,5 @@ class GameState:
             else:
                 return None
 
-
     def __str__(self):
-        return '\n'.join([' '.join(map(lambda x:'  ' if x is None else str(x),boardRow)) for boardRow in self.board])
-
-
+        return '\n'.join([' '.join(map(lambda x: '  ' if x is None else str(x), boardRow)) for boardRow in self.board])

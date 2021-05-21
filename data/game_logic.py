@@ -1,28 +1,34 @@
 import pygame
 
-from .constants import BOARD_POSITION, TILE_SIZE, BOARD_END_POSITION, W, E
+from .constants import BOARD_POSITION, TILE_SIZE, BOARD_END_POSITION
 
 '''moze uzyc numpy'''
+
+
 def sum_directions(direction1, direction2, direction3=(0, 0)):
     return tuple(map(sum, zip(direction1, direction2, direction3)))
 
-def sub_directions(direction1, direction2,):
+
+def sub_directions(direction1, direction2, ):
     return tuple(direction1 - direction2 for direction1, direction2 in zip(direction1, direction2))
 
+
 def multiply_direction(direction, multiplier):
-    multiplied_direction = (direction[0]*multiplier, direction[1]*multiplier)
+    multiplied_direction = (direction[0] * multiplier, direction[1] * multiplier)
     return list(multiplied_direction)
 
 
 def get_game_coord_from_mouse():
     mouse_pos = pygame.mouse.get_pos()
-    coord = ((mouse_pos[0] - BOARD_POSITION[1])//TILE_SIZE, (mouse_pos[1] - BOARD_POSITION[0])//TILE_SIZE)
+    coord = ((mouse_pos[0] - BOARD_POSITION[1]) // TILE_SIZE, (mouse_pos[1] - BOARD_POSITION[0]) // TILE_SIZE)
     if BOARD_END_POSITION >= mouse_pos >= BOARD_POSITION:
         return coord
     else:
         return None
 
-def selecting_piece(board, coord, active_player): # Zwraca None jeżeli nie jest klikniete pole z figura aktywnego gracza
+
+def selecting_piece(board, coord,
+                    active_player):  # Zwraca None jeżeli nie jest klikniete pole z figura aktywnego gracza
     row, col = coord
     piece = board[col][row]
     if piece is not None:  # obiekt nie moze byc None
@@ -37,6 +43,7 @@ def making_move(board, moves_list):
         piece = board[[coord][0]]
         board[[coord][0]] = None
         board[[coord][1]] = piece
+
 
 def switching_turns(active_player):
     if active_player == "w":
