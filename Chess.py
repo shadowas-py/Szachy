@@ -44,14 +44,13 @@ def main():
                         refresh_flag = True # zmienna do odswiezania ekranu
                         coord_selected = coord # zapisuje w pamieci koordynaty prawidlowo wybranej figury
                     else:
-                        piece_selected = None  # odznacza figury jak nie ma mozliwosci ruchu
+                        piece_selected = None  # odznacza figury jak nie ma mozliwosci ruchu lub nieprawidlowy wybor
                     '''if piece_shift in moves_list(possible_moves) TO WSTAWIC GDZIES TUTAJ'''
                 elif possible_moves is not None:  # Wchodzi jezeli jest mozliwosc ruchu dla zaznaczonej figury
-                    if making_move(game.board, piece_selected, coord_selected, coord, ) is True:
-                        # ruch sie bedzie wykonywal jezeli bedzie na liscie moves allowed
-                        drawing_board()
-                        drawing_pieces(game.board)
-                        active_player = switching_turns(active_player)
+                    making_move(game.board, possible_moves)# possible_moves zamienic na moves_list
+                    drawing_board()
+                    drawing_pieces(game.board)
+                    active_player = switching_turns(active_player)
                     piece_selected = None
                     refresh_flag = True
         if refresh_flag:
