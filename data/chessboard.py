@@ -1,6 +1,6 @@
 from data.constants import N, W, E, S
 from data.pieces import Pawn, Rook, Knight, Bishop, Queen, King
-from data.game_logic import sum_directions, multiply_direction
+from data.game_logic import sum_directions, multiply_direction, sub_directions
 
 
 class GameState:
@@ -11,7 +11,22 @@ class GameState:
         self.board = [[None if pieceKey is '' else piece_classesDict[pieceKey[1]](pieceKey[0]) for pieceKey in
                        pieceRowText.split(',')] for pieceRowText in pieceRowsText]
 
+
+
+
     def generating_all_moves_for_piece(self, board, piece, coord):  # WYPISYWANIE KOLEJNYCH KOLUMN
+
+        def castling(piece):
+            castling_move = []
+            if piece.castling_flag[0] == True:
+                castling_move.extend(piece.additional_move[0])
+                castling_move.extend((sub_directions(coord,(-3,0)) ,sub_directions(coord,(-1,0))))
+            if piece.castling_flag[1] == True:
+                castling_move.extend(piece.additional_move[1])
+                castling_move.extend((sub_directions(coord, (-3, 0)), sub_directions(coord, (-1, 0))))
+                return castling_move
+            else:
+                return None
         # PAWN MOVES
         moves_list = []
         if piece.__class__.__name__ == "Pawn":
@@ -33,11 +48,11 @@ class GameState:
                     moves_list.append(list(sum_directions(N, E)))
                 if len(moves_list) == 0:
                     moves_list = None
-                    return moves_list
+                    return moves_list  # zwrocic target coords
                 else:
                     return moves_list
 
-            elif piece.color == 'b':  # to samo dla czarnego piona
+            else:   # to samo dla czarnego piona
                 black_pawn_starting_row = 1
                 moves_list = []
                 new_coord = sum_directions(coord, S)
@@ -60,6 +75,13 @@ class GameState:
                     return moves_list
         # REST MOVES
         else:
+            try:
+                if piece.castling_flags != None:
+                    moves_list.append(castling(piece))
+                else:
+                    pass
+            except:
+                pass
             for j in range(len(piece.movement)):
                 for i in range(piece.movement_range):
                     increased_piece_movement = multiply_direction(piece.movement[j], i + 1)
@@ -80,6 +102,10 @@ class GameState:
                 return moves_list
             else:
                 return None
+
+    def castling_move_complement(self):
+
+
 
     def __str__(self):
         return '\n'.join([' '.join(map(lambda x: '  ' if x is None else str(x), boardRow)) for boardRow in self.board])
