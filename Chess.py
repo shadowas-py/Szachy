@@ -36,22 +36,21 @@ def main():
                 run = False
             if event.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed()[0]:  # jezeli wcisniety LEFT MOUSE BUTTON
                 coord = get_game_coord_from_mouse()
-                print(coord,'wybrano')
                 'WSTAWIC generating_all_possible_moves to check pat'
                 if piece_selected is None:  # Wchodzi jeżeli nic nie jest zaznaczone
                     piece_selected = selecting_piece(game.board, coord, active_player)
-                    possible_target_tiles = game.generating_all_moves_for_piece(game.board, piece_selected, coord)
-                    print(possible_target_tiles)
                     'WSTAWIC is_check, is_pat'
-                    if (piece_selected, possible_target_tiles) is not None : # Sprawdzam czy sa mozliwe ruchy dla danego zaznaczenia
-                        '''moznaby przypisac coord do obiektu piece'''
-                        refresh_flag = True  # zmienna do odswiezania ekranu
-                        coord_selected = coord  # zapisuje w pamieci koordynaty prawidlowo wybranej figury
+                    if piece_selected is not None: # Sprawdzam czy sa mozliwe ruchy dla danego zaznaczenia
+                        possible_target_tiles = game.generating_all_moves_for_piece(game.board, piece_selected, coord)
+                        if possible_target_tiles is not None:
+                            refresh_flag = True  # zmienna do odswiezania ekranu
+                            coord_selected = coord  # zapisuje w pamieci koordynaty prawidlowo wybranej figury
                     else:
                         piece_selected = None  # odznacza figury jak nie ma mozliwosci ruchu lub nieprawidlowy wybor
-                '''if piece_shift in moves_list(possible_moves) TO WSTAWIC GDZIES TUTAJ'''
-                if coord in possible_target_tiles:  # Wchodzi jezeli jest mozliwosc ruchu dla zaznaczonej figury
-                    print(piece_selected,'piece_selected', game.board[coord_selected[1]][coord_selected[0]])
+                        print('odznaczam')
+                    print(possible_target_tiles, 'possible target tles', piece_selected,'piece_sel')
+                elif coord in possible_target_tiles:
+                # Wchodzi jezeli jest mozliwosc ruchu dla zaznaczonej figury
                     move_list = [(coord_selected, possible_target_tiles[possible_target_tiles.index(coord)])]
                     making_move(game.board, move_list)# possible_moves zamienic na moves_list
                     drawing_board()
