@@ -12,19 +12,15 @@ class GameState:
                        pieceRowText.split(',')] for pieceRowText in pieceRowsText]
 
 
-
-
     def generating_all_moves_for_piece(self, board, piece, coord):  # WYPISYWANIE KOLEJNYCH KOLUMN
 
-        def castling(piece):
-            castling_move = []
-            if piece.castling_flag[0] == True:
-                castling_move.extend(piece.additional_move[0])
-                castling_move.extend((sub_directions(coord,(-3,0)) ,sub_directions(coord,(-1,0))))
-            if piece.castling_flag[1] == True:
-                castling_move.extend(piece.additional_move[1])
-                castling_move.extend((sub_directions(coord, (-3, 0)), sub_directions(coord, (-1, 0))))
-                return castling_move
+        def castling_checking(piece):
+            castling_move_complement = []
+            if piece.castling_flags[0] == True:
+                castling_move_complement.extend((sub_directions(coord,(-2,0)) ,sub_directions(coord,(1,0))))
+            if piece.castling_flags[1] == True:
+                castling_move_complement.extend((sub_directions(coord, (2, 0)), sub_directions(coord, (-1, 0))))
+                return castling_move_complement
             else:
                 return None
         # PAWN MOVES
@@ -75,13 +71,10 @@ class GameState:
                     return moves_list
         # REST MOVES
         else:
-            try:
-                if piece.castling_flags != None:
-                    moves_list.append(castling(piece))
-                else:
-                    pass
-            except:
-                pass
+            if piece.castling_flags != None:
+                castling_movement = castling_checking(piece)
+                moves_list.append(piece.additional_movement)
+                moves_list.append((castling_movement))
             for j in range(len(piece.movement)):
                 for i in range(piece.movement_range):
                     increased_piece_movement = multiply_direction(piece.movement[j], i + 1)
@@ -94,11 +87,12 @@ class GameState:
                             if board[coords_after_move[1]][coords_after_move[0]].color == piece.color:
                                 break
                             else:
-                                moves_list.append(coords_after_move)
+                                moves_list.append(increased_piece_movement)
                                 break
                         else:
-                            moves_list.append(coords_after_move)
+                            moves_list.append(increased_piece_movement)
             if not len(moves_list) == 0:
+                print(moves_list)
                 return moves_list
             else:
                 return None
