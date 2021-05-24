@@ -1,11 +1,11 @@
 import pygame
 import logging
 
-from data.chessboard import GameState
-from data.game_logic import selecting_piece, get_game_coord_from_mouse, making_move, switching_turns
-from data.graphic import drawing_board, drawing_pieces
+from Szachy.data.chessboard import GameState
+from Szachy.data.game_logic import selecting_piece, get_game_coord_from_mouse, making_move, switching_turns
+from Szachy.data.graphic import drawing_board, drawing_pieces
 # from Szachy.data.pieces import Pieces
-from data.settings import FPS
+from Szachy.data.settings import FPS
 
 pygame.init()
 
@@ -16,8 +16,7 @@ print(game.board)
 # SETTINGS
 pygame.display.set_caption('Szachy')
 logging.basicConfig(filename='logs.log', level=logging.DEBUG,
-                    format='%(asctime)s,:%(levelname)s:%(module)s:,%(message)s')
-
+                    format = '%(asctime)s,:%(levelname)s:%(module)s:,%(message)s')
 
 def main():
     run = True
@@ -35,26 +34,23 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-            if event.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed()[
-                0]:  # jezeli wcisniety LEFT MOUSE BUTTON
+            if event.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed()[0]:  # jezeli wcisniety LEFT MOUSE BUTTON
                 coord = get_game_coord_from_mouse()
                 if piece_selected is None:  # Wchodzi jeżeli nic nie jest zaznaczone
                     piece_selected = selecting_piece(game.board, coord, active_player)
                     possible_moves = game.generating_all_moves_for_piece(game.board, piece_selected, coord)
-                    if (piece_selected,
-                        possible_moves) is not None:  # Sprawdzam czy sa mozliwe ruchy dla danego zaznaczenia
+                    if (piece_selected, possible_moves) is not None : # Sprawdzam czy sa mozliwe ruchy dla danego zaznaczenia
                         '''moznaby przypisac coord do obiektu piece'''
-                        refresh_flag = True  # zmienna do odswiezania ekranu
-                        coord_selected = coord  # zapisuje w pamieci koordynaty prawidlowo wybranej figury
+                        refresh_flag = True # zmienna do odswiezania ekranu
+                        coord_selected = coord # zapisuje w pamieci koordynaty prawidlowo wybranej figury
                     else:
-                        piece_selected = None  # odznacza figury jak nie ma mozliwosci ruchu
+                        piece_selected = None  # odznacza figury jak nie ma mozliwosci ruchu lub nieprawidlowy wybor
                     '''if piece_shift in moves_list(possible_moves) TO WSTAWIC GDZIES TUTAJ'''
                 elif possible_moves is not None:  # Wchodzi jezeli jest mozliwosc ruchu dla zaznaczonej figury
-                    if making_move(game.board, piece_selected, coord_selected, coord, ) is True:
-                        # ruch sie bedzie wykonywal jezeli bedzie na liscie moves allowed
-                        drawing_board()
-                        drawing_pieces(game.board)
-                        active_player = switching_turns(active_player)
+                    making_move(game.board, possible_moves)# possible_moves zamienic na moves_list
+                    drawing_board()
+                    drawing_pieces(game.board)
+                    active_player = switching_turns(active_player)
                     piece_selected = None
                     refresh_flag = True
         if refresh_flag:
@@ -65,14 +61,14 @@ def main():
 if __name__ == "__main__":
     main()
 
-# TO DO
+#TO DO
 # zrobic przeźroczystość pol szachownicy
 # podswietlanie wybranej bierki
 # podswietlanie ostatnio wykonanego ruchu
 # dodac troche grafiki (wspolrzedne, tlo, ui)
 # 1.Roszady(bez sprawdzania legalnosci)
 
-# later
+#later
 # uporzadkowac kod generujacy ruchy - Pawn
 # 2.Promocja piona (interfejs wyboru figury)
 # 3.Bicie w przelocie
@@ -84,4 +80,4 @@ if __name__ == "__main__":
 # 8.zegary
 
 # Knows bugs
-# . Klikniecie poza szachownice crashuje
+#. Klikniecie poza szachownice crashuje
