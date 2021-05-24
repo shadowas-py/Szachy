@@ -46,6 +46,7 @@ def main():
                             coord_selected = coord  # zapisuje w pamieci koordynaty prawidlowo wybranej figury
                         else:
                             piece_selected = None # odznacza figury jak nie ma mozliwosci ruchu lub nieprawidlowy wybor
+                    print(possible_target_tiles)
                 elif coord in possible_target_tiles:  # Wchodzi jezeli jest mozliwosc ruchu dla zaznaczonej figury
                     move_list = [(coord_selected, possible_target_tiles[possible_target_tiles.index(coord)])]
                     making_move(game.board, move_list)# possible_moves zamienic na moves_list
