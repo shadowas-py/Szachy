@@ -2,7 +2,7 @@ import pygame
 import logging
 
 from data.chessboard import GameState
-from data.game_logic import selecting_piece, get_game_coord_from_mouse, making_move, switching_turns
+from data.game_logic import selecting_piece, get_game_coord_from_mouse, making_move, switching_turns, sub_directions
 from data.graphic import drawing_board, drawing_pieces
 # from Szachy.data.pieces import Pieces
 from data.settings import FPS
@@ -36,17 +36,23 @@ def main():
                 run = False
             if event.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed()[0]:  # jezeli wcisniety LEFT MOUSE BUTTON
                 coord = get_game_coord_from_mouse()
+                print(coord)
+                'WSTAWIC generating_all_possible_moves to check pat'
                 if piece_selected is None:  # Wchodzi jeżeli nic nie jest zaznaczone
                     piece_selected = selecting_piece(game.board, coord, active_player)
                     possible_moves = game.generating_all_moves_for_piece(game.board, piece_selected, coord)
+                    'WSTAWIC is_check, is_pat'
                     if (piece_selected, possible_moves) is not None : # Sprawdzam czy sa mozliwe ruchy dla danego zaznaczenia
                         '''moznaby przypisac coord do obiektu piece'''
                         refresh_flag = True # zmienna do odswiezania ekranu
                         coord_selected = coord # zapisuje w pamieci koordynaty prawidlowo wybranej figury
                     else:
                         piece_selected = None  # odznacza figury jak nie ma mozliwosci ruchu lub nieprawidlowy wybor
-                    '''if piece_shift in moves_list(possible_moves) TO WSTAWIC GDZIES TUTAJ'''
-                elif possible_moves is not None:  # Wchodzi jezeli jest mozliwosc ruchu dla zaznaczonej figury
+                else:
+                    piece_shift = sub_directions(coord, coord_selected)
+                '''if piece_shift in moves_list(possible_moves) TO WSTAWIC GDZIES TUTAJ'''
+
+                if piece_shift in possible_moves:  # Wchodzi jezeli jest mozliwosc ruchu dla zaznaczonej figury
                     making_move(game.board, possible_moves)# possible_moves zamienic na moves_list
                     drawing_board()
                     drawing_pieces(game.board)

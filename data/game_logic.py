@@ -39,10 +39,10 @@ def selecting_piece(board, coord,
 
 # zeby nie wywalalo jak kliknie sie poza plansze
 def making_move(board, moves_list):
-    for coord in moves_list:
-        piece = board[[coord][0]]
-        board[[coord][0]] = None
-        board[[coord][1]] = piece
+    for shift in moves_list:
+        piece = board[shift][0]
+        board[shift][0] = None
+        board[shift][1] = piece
 
 
 def switching_turns(active_player):
