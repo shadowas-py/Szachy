@@ -1,11 +1,11 @@
 import pygame
 import logging
 
-from Szachy.data.chessboard import GameState
-from Szachy.data.game_logic import selecting_piece, get_game_coord_from_mouse, making_move, switching_turns
-from Szachy.data.graphic import drawing_board, drawing_pieces
+from data.chessboard import GameState
+from data.game_logic import selecting_piece, get_game_coord_from_mouse, making_move, switching_turns
+from data.graphic import drawing_board, drawing_pieces
 # from Szachy.data.pieces import Pieces
-from Szachy.data.settings import FPS
+from data.settings import FPS
 
 pygame.init()
 
