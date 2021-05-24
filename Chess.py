@@ -36,11 +36,11 @@ def main():
                 run = False
             if event.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed()[0]:  # jezeli wcisniety LEFT MOUSE BUTTON
                 coord = get_game_coord_from_mouse()
-                print(coord)
                 'WSTAWIC generating_all_possible_moves to check pat'
                 if piece_selected is None:  # Wchodzi jeżeli nic nie jest zaznaczone
                     piece_selected = selecting_piece(game.board, coord, active_player)
                     possible_target_tiles = game.generating_all_moves_for_piece(game.board, piece_selected, coord)
+                    print(possible_target_tiles)
                     'WSTAWIC is_check, is_pat'
                     if (piece_selected, possible_target_tiles) is not None : # Sprawdzam czy sa mozliwe ruchy dla danego zaznaczenia
                         '''moznaby przypisac coord do obiektu piece'''

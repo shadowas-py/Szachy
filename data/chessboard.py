@@ -94,10 +94,10 @@ class GameState:
                             if board[coords_after_move[1]][coords_after_move[0]].color == piece.color:
                                 break
                             else:
-                                moves_list.append(increased_piece_movement)
+                                moves_list.append(coords_after_move)
                                 break
                         else:
-                            moves_list.append(increased_piece_movement)
+                            moves_list.append(coords_after_move)
             if not len(moves_list) == 0:
                 return moves_list
             else:
