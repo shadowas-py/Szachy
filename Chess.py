@@ -40,7 +40,7 @@ def main():
                 'WSTAWIC generating_all_possible_moves to check pat'
                 if piece_selected is None:  # Wchodzi jeżeli nic nie jest zaznaczone
                     piece_selected = selecting_piece(game.board, coord, active_player)
-                    possible_moves = game.generating_all_moves_for_piece(game.board, piece_selected, coord)
+                    possible_moves = game.generating_all_moves_for_piece(game.board, piece_selected, coord)#possible shifts
                     'WSTAWIC is_check, is_pat'
                     if (piece_selected, possible_moves) is not None : # Sprawdzam czy sa mozliwe ruchy dla danego zaznaczenia
                         '''moznaby przypisac coord do obiektu piece'''
