@@ -103,9 +103,5 @@ class GameState:
             else:
                 return None
 
-    def castling_move_complement(self):
-
-
-
     def __str__(self):
         return '\n'.join([' '.join(map(lambda x: '  ' if x is None else str(x), boardRow)) for boardRow in self.board])

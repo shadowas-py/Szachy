@@ -21,7 +21,7 @@ logging.basicConfig(filename='logs.log', level=logging.DEBUG,
 def main():
     run = True
     clock = pygame.time.Clock()
-    possible_moves = None
+    possible_target_tiles = None
     piece_selected = None
     coord_selected = None
     active_player = 'w'
@@ -40,20 +40,18 @@ def main():
                 'WSTAWIC generating_all_possible_moves to check pat'
                 if piece_selected is None:  # Wchodzi jeżeli nic nie jest zaznaczone
                     piece_selected = selecting_piece(game.board, coord, active_player)
-                    possible_moves = game.generating_all_moves_for_piece(game.board, piece_selected, coord)#possible shifts
+                    possible_target_tiles = game.generating_all_moves_for_piece(game.board, piece_selected, coord)
                     'WSTAWIC is_check, is_pat'
-                    if (piece_selected, possible_moves) is not None : # Sprawdzam czy sa mozliwe ruchy dla danego zaznaczenia
+                    if (piece_selected, possible_target_tiles) is not None : # Sprawdzam czy sa mozliwe ruchy dla danego zaznaczenia
                         '''moznaby przypisac coord do obiektu piece'''
-                        refresh_flag = True # zmienna do odswiezania ekranu
-                        coord_selected = coord # zapisuje w pamieci koordynaty prawidlowo wybranej figury
+                        refresh_flag = True  # zmienna do odswiezania ekranu
+                        coord_selected = coord  # zapisuje w pamieci koordynaty prawidlowo wybranej figury
                     else:
                         piece_selected = None  # odznacza figury jak nie ma mozliwosci ruchu lub nieprawidlowy wybor
-                else:
-                    piece_shift = sub_directions(coord, coord_selected)
                 '''if piece_shift in moves_list(possible_moves) TO WSTAWIC GDZIES TUTAJ'''
-
-                if piece_shift in possible_moves:  # Wchodzi jezeli jest mozliwosc ruchu dla zaznaczonej figury
-                    making_move(game.board, possible_moves)# possible_moves zamienic na moves_list
+                if coord in possible_target_tiles:  # Wchodzi jezeli jest mozliwosc ruchu dla zaznaczonej figury
+                    move_list = [(coord, possible_target_tiles.index(coord))]
+                    making_move(game.board, move_list)# possible_moves zamienic na moves_list
                     drawing_board()
                     drawing_pieces(game.board)
                     active_player = switching_turns(active_player)
