@@ -2,8 +2,6 @@ import pygame
 
 from .constants import BOARD_POSITION, TILE_SIZE, BOARD_END_POSITION
 
-'''moze uzyc numpy'''
-
 
 def sum_directions(direction1, direction2, direction3=(0, 0)):
     return tuple(map(sum, zip(direction1, direction2, direction3)))
@@ -24,16 +22,19 @@ def get_game_coord_from_mouse():
     if BOARD_END_POSITION >= mouse_pos >= BOARD_POSITION:
         return coord
     else:
+        '''selecting_tile wywali blad'''
         return None
 
 
-def selecting_piece(board, coord,
-                    active_player):  # Zwraca None jeżeli nie jest klikniete pole z figura aktywnego gracza
+def selecting_piece(board, coord, active_player):  # Zwraca None jeżeli nie jest klikniete pole z figura aktywnego gracza
     row, col = coord
     piece = board[col][row]
+    print('selecting_piece')
     if piece is not None:  # obiekt nie moze byc None
         if piece.color == active_player:
             return piece
+        return None
+    else:
         return None
 
 

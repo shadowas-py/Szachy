@@ -11,7 +11,6 @@ pygame.init()
 
 # IMPORTS
 game = GameState()
-print(game.board)
 
 # SETTINGS
 pygame.display.set_caption('Szachy')
@@ -45,12 +44,9 @@ def main():
                         if possible_target_tiles is not None:
                             refresh_flag = True  # zmienna do odswiezania ekranu
                             coord_selected = coord  # zapisuje w pamieci koordynaty prawidlowo wybranej figury
-                    else:
-                        piece_selected = None  # odznacza figury jak nie ma mozliwosci ruchu lub nieprawidlowy wybor
-                        print('odznaczam')
-                    print(possible_target_tiles, 'possible target tles', piece_selected,'piece_sel')
-                elif coord in possible_target_tiles:
-                # Wchodzi jezeli jest mozliwosc ruchu dla zaznaczonej figury
+                        else:
+                            piece_selected = None # odznacza figury jak nie ma mozliwosci ruchu lub nieprawidlowy wybor
+                elif coord in possible_target_tiles:  # Wchodzi jezeli jest mozliwosc ruchu dla zaznaczonej figury
                     move_list = [(coord_selected, possible_target_tiles[possible_target_tiles.index(coord)])]
                     making_move(game.board, move_list)# possible_moves zamienic na moves_list
                     drawing_board()
@@ -58,6 +54,8 @@ def main():
                     active_player = switching_turns(active_player)
                     piece_selected = None
                     refresh_flag = True
+                else:
+                    piece_selected = None
         if refresh_flag:
             pygame.display.update()
     pygame.quit()

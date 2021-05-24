@@ -33,7 +33,7 @@ class King(Piece):
                         sum_directions(S, E), sum_directions(S, W),
         self.additional_movement = sum_directions(E, E), (sum_directions(E, E))# castling
 
-        self.castling_flags = (True, True)#Short #Long
+        self.castling_flags = [True, True]#Short #Long
         if self.color == 'b':
             self.file_name = 'black_king'
         else:
