@@ -39,8 +39,10 @@ def selecting_piece(board, coord, active_player):  # Zwraca None jeżeli nie jes
 
 # zeby nie wywalalo jak kliknie sie poza plansze
 def making_move(board, moves_list):
+    print(moves_list)
     for shift in moves_list:
         piece = board[shift[0][1]][shift[0][0]]
+        print(piece)
         board[shift[0][1]][shift[0][0]] = None
         board[shift[1][1]][shift[1][0]] = piece
 

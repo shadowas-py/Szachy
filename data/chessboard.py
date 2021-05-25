@@ -11,22 +11,20 @@ class GameState:
         self.board = [[None if pieceKey is '' else piece_classesDict[pieceKey[1]](pieceKey[0]) for pieceKey in
                        pieceRowText.split(',')] for pieceRowText in pieceRowsText]
 
-
-
-
     def generating_all_moves_for_piece(self, board, piece, coord):  # WYPISYWANIE KOLEJNYCH KOLUMN
 
         def castling(piece):
             castling_move = []
-            if piece.castling_flags[0] == True:
-                castling_move.extend(piece.additional_movement[0])
-                castling_move.extend((sub_directions(coord,(-3,0)) ,sub_directions(coord,(-1,0))))
-            if piece.castling_flags[1] == True:
-                castling_move.extend(piece.additional_movement[1])
-                castling_move.extend((sub_directions(coord, (-3, 0)), sub_directions(coord, (-1, 0))))
+            if piece.castling_flags[0]:  # SHORT
+                castling_move.extend((sum_directions(coord, piece.additional_movement[0]),
+                                      (sum_directions(coord, (-4, 0)), sum_directions(coord, (-1, 0)))))
+            if piece.castling_flags[1]:  # LONG
+                castling_move.extend((sum_directions(coord, piece.additional_movement[1]),
+                                      (sum_directions(coord, (3, 0)), sum_directions(coord, (1, 0)))))
                 return castling_move
             else:
                 return None
+
         # PAWN MOVES
         moves_list = []
         if piece.__class__.__name__ == "Pawn":
@@ -52,7 +50,7 @@ class GameState:
                 else:
                     return moves_list
 
-            else:   # to samo dla czarnego piona
+            else:  # to samo dla czarnego piona
                 black_pawn_starting_row = 1
                 moves_list = []
                 new_coord = sum_directions(coord, S)
@@ -77,10 +75,7 @@ class GameState:
         else:
 
             if piece.castling_flags != None:
-                moves_list.append(castling(piece))
-                print( moves_list)
-            else:
-                pass
+                moves_list.extend(castling(piece))
             for j in range(len(piece.movement)):
                 for i in range(piece.movement_range):
                     increased_piece_movement = multiply_direction(piece.movement[j], i + 1)
