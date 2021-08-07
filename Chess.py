@@ -56,9 +56,10 @@ def main():
                     except:
                         move_list = [(coord_selected, possible_target_tiles[possible_target_tiles.index(coord)])]
                         print(move_list)
-                    making_move(game.board, move_list)# possible_moves zamienic na moves_list
+                    making_move(game.board, move_list)
                     drawing_board()
                     drawing_pieces(game.board)
+                    '''TUTAJ ZMIENIC FLAGI CASTLING I BICIA W PRZELOCIE'''
                     active_player = switching_turns(active_player)
                     piece_selected = None
                     refresh_flag = True

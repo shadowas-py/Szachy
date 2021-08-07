@@ -4,12 +4,19 @@ from data.game_logic import sum_directions, multiply_direction, sub_directions
 
 
 class GameState:
+    """PRZECHOWUJE AKTUALNY STAN GRY"""
     def __init__(self, game_filepath="data/classic_new_game.csv"):
-        with open(game_filepath, 'r') as f:
-            self.nextMoveColor, *pieceRowsText = f.read().split('\n')
-        piece_classesDict = {pieceClass.tag: pieceClass for pieceClass in [Pawn, Rook, Knight, Bishop, Queen, King]}
-        self.board = [[None if pieceKey is '' else piece_classesDict[pieceKey[1]](pieceKey[0]) for pieceKey in
-                       pieceRowText.split(',')] for pieceRowText in pieceRowsText]
+        with open(game_filepath, 'r') as file:
+            self.nextMoveColor, *boardRowsText = file.read().split('\n')
+
+        'LISTA KLAS-FIGUR DO INICJALIZACJI'
+        pieces_ClsDict = {pieceClass.tag: pieceClass for pieceClass in [Pawn, Rook, Knight, Bishop, Queen, King]}
+
+        'POLE GRY'
+        self.board = [[None if tag == '' else pieces_ClsDict[tag[1]](tag[0])  # pieces_ClsDict[]() == Piece(color)
+                        for tag in row.split(',')]
+                        for row in boardRowsText]
+
 
     def generating_all_moves_for_piece(self, board, piece, coord):  # WYPISYWANIE KOLEJNYCH KOLUMN
 

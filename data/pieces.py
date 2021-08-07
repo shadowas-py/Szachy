@@ -10,7 +10,7 @@ class Piece:
 class Pawn(Piece):
     tag = 'P'
 
-    def __init__(self, color):  # domyslna ilosc pól o jakie dana figura moze sie poruszac
+    def __init__(self, color):
         self.color = color
         # MOVEMENT
         self.movement_range = 1
