@@ -39,11 +39,9 @@ class GameState:
                     if min(coords_after_move) >= 0 and max(coords_after_move) < 8:
                         if board[coords_after_move[1]][coords_after_move[0]] is not None:
                             # jezeli napotka na przeszkode przerywa iteracje po dlugosci ruchu
-                            if board[coords_after_move[1]][coords_after_move[0]].color == piece.color:
-                                break
-                            else:
+                            if board[coords_after_move[1]][coords_after_move[0]].color != piece.color:
                                 moves_list.append(increased_piece_movement)
-                                break
+                            break
                         else:
                             moves_list.append(increased_piece_movement)
 
