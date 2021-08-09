@@ -25,7 +25,7 @@ def drawing_pieces(board):
     for col in range(GRID_SIZE):
         for row in range(GRID_SIZE):
             if board[col][row] is not None:
-                file_name = board[col][row].file_name
+                file_name = board[col][row].get_full_name()
                 piece = pygame.transform.scale(pygame.image.load(
                     os.path.join('Images', file_name+'.png')),
                     (TILE_SIZE, TILE_SIZE))
