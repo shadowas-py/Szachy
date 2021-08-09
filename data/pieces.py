@@ -3,6 +3,9 @@ from .constants import N, S, W, E, GRID_SIZE
 
 
 class Piece:
+    color = None
+    tag = None
+
     def __str__(self):
         return self.color + self.tag
 
@@ -28,12 +31,12 @@ class King(Piece):
     def __init__(self, color):  # parametry do poprawienia
         self.color = color
         self.movement_range = 1
-        self.movement = N, S, E, W,\
+        self.movement = N, S, E, W, \
                         sum_directions(N, E), sum_directions(N, W), \
                         sum_directions(S, E), sum_directions(S, W),
-        self.additional_movement = sum_directions(W, W), (sum_directions(E, E))# castling
+        self.additional_movement = sum_directions(W, W), (sum_directions(E, E))  # castling
 
-        self.castling_flags = [True, True]#Short #Long
+        self.castling_flags = [True, True]  # Short #Long
         if self.color == 'b':
             self.file_name = 'black_king'
         else:

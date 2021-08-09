@@ -4,7 +4,6 @@ import logging
 from data.chessboard import GameState
 from data.game_logic import selecting_piece, get_game_coord_from_mouse, making_move, switching_turns, sub_directions
 from data.graphic import drawing_board, drawing_pieces
-# from Szachy.data.pieces import Pieces
 from data.settings import FPS
 from data.display_info import translate_to_chess_notation
 
@@ -47,14 +46,13 @@ def main():
                             coord_selected = coord  # zapisuje w pamieci koordynaty prawidlowo wybranej figury
                         else:
                             piece_selected = None # odznacza figury jak nie ma mozliwosci ruchu lub nieprawidlowy wybor
-                    print(possible_target_tiles,'ptt')
+                    translate_to_chess_notation(possible_target_tiles)
                 elif coord in possible_target_tiles:  # Wchodzi jezeli jest mozliwosc ruchu dla zaznaczonej figury
                     move_list = []
                     try:
                         move_list.append((coord_selected, possible_target_tiles[possible_target_tiles.index(coord)]))
                         move_list.append(possible_target_tiles[possible_target_tiles.index(coord)+1])
-                        # print(move_list,'?')
-                    except:
+                    except Exception:
                         move_list = [(coord_selected, possible_target_tiles[possible_target_tiles.index(coord)])]
                         # print(move_list)
                     making_move(game.board, move_list)
@@ -74,7 +72,7 @@ def main():
 if __name__ == "__main__":
     main()
 
-#TO DO
+#TODO
 # zrobic przeźroczystość pol szachownicy
 # podswietlanie wybranej bierki
 # podswietlanie ostatnio wykonanego ruchu
@@ -92,5 +90,5 @@ if __name__ == "__main__":
 # 8.spradzanie legalnosci roszady
 # 8.zegary
 
-# Knows bugs
+# BUG Known bugs
 #. Klikniecie poza szachownice crashuje

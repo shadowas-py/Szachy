@@ -5,6 +5,7 @@ from data.game_logic import sum_directions, multiply_direction, sub_directions
 
 class GameState:
     """PRZECHOWUJE AKTUALNY STAN GRY"""
+
     def __init__(self, game_filepath="data/classic_new_game.csv"):
         with open(game_filepath, 'r') as file:
             self.nextMoveColor, *boardRowsText = file.read().split('\n')
@@ -14,9 +15,8 @@ class GameState:
 
         'POLE GRY'
         self.board = [[None if tag == '' else pieces_ClsDict[tag[1]](tag[0])  # pieces_ClsDict[]() == Piece(color)
-                        for tag in row.split(',')]
-                        for row in boardRowsText]
-
+                       for tag in row.split(',')]
+                      for row in boardRowsText]
 
     def generating_all_moves_for_piece(self, board, piece, coord):  # WYPISYWANIE KOLEJNYCH KOLUMN
 
@@ -28,9 +28,7 @@ class GameState:
             if piece.castling_flags[1]:  # LONG
                 castling_move.extend((sum_directions(coord, piece.additional_movement[1]),
                                       (sum_directions(coord, (3, 0)), sum_directions(coord, (1, 0)))))
-                return castling_move
-            else:
-                return None
+            return castling_move
 
         # PAWN MOVES
         moves_list = []
@@ -80,13 +78,12 @@ class GameState:
                     return moves_list
         # REST MOVES
         else:
-
-            if piece.castling_flags != None:
+            if piece.castling_flags is not None:
                 moves_list.extend(castling(piece))
-            for j in range(len(piece.movement)):
-                for i in range(piece.movement_range):
-                    increased_piece_movement = multiply_direction(piece.movement[j], i + 1)
-                    # i jest mnoznikiem odleglosci
+            #  print(moves_list, 'A')
+            for singleMove in piece.movement:
+                for multiplier in range(piece.movement_range):
+                    increased_piece_movement = multiply_direction(singleMove, multiplier + 1)
                     coords_after_move = sum_directions(coord, increased_piece_movement)
                     # if pilnujacy zeby generowane ruchy nie wychodzilo poza zakres planszy
                     if min(coords_after_move) >= 0 and max(coords_after_move) < 8:
@@ -102,6 +99,7 @@ class GameState:
             if not len(moves_list) == 0:
                 return moves_list
             else:
+                #  TODO - ustalic czy ma zwracac [] czy None
                 return None
 
     def __str__(self):
