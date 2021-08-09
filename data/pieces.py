@@ -1,4 +1,4 @@
-from .game_logic import sum_directions
+from .game_logic import sum_directions, rotations
 from .constants import N, S, W, E, GRID_SIZE
 
 class Piece:
@@ -15,7 +15,7 @@ class Pawn(Piece):
         # MOVEMENT
         self.movement_range = 1
         self.movement = N if color == 'w' else S
-        
+
         # TO DO
         # bicie w przelocie
 

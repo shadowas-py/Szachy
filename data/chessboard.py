@@ -12,10 +12,10 @@ class GameState:
 
 
 
-    def generating_all_moves_for_piece(self, board, piece, coord):  # WYPISYWANIE KOLEJNYCH KOLUMN
+    def generating_all_moves_for_piece(self, board, piece, coord):
         # PAWN MOVES
         moves_list = []
-        if piece.__class__.__name__ == "Pawn":
+        if piece.tag == "P":
             pawn_movement = piece.movement
             new_coord = sum_directions(coord, pawn_movement)
             if board[new_coord[1]][new_coord[0]] is None:
