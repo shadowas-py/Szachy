@@ -13,6 +13,11 @@ def multiply_direction(direction, multiplier):
     multiplied_direction = (direction[0]*multiplier, direction[1]*multiplier)
     return list(multiplied_direction)
 
+def rotations(v):
+    x, y = v
+    return [(x,y), (y,-x), (-x,-y), (-y,x)]
+
+
 
 def get_game_coord_from_mouse():
     mouse_pos = pygame.mouse.get_pos()

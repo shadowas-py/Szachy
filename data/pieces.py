@@ -23,9 +23,7 @@ class King(Piece):
     def __init__(self, color):  # parametry do poprawienia
         self.color = color
         self.movement_range = 1
-        self.movement = N, S, E, W, \
-                        sum_directions(N, E), sum_directions(N, W),\
-                        sum_directions(S, E), sum_directions(S, W)
+        self.movement = rotations(N, S, E, W) + rotations(sum_directions(N, E))
 
         # self.all_moves = listing_moves_for_the_piece(self.movement, self.movement_range, piece_coord)
         # TO DO
@@ -37,7 +35,7 @@ class Rook(Piece):
     def __init__(self, color):
         self.color = color
         self.movement_range = GRID_SIZE - 1
-        self.movement = N, S, E, W
+        self.movement = rotations(N)
 
         # self.all_moves = listing_moves_for_the_piece(self.movement, self.movement_range, piece_coord)
 
@@ -47,10 +45,7 @@ class Knight(Piece):
     def __init__(self, color):
         self.color = color
         self.movement_range = 1
-        self.movement = sum_directions(N, N, E), sum_directions(N, N, W), \
-                        sum_directions(E, E, N), sum_directions(E, E, S), \
-                        sum_directions(W, W, N), sum_directions(W, W, S), \
-                        sum_directions(S, S, E), sum_directions(S, S, W)
+        self.movement = rotations(sum_directions(N, N, E)) + rotations(sum_directions(N, N, W))
 
         # self.all_moves = listing_moves_for_the_piece(self.movement, self.movement_range, piece_coord)
 
@@ -60,8 +55,7 @@ class Bishop(Piece):
     def __init__(self, color):
         self.color = color
         self.movement_range = GRID_SIZE - 1
-        self.movement = sum_directions(N, E), sum_directions(N, W), \
-                        sum_directions(S, E), sum_directions(S, W)
+        self.movement = rotations(sum_directions(N, E))
 
         # self.all_moves = listing_moves_for_the_piece(self.movement, self.movement_range, piece_coord)
 
@@ -71,7 +65,6 @@ class Queen(Piece):
     def __init__(self, color):
         self.color = color
         self.movement_range = GRID_SIZE - 1
-        self.movement = N, S, E, W, sum_directions(N, E), sum_directions(N, W), \
-                        sum_directions(S, E), sum_directions(S, W)
+        self.movement = rotations(N, S, E, W) + rotations(sum_directions(N, E))
                         
         # self.all_moves = listing_moves_for_the_piece(self.movement, self.movement_range, piece_coord)
