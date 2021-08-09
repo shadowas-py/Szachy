@@ -16,37 +16,19 @@ class GameState:
         # PAWN MOVES
         moves_list = []
         if piece.__class__.__name__ == "Pawn":
-            if piece.color == 'w':
-                pawn_starting_row = 6
-                pawn_direction = N
-                opponent_color = 'b'
-            else:
-                pawn_starting_row = 1
-                pawn_direction = S
-                opponent_color = 'w'
-
-
-            moves_list = []
-            new_coord = sum_directions(coord, pawn_direction)
+            pawn_movement = piece.movement
+            new_coord = sum_directions(coord, pawn_movement)
             if board[new_coord[1]][new_coord[0]] is None:
-                moves_list.append(list(pawn_direction))
-                new_coord = sum_directions(coord, (sum_directions(pawn_direction, pawn_direction)))
-                if coord[1] == pawn_starting_row and board[new_coord[1]][new_coord[0]] is None:  # Jezeli pionek znajduje sie w rzedzie startowym
-                    moves_list.append(list(sum_directions(pawn_direction, pawn_direction)))
-            new_coord = sum_directions(coord, (sum_directions(pawn_direction, W)))
-            if board[new_coord[1]][new_coord[0]] is not None and board[new_coord[1]][new_coord[0]].color == opponent_color:
-                moves_list.append(list(sum_directions(pawn_direction, W)))
-            new_coord = sum_directions(coord, (sum_directions(pawn_direction, E)))
-            if board[new_coord[1]][new_coord[0]] is not None and board[new_coord[1]][new_coord[0]].color == opponent_color:
-                moves_list.append(list(sum_directions(pawn_direction, E)))
-            if len(moves_list) == 0:
-                moves_list = None
-                return moves_list
-            else:
-                return moves_list
+                moves_list.append(list(pawn_movement))
+                new_coord = sum_directions(coord, pawn_movement, pawn_movement)
+                if coord[1] == (6 if piece.color == 'w' else 1) and board[new_coord[1]][new_coord[0]] is None:
+                    moves_list.append(list(sum_directions(pawn_movement, pawn_movement)))
+            for horizontal_shift in [W,E]:
+                new_coord = sum_directions(coord, (sum_directions(pawn_movement, horizontal_shift)))
+                if board[new_coord[1]][new_coord[0]] is not None and board[new_coord[1]][new_coord[0]].color != piece.color:
+                    moves_list.append(list(sum_directions(pawn_movement, horizontal_shift)))
 
-
-        # REST MOVES
+        # MOVES OF OTHER PIECES
         else:
             for j in range(len(piece.movement)):
                 for i in range(piece.movement_range):
@@ -64,10 +46,10 @@ class GameState:
                                 break
                         else:
                             moves_list.append(increased_piece_movement)
-            if not len(moves_list) == 0:
-                return moves_list
-            else:
-                return None
+
+        if len(moves_list) == 0:
+            return None
+        return moves_list
 
 
     def __str__(self):

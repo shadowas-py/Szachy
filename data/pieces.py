@@ -14,6 +14,8 @@ class Pawn(Piece):
         self.color = color
         # MOVEMENT
         self.movement_range = 1
+        self.movement = N if color == 'w' else S
+        
         # TO DO
         # bicie w przelocie
 
