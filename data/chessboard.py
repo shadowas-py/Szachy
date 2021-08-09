@@ -17,20 +17,19 @@ class GameState:
                         for tag in row.split(',')]
                         for row in boardRowsText]
 
+    def _castling(coord, castling_flags):
+        castling_move = []
+        if castling_flags[0]:  # SHORT
+            castling_move.extend((sum_directions(coord, (-2, 0)),
+                                  (sum_directions(coord, (-4, 0)), sum_directions(coord, (-1, 0)))))
+        if castling_flags[1]:  # LONG
+            castling_move.extend((sum_directions(coord, (2, 0)),
+                                  (sum_directions(coord, (3, 0)), sum_directions(coord, (1, 0)))))
+        return castling_move
+
 
     def generating_all_moves_for_piece(self, board, piece, coord):  # WYPISYWANIE KOLEJNYCH KOLUMN
 
-        def castling(piece):
-            castling_move = []
-            if piece.castling_flags[0]:  # SHORT
-                castling_move.extend((sum_directions(coord, piece.additional_movement[0]),
-                                      (sum_directions(coord, (-4, 0)), sum_directions(coord, (-1, 0)))))
-            if piece.castling_flags[1]:  # LONG
-                castling_move.extend((sum_directions(coord, piece.additional_movement[1]),
-                                      (sum_directions(coord, (3, 0)), sum_directions(coord, (1, 0)))))
-                return castling_move
-            else:
-                return None
 
         # PAWN MOVES
         moves_list = []
@@ -82,7 +81,7 @@ class GameState:
         else:
 
             if piece.castling_flags != None:
-                moves_list.extend(castling(piece))
+                moves_list.extend(_castling(coord, piece.castling_flags))
             for j in range(len(piece.movement)):
                 for i in range(piece.movement_range):
                     increased_piece_movement = multiply_direction(piece.movement[j], i + 1)
