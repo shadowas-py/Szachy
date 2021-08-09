@@ -52,10 +52,10 @@ def main():
                     try:
                         move_list.append((coord_selected, possible_target_tiles[possible_target_tiles.index(coord)]))
                         move_list.append(possible_target_tiles[possible_target_tiles.index(coord)+1])
-                        print(move_list,'?')
+                        # print(move_list,'?')
                     except:
                         move_list = [(coord_selected, possible_target_tiles[possible_target_tiles.index(coord)])]
-                        print(move_list)
+                        # print(move_list)
                     making_move(game.board, move_list)
                     drawing_board()
                     drawing_pieces(game.board)
