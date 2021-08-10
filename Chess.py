@@ -2,7 +2,8 @@ import pygame
 import logging
 
 from data.chessboard import GameState
-from data.game_logic import selecting_piece, get_game_coord_from_mouse, making_move, switching_turns, sub_directions
+from data.game_logic import selecting_piece, get_game_coord_from_mouse, making_move, switching_turns, sub_directions, \
+    disabling_castling_flags
 from data.graphic import drawing_board, drawing_pieces
 from data.settings import FPS
 from data.display_info import translate_to_chess_notation
@@ -48,13 +49,15 @@ def main():
                             piece_selected = None # odznacza figury jak nie ma mozliwosci ruchu lub nieprawidlowy wybor
                     translate_to_chess_notation(possible_target_tiles)
                 elif coord in possible_target_tiles:  # Wchodzi jezeli jest mozliwosc ruchu dla zaznaczonej figury
-                    move_list = [(coord_selected, coord)]
+                    single_move_sequence = [(coord_selected, coord)]
+                    # FIXME BUG TypeError: 'int' object is not subscriptable
                     if type(possible_target_tiles[possible_target_tiles.index(coord)+1][0]) is tuple:
-                        move_list.append(possible_target_tiles[possible_target_tiles.index(coord)+1])
-                    making_move(game.board, move_list)
+                        single_move_sequence.append(possible_target_tiles[possible_target_tiles.index(coord)+1])
+                    making_move(game.board, single_move_sequence)
+                    if piece_selected.tag == 'K' or piece_selected.tag == 'R':
+                        disabling_castling_flags(game=game, piece=piece_selected, base_coord=coord_selected)
                     drawing_board()
                     drawing_pieces(game.board)
-                    '''TUTAJ ZMIENIC FLAGI CASTLING I BICIA W PRZELOCIE'''
                     active_player = switching_turns(active_player)
                     piece_selected = None
                     refresh_flag = True
@@ -73,7 +76,6 @@ if __name__ == "__main__":
 # podswietlanie wybranej bierki
 # podswietlanie ostatnio wykonanego ruchu
 # dodac troche grafiki (wspolrzedne, tlo, ui)
-# 1.Roszady(bez sprawdzania legalnosci)
 
 #later
 # uporzadkowac kod generujacy ruchy - Pawn

@@ -46,6 +46,21 @@ def making_move(board, moves_list):
         board[shift[0][1]][shift[0][0]] = None
         board[shift[1][1]][shift[1][0]] = piece
 
+# ZAKLADAM ZE RUCH ZOSTAL WYKONANY
+def disabling_castling_flags(game, piece, base_coord):
+    if piece.tag == 'K':
+        game.castling_flags[piece.color + '_short'] = False
+        game.castling_flags[piece.color + '_long'] = False
+    elif piece.tag == 'R':
+        if base_coord == (0, 0):
+            game.castling_flags[piece.color + '_long'] = False
+        if base_coord == (0, 7):
+            game.castling_flags[piece.color + '_long'] = False
+        if base_coord == (7, 0):
+            game.castling_flags[piece.color + '_short'] = False
+        if base_coord == (7, 7):
+            game.castling_flags[piece.color + '_short'] = False
+
 
 def switching_turns(active_player):
     return 'b' if active_player == 'w' else 'w'

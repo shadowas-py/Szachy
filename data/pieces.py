@@ -33,9 +33,7 @@ class King(Piece):
         self.movement_range = 1
         self.movement = rotations(N, S, E, W) + rotations(sum_directions(N, E))
 
-        # self.all_moves = listing_moves_for_the_piece(self.movement, self.movement_range, piece_coord)
-        # TO DO
-        # dodac znaczniki i ruch roszady dla bialego i czarnego
+        # self.castling_flags = [True, True]  # [Short , Long]
 
 
 class Rook(Piece):

@@ -9,21 +9,20 @@ class GameState:
     def __init__(self, game_filepath="data/classic_new_game.csv"):
         with open(game_filepath, 'r') as file:
             self.nextMoveColor, *boardRowsText = file.read().split('\n')
+        #  LISTA KLAS-FIGUR DO INICJALIZACJI
+        piecesClsDict = {pieceClass.tag: pieceClass for pieceClass in [Pawn, Rook, Knight, Bishop, Queen, King]}
+        #  POLE GRY
+        self.board = [[None if tag == '' else piecesClsDict[tag[1]](tag[0])  # pieces_ClsDict[]() == Piece(color)
+                       for tag in row.split(',')]
+                      for row in boardRowsText]
+        self.castling_flags = {'w_long': True, 'w_short': True, 'b_long': True, 'b_short': True}
 
-        'LISTA KLAS-FIGUR DO INICJALIZACJI'
-        pieces_ClsDict = {pieceClass.tag: pieceClass for pieceClass in [Pawn, Rook, Knight, Bishop, Queen, King]}
-
-        'POLE GRY'
-        self.board = [[None if tag == '' else pieces_ClsDict[tag[1]](tag[0])  # pieces_ClsDict[]() == Piece(color)
-                        for tag in row.split(',')]
-                        for row in boardRowsText]
-
-    def _castling(coord, castling_flags):
+    def _castling(self, coord, color):
         castling_move = []
-        if castling_flags[0]:  # SHORT
+        if self.castling_flags[color+'_short'] is True:  # SHORT
             castling_move.extend((sum_directions(coord, (-2, 0)),
                                   (sum_directions(coord, (-4, 0)), sum_directions(coord, (-1, 0)))))
-        if castling_flags[1]:  # LONG
+        if self.castling_flags[color+'_long'] is True:  # LONG
             castling_move.extend((sum_directions(coord, (2, 0)),
                                   (sum_directions(coord, (3, 0)), sum_directions(coord, (1, 0)))))
         return castling_move
@@ -42,18 +41,17 @@ class GameState:
                     moves_list.append(list(sum_directions(pawn_movement, pawn_movement)))
             for horizontal_shift in [W,E]:
                 new_coord = sum_directions(coord, (sum_directions(pawn_movement, horizontal_shift)))
-                if board[new_coord[1]][new_coord[0]] is not None and board[new_coord[1]][new_coord[0]].color != piece.color:
-                    moves_list.append(list(sum_directions(pawn_movement, horizontal_shift)))
-
-        # MOVES OF OTHER PIECES
+                if board[new_coord[1]][new_coord[0]] is not None and\
+                   board[new_coord[1]][new_coord[0]].color != piece.color:
+                    # moves_list.append(list(sum_directions(pawn_movement, horizontal_shift)))
+                    moves_list.append(tuple(new_coord))
+            #  MOVES OF OTHER PIECES
         else:
-
-            if piece.castling_flags != None:
-                moves_list.extend(_castling(coord, piece.castling_flags))
-            for j in range(len(piece.movement)):
-                for i in range(piece.movement_range):
-                    increased_piece_movement = multiply_direction(piece.movement[j], i + 1)
-                    # i jest mnoznikiem odleglosci
+            if piece.tag =='K':
+                moves_list.extend(self._castling(coord, piece.color))
+            for singleMove in piece.movement:
+                for multiplier in range(piece.movement_range):
+                    increased_piece_movement = multiply_direction(singleMove, multiplier + 1)
                     coords_after_move = sum_directions(coord, increased_piece_movement)
                     # if pilnujacy zeby generowane ruchy nie wychodzilo poza zakres planszy
                     if min(coords_after_move) >= 0 and max(coords_after_move) < 8:
