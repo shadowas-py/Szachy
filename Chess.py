@@ -48,13 +48,9 @@ def main():
                             piece_selected = None # odznacza figury jak nie ma mozliwosci ruchu lub nieprawidlowy wybor
                     translate_to_chess_notation(possible_target_tiles)
                 elif coord in possible_target_tiles:  # Wchodzi jezeli jest mozliwosc ruchu dla zaznaczonej figury
-                    move_list = []
-                    try:
-                        move_list.append((coord_selected, possible_target_tiles[possible_target_tiles.index(coord)]))
+                    move_list = [(coord_selected, coord)]
+                    if type(possible_target_tiles[possible_target_tiles.index(coord)+1][0]) is tuple:
                         move_list.append(possible_target_tiles[possible_target_tiles.index(coord)+1])
-                    except Exception:
-                        move_list = [(coord_selected, possible_target_tiles[possible_target_tiles.index(coord)])]
-                        # print(move_list)
                     making_move(game.board, move_list)
                     drawing_board()
                     drawing_pieces(game.board)

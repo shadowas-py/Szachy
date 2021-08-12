@@ -15,20 +15,21 @@ class GameState:
 
         'POLE GRY'
         self.board = [[None if tag == '' else pieces_ClsDict[tag[1]](tag[0])  # pieces_ClsDict[]() == Piece(color)
-                       for tag in row.split(',')]
-                      for row in boardRowsText]
+                        for tag in row.split(',')]
+                        for row in boardRowsText]
+
+    def _castling(coord, castling_flags):
+        castling_move = []
+        if castling_flags[0]:  # SHORT
+            castling_move.extend((sum_directions(coord, (-2, 0)),
+                                  (sum_directions(coord, (-4, 0)), sum_directions(coord, (-1, 0)))))
+        if castling_flags[1]:  # LONG
+            castling_move.extend((sum_directions(coord, (2, 0)),
+                                  (sum_directions(coord, (3, 0)), sum_directions(coord, (1, 0)))))
+        return castling_move
+
 
     def generating_all_moves_for_piece(self, board, piece, coord):  # WYPISYWANIE KOLEJNYCH KOLUMN
-
-        def castling(piece):
-            castling_move = []
-            if piece.castling_flags[0]:  # SHORT
-                castling_move.extend((sum_directions(coord, piece.additional_movement[0]),
-                                      (sum_directions(coord, (-4, 0)), sum_directions(coord, (-1, 0)))))
-            if piece.castling_flags[1]:  # LONG
-                castling_move.extend((sum_directions(coord, piece.additional_movement[1]),
-                                      (sum_directions(coord, (3, 0)), sum_directions(coord, (1, 0)))))
-            return castling_move
 
         # PAWN MOVES
         moves_list = []
@@ -78,12 +79,13 @@ class GameState:
                     return moves_list
         # REST MOVES
         else:
-            if piece.castling_flags is not None:
-                moves_list.extend(castling(piece))
-            #  print(moves_list, 'A')
-            for singleMove in piece.movement:
-                for multiplier in range(piece.movement_range):
-                    increased_piece_movement = multiply_direction(singleMove, multiplier + 1)
+
+            if piece.castling_flags != None:
+                moves_list.extend(_castling(coord, piece.castling_flags))
+            for j in range(len(piece.movement)):
+                for i in range(piece.movement_range):
+                    increased_piece_movement = multiply_direction(piece.movement[j], i + 1)
+                    # i jest mnoznikiem odleglosci
                     coords_after_move = sum_directions(coord, increased_piece_movement)
                     # if pilnujacy zeby generowane ruchy nie wychodzilo poza zakres planszy
                     if min(coords_after_move) >= 0 and max(coords_after_move) < 8:

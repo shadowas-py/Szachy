@@ -30,12 +30,9 @@ def get_game_coord_from_mouse():
 def selecting_piece(board, coord, active_player):  # Zwraca None jeżeli nie jest klikniete pole z figura aktywnego gracza
     row, col = coord
     piece = board[col][row]
-    if piece is not None:  # obiekt nie moze byc None
-        if piece.color == active_player:
-            return piece
-        return None
-    else:
-        return None
+    if piece is not None and piece.color == active_player:
+        return piece
+    return None
 
 
 # zeby nie wywalalo jak kliknie sie poza plansze
@@ -49,10 +46,7 @@ def making_move(board, moves_list):
 
 
 def switching_turns(active_player):
-    if active_player == "w":
-        return 'b'
-    else:
-        return "w"
+    return 'b' if active_player == 'w' else 'w'
 
 # class SpecialMoves:
 #     def __init__(self):
