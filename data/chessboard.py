@@ -35,11 +35,11 @@ class GameState:
             pawn_movement = piece.movement
             new_coord = sum_directions(coord, pawn_movement)
             if board[new_coord[1]][new_coord[0]] is None:
-                moves_list.append(list(pawn_movement))
+                moves_list.append(tuple(new_coord))
                 new_coord = sum_directions(coord, pawn_movement, pawn_movement)
                 if coord[1] == (6 if piece.color == 'w' else 1) and board[new_coord[1]][new_coord[0]] is None:
-                    moves_list.append(list(sum_directions(pawn_movement, pawn_movement)))
-            for horizontal_shift in [W,E]:
+                    moves_list.append(tuple(new_coord))
+            for horizontal_shift in [W, E]:
                 new_coord = sum_directions(coord, (sum_directions(pawn_movement, horizontal_shift)))
                 # FIXME BUG sprawdzane wspolrzedne wychodza poza game.board
                 if board[new_coord[1]][new_coord[0]] is not None and \
@@ -54,22 +54,18 @@ class GameState:
                 for multiplier in range(piece.movement_range):
                     increased_piece_movement = multiply_direction(singleMove, multiplier + 1)
                     coords_after_move = sum_directions(coord, increased_piece_movement)
-                    # if pilnujacy zeby generowane ruchy nie wychodzilo poza zakres planszy
+                    # IF PILNUJACY ABY GENEROWANE RUCHY NIE WYCHODZILY POZA ZAKRES BOARDA"""
                     if min(coords_after_move) >= 0 and max(coords_after_move) < 8:
                         if board[coords_after_move[1]][coords_after_move[0]] is not None:
-                            # jezeli napotka na przeszkode przerywa iteracje po dlugosci ruchu
-                            if board[coords_after_move[1]][coords_after_move[0]].color == piece.color:
-                                break
-                            else:
+                            # PRZERYWA ITERACJE PO NAPOTKANIU PRZESZKODY
+                            if board[coords_after_move[1]][coords_after_move[0]].color != piece.color:
                                 moves_list.append(coords_after_move)
-                                break
+                            break
                         else:
                             moves_list.append(coords_after_move)
-            if not len(moves_list) == 0:
-                return moves_list
-            else:
-                #  TODO - ustalic czy ma zwracac [] czy None
-                return None
+        if len(moves_list) == 0:
+            return None
+        return moves_list
 
     def __str__(self):
         return '\n'.join([' '.join(map(lambda x: '  ' if x is None else str(x), boardRow)) for boardRow in self.board])

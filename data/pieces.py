@@ -31,7 +31,7 @@ class King(Piece):
     def __init__(self, color):  # parametry do poprawienia
         self.color = color
         self.movement_range = 1
-        self.movement = rotations(N, S, E, W) + rotations(sum_directions(N, E))
+        self.movement = rotations(N) + rotations(sum_directions(N, E))
 
         # self.castling_flags = [True, True]  # [Short , Long]
 
@@ -75,6 +75,6 @@ class Queen(Piece):
     def __init__(self, color):
         self.color = color
         self.movement_range = GRID_SIZE - 1
-        self.movement = rotations(N, S, E, W) + rotations(sum_directions(N, E))
+        self.movement = rotations(N) + rotations(sum_directions(N, E))
                         
         # self.all_moves = listing_moves_for_the_piece(self.movement, self.movement_range, piece_coord)

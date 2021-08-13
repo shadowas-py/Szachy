@@ -8,13 +8,12 @@ def sum_directions(direction1, direction2, direction3=(0, 0)):
 
 
 def sub_directions(direction1, direction2):
-    return tuple(nCoord1 - nCoord2 for
-                 nCoord1, nCoord2 in zip(direction1, direction2))
+    return tuple(nCoord1 - nCoord2 for nCoord1, nCoord2 in zip(direction1, direction2))
 
 
 def multiply_direction(direction, multiplier):
-    multiplied_direction = (direction[0]*multiplier, direction[1]*multiplier)
-    return list(multiplied_direction)
+    return tuple((direction[0] * multiplier, direction[1] * multiplier))
+
 
 def rotations(v):
     x, y = v
