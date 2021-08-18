@@ -36,10 +36,14 @@ def main():
                 run = False
             if event.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed()[0]:  # jezeli wcisniety LEFT MOUSE BUTTON
                 coord = get_game_coord_from_mouse()
-                'WSTAWIC generating_all_possible_moves to check pat'
+                #TODO dodac narzedzie zarzadzajace eventami klikniec itp, na przyszlosc do obslugi UI
+                if coord is None: # Resetuje zaznaczenie jezeli zaznaczy sie puste pole lub kliknie poza board
+                    coord_selected = None
+                    piece_selected = None
+                    break
                 if piece_selected is None:  # Wchodzi jeżeli nic nie jest zaznaczone
                     piece_selected = selecting_piece(game.board, coord, active_player)
-                    'WSTAWIC is_check, is_pat'
+                    #TODO WSTAWIC is_check, is_pat'
                     if piece_selected is not None: # Sprawdzam czy sa mozliwe ruchy dla danego zaznaczenia
                         possible_target_tiles = game.generating_all_moves_for_piece(game.board, piece_selected, coord)
                         if possible_target_tiles is not None:
