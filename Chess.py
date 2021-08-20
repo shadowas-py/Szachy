@@ -43,19 +43,18 @@ def main():
                     break
                 if piece_selected is None:  # Wchodzi jeżeli nic nie jest zaznaczone
                     piece_selected = selecting_piece(game.board, coord, active_player)
-                    #TODO WSTAWIC is_check, is_pat'
                     if piece_selected is not None: # Sprawdzam czy sa mozliwe ruchy dla danego zaznaczenia
                         possible_target_tiles = game.generating_all_moves_for_piece(game.board, piece_selected, coord)
                         if possible_target_tiles is not None:
                             refresh_flag = True  # zmienna do odswiezania ekranu
                             coord_selected = coord  # zapisuje w pamieci koordynaty prawidlowo wybranej figury
+                            translate_to_chess_notation(possible_target_tiles)
                         else:
                             piece_selected = None # odznacza figury jak nie ma mozliwosci ruchu lub nieprawidlowy wybor
-                    translate_to_chess_notation(possible_target_tiles)
                 elif coord in possible_target_tiles:  # Wchodzi jezeli jest mozliwosc ruchu dla zaznaczonej figury
                     single_move_sequence = [(coord_selected, coord)]
-                    # FIXME BUG TypeError: 'int' object is not subscriptable
-                    if type(possible_target_tiles[possible_target_tiles.index(coord)+1][0]) is tuple:
+                    if coord != possible_target_tiles[-1] and \
+                            type(possible_target_tiles[possible_target_tiles.index(coord) + 1][0]) is tuple:
                         single_move_sequence.append(possible_target_tiles[possible_target_tiles.index(coord)+1])
                     making_move(game.board, single_move_sequence)
                     if piece_selected.tag == 'K' or piece_selected.tag == 'R':
