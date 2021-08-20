@@ -27,7 +27,6 @@ class GameState:
                                   (sum_directions(coord, (3, 0)), sum_directions(coord, (1, 0)))))
         return castling_move
 
-
     def generating_all_moves_for_piece(self, board, piece, coord):
         # PAWN MOVES
         moves_list = []

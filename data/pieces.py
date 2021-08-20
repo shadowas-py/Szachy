@@ -8,6 +8,7 @@ class Piece:
 
     def __str__(self):
         return self.color + self.tag
+
     def get_full_name(self):
         return '_'.join(['black' if self.color == 'b' else 'white', type(self).__name__.lower()])
 

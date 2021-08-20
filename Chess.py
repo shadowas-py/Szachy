@@ -16,7 +16,8 @@ game = GameState()
 # SETTINGS
 pygame.display.set_caption('Szachy')
 logging.basicConfig(filename='logs.log', level=logging.DEBUG,
-                    format = '%(asctime)s,:%(levelname)s:%(module)s:,%(message)s')
+                    format='%(asctime)s,:%(levelname)s:%(module)s:,%(message)s')
+
 
 def main():
     run = True
@@ -36,21 +37,21 @@ def main():
                 run = False
             if event.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed()[0]:  # jezeli wcisniety LEFT MOUSE BUTTON
                 coord = get_game_coord_from_mouse()
-                #TODO dodac narzedzie zarzadzajace eventami klikniec itp, na przyszlosc do obslugi UI
-                if coord is None: # Resetuje zaznaczenie jezeli zaznaczy sie puste pole lub kliknie poza board
+                # TODO dodac narzedzie zarzadzajace eventami klikniec itp, na przyszlosc do obslugi UI
+                if coord is None:  # Resetuje zaznaczenie jezeli zaznaczy sie puste pole lub kliknie poza board
                     coord_selected = None
                     piece_selected = None
                     break
                 if piece_selected is None:  # Wchodzi jeżeli nic nie jest zaznaczone
                     piece_selected = selecting_piece(game.board, coord, active_player)
-                    if piece_selected is not None: # Sprawdzam czy sa mozliwe ruchy dla danego zaznaczenia
+                    if piece_selected is not None:  # Sprawdzam czy sa mozliwe ruchy dla danego zaznaczenia
                         possible_target_tiles = game.generating_all_moves_for_piece(game.board, piece_selected, coord)
                         if possible_target_tiles is not None:
                             refresh_flag = True  # zmienna do odswiezania ekranu
                             coord_selected = coord  # zapisuje w pamieci koordynaty prawidlowo wybranej figury
                             translate_to_chess_notation(possible_target_tiles)
                         else:
-                            piece_selected = None # odznacza figury jak nie ma mozliwosci ruchu lub nieprawidlowy wybor
+                            piece_selected = None  # odznacza figury jak nie ma mozliwosci ruchu lub nieprawidlowy wybor
                 elif coord in possible_target_tiles:  # Wchodzi jezeli jest mozliwosc ruchu dla zaznaczonej figury
                     single_move_sequence = [(coord_selected, coord)]
                     if coord != possible_target_tiles[-1] and \
@@ -80,8 +81,7 @@ if __name__ == "__main__":
 # podswietlanie ostatnio wykonanego ruchu
 # dodac troche grafiki (wspolrzedne, tlo, ui)
 
-#later
-# uporzadkowac kod generujacy ruchy - Pawn
+# later
 # 2.Promocja piona (interfejs wyboru figury)
 # 3.Bicie w przelocie
 # 4.generowac notacje szachowa
@@ -89,7 +89,4 @@ if __name__ == "__main__":
 # 6.sprawdzanie szacha
 # 7.sprawdzanie mata i pata
 # 8.spradzanie legalnosci roszady
-# 8.zegary
-
-# BUG Known bugs
-#. Klikniecie poza szachownice crashuje
+# 9.zegary

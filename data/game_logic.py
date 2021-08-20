@@ -11,7 +11,7 @@ def get_game_coord_from_mouse():
     else:
         return None
 
-def selecting_piece(board, coord, active_player): # Zwraca None jeżeli nie jest klikniete pole z figura aktywnego gracza
+def selecting_piece(board, coord, active_player):
     row, col = coord
     piece = board[col][row]
     if piece is not None and piece.color == active_player:
@@ -45,24 +45,3 @@ def disabling_castling_flags(game, piece, base_coord):
 
 def switching_turns(active_player):
     return 'b' if active_player == 'w' else 'w'
-
-# class SpecialMoves:
-#     def __init__(self):
-#         self.w_long_castling_flag = True
-#         self.w_short_castling_flag = True
-#         self.b_long_castling_flag = True
-#         self.b_short_castling_flag = True
-#         en_passant_flag = False
-#
-#     def castling(self):
-#         short_castling = sum_directions(E, E)
-#         long_castling = sum_directions(W, W)
-#         if self.w_long_castling_flag:
-#             if self.w_short_castling_flag:
-#                 return short_castling, long_castling
-#         else:
-#             if self.w_short_castling_flag :
-#                 return short_castling
-#
-#     def en_passant():
-#         pass
