@@ -41,10 +41,9 @@ class GameState:
                     moves_list.append(tuple(new_coord))
             for horizontal_shift in [W, E]:
                 new_coord = sum_directions(coord, (sum_directions(pawn_movement, horizontal_shift)))
-                # FIXME BUG sprawdzane wspolrzedne wychodza poza game.board
-                if board[new_coord[1]][new_coord[0]] is not None and \
+                if tuple(filter(lambda x: x < 7, coord)) == coord and\
+                        board[new_coord[1]][new_coord[0]] is not None and \
                         board[new_coord[1]][new_coord[0]].color != piece.color:
-                    # moves_list.append(list(sum_directions(pawn_movement, horizontal_shift)))
                     moves_list.append(tuple(new_coord))
             #  MOVES OF OTHER PIECES
         else:
