@@ -2,7 +2,7 @@ import pygame
 import logging
 
 from data.chessboard import GameState
-from data.game_logic import selecting_piece, get_game_coord_from_mouse, making_move, switching_turns, sub_directions, \
+from data.game_logic import selecting_piece, get_game_coord_from_mouse, making_move, switching_turns, \
     disabling_castling_flags
 from data.graphic import drawing_board, drawing_pieces
 from data.settings import FPS

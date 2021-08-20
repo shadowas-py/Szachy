@@ -1,4 +1,4 @@
-from .game_logic import sum_directions, rotations
+from .functions import sum_directions, rotations
 from .constants import N, S, W, E, GRID_SIZE
 
 

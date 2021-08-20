@@ -1,6 +1,6 @@
 from data.constants import N, W, E, S
 from data.pieces import Pawn, Rook, Knight, Bishop, Queen, King
-from data.game_logic import sum_directions, multiply_direction, sub_directions
+from data.functions import sum_directions, multiply_direction
 
 
 class GameState:
