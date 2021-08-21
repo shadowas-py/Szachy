@@ -28,6 +28,11 @@ class GameState:
                                   (sum_directions(coord, (3, 0)), sum_directions(coord, (1, 0)))))
         return castling_move
 
+    # def en_passant(self, coord):
+    #     en_passant_move = []
+    #     en_passant_move.extend()
+    #     return en_passant_move
+
     def generating_all_moves_for_piece(self, board, piece, coord):
         # PAWN MOVES
         moves_list = []
@@ -39,6 +44,7 @@ class GameState:
                 new_coord = sum_directions(coord, pawn_movement, pawn_movement)
                 if coord[1] == (6 if piece.color == 'w' else 1) and board[new_coord[1]][new_coord[0]] is None:
                     moves_list.append(tuple(new_coord))
+                    print(moves_list, 'ml')
             for horizontal_shift in [W, E]:
                 new_coord = sum_directions(coord, (sum_directions(pawn_movement, horizontal_shift)))
                 if tuple(filter(lambda x: x < 7, coord)) == coord and\

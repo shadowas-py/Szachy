@@ -9,7 +9,7 @@ def multiply_direction(direction, multiplier):
 
 def shift_value(coord1, coord2):
     for i in range(2):
-        yield coord1[i] - coord2[i] if coord1[i] >= coord2[i] else coord2[i] - coord1[i]
+        yield abs(coord1[i] - coord2[i])
 
 def midpoint_between_two_coords(coord1, coord2):
     for i in range(2):
