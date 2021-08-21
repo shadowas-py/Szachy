@@ -3,7 +3,7 @@ import logging
 
 from data.chessboard import GameState
 from data.game_logic import selecting_piece, get_game_coord_from_mouse, making_move, switching_turns, \
-    disabling_castling_flags
+    disabling_castling_flags, set_en_passant_tile
 from data.graphic import drawing_board, drawing_pieces
 from data.settings import FPS
 from data.display_info import translate_to_chess_notation
@@ -63,7 +63,8 @@ def main():
                         disabling_castling_flags(game=game, piece=piece_selected, base_coord=coord_selected)
                     if piece_selected.tag == 'P' and \
                             tuple(shift_value(coord, coord_selected)) == (0, 2):
-                        print('en passant')
+                        set_en_passant_tile(game, base_coord=coord_selected, target_coord=coord)
+                        print('en passant', game.en_passant_tile)
                     drawing_board()
                     drawing_pieces(game.board)
                     active_player = switching_turns(active_player)

@@ -1,7 +1,7 @@
 import pygame
 
 from .constants import BOARD_POSITION, TILE_SIZE, BOARD_END_POSITION
-
+from .functions import midpoint_between_two_coords
 
 def get_game_coord_from_mouse():
     mouse_pos = pygame.mouse.get_pos()
@@ -18,12 +18,10 @@ def selecting_piece(board, coord, active_player):
         return piece
     return None
 
-# zeby nie wywalalo jak kliknie sie poza plansze
 def making_move(board, moves_list):
     # print(moves_list)
     for shift in moves_list:
         piece = board[shift[0][1]][shift[0][0]]
-        # print(piece)
         board[shift[0][1]][shift[0][0]] = None
         board[shift[1][1]][shift[1][0]] = piece
 
@@ -41,6 +39,9 @@ def disabling_castling_flags(game, piece, base_coord):
             game.castling_flags[piece.color + '_short'] = False
         if base_coord == (7, 7):
             game.castling_flags[piece.color + '_short'] = False
+
+def set_en_passant_tile(game, base_coord, target_coord):
+    game.en_passant_tile = tuple(midpoint_between_two_coords(base_coord, target_coord))
 
 
 def switching_turns(active_player):

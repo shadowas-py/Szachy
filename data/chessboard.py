@@ -16,6 +16,7 @@ class GameState:
                        for tag in row.split(',')]
                       for row in boardRowsText]
         self.castling_flags = {'w_long': True, 'w_short': True, 'b_long': True, 'b_short': True}
+        self.en_passant_tile = None
 
     def _castling(self, coord, color):
         castling_move = []
