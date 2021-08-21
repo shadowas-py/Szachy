@@ -7,6 +7,7 @@ from data.game_logic import selecting_piece, get_game_coord_from_mouse, making_m
 from data.graphic import drawing_board, drawing_pieces
 from data.settings import FPS
 from data.display_info import translate_to_chess_notation
+from data.functions import shift_value
 
 pygame.init()
 
@@ -60,6 +61,9 @@ def main():
                     making_move(game.board, single_move_sequence)
                     if piece_selected.tag == 'K' or piece_selected.tag == 'R':
                         disabling_castling_flags(game=game, piece=piece_selected, base_coord=coord_selected)
+                    if piece_selected.tag == 'P' and \
+                            tuple(shift_value(coord, coord_selected)) == (0, 2):
+                        print('en passant')
                     drawing_board()
                     drawing_pieces(game.board)
                     active_player = switching_turns(active_player)
