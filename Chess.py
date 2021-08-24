@@ -46,7 +46,7 @@ def main():
                 if piece_selected is None:  # Wchodzi jeżeli nic nie jest zaznaczone
                     piece_selected = selecting_piece(game.board, coord, active_player)
                     if piece_selected is not None:  # Sprawdzam czy sa mozliwe ruchy dla danego zaznaczenia
-                        possible_target_tiles = game.generating_all_moves_for_piece(game.board, piece_selected, coord)
+                        possible_target_tiles = game.generating_all_moves_for_piece(game, piece_selected, coord)
                         if possible_target_tiles is not None:
                             refresh_flag = True  # zmienna do odswiezania ekranu
                             coord_selected = coord  # zapisuje w pamieci koordynaty prawidlowo wybranej figury
@@ -55,6 +55,7 @@ def main():
                             piece_selected = None  # odznacza figury jak nie ma mozliwosci ruchu lub nieprawidlowy wybor
                 elif coord in possible_target_tiles:  # Wchodzi jezeli jest mozliwosc ruchu dla zaznaczonej figury
                     single_move_sequence = [(coord_selected, coord)]
+                    game.en_passant_coord = None
                     if coord != possible_target_tiles[-1] and \
                             type(possible_target_tiles[possible_target_tiles.index(coord) + 1][0]) is tuple:
                         single_move_sequence.append(possible_target_tiles[possible_target_tiles.index(coord)+1])
@@ -63,8 +64,7 @@ def main():
                         disabling_castling_flags(game=game, piece=piece_selected, base_coord=coord_selected)
                     if piece_selected.tag == 'P' and \
                             tuple(shift_value(coord, coord_selected)) == (0, 2):
-                        set_en_passant_tile(game, base_coord=coord_selected, target_coord=coord)
-                        print('en passant', game.en_passant_tile)
+                        game.en_passant_coord = tuple(set_en_passant_tile(base_coord=coord_selected, target_coord=coord))
                     drawing_board()
                     drawing_pieces(game.board)
                     active_player = switching_turns(active_player)

@@ -16,7 +16,7 @@ class GameState:
                        for tag in row.split(',')]
                       for row in boardRowsText]
         self.castling_flags = {'w_long': True, 'w_short': True, 'b_long': True, 'b_short': True}
-        self.en_passant_tile = None
+        self.en_passant_coord = None
 
     def _castling(self, coord, color):
         castling_move = []
@@ -28,32 +28,30 @@ class GameState:
                                   (sum_directions(coord, (3, 0)), sum_directions(coord, (1, 0)))))
         return castling_move
 
-    # def en_passant(self, coord):
-    #     en_passant_move = []
-    #     en_passant_move.extend()
-    #     return en_passant_move
-
-    def generating_all_moves_for_piece(self, board, piece, coord):
+    def generating_all_moves_for_piece(self, game, piece, coord):
         # PAWN MOVES
         moves_list = []
         if piece.tag == "P":
             pawn_movement = piece.movement
             new_coord = sum_directions(coord, pawn_movement)
-            if board[new_coord[1]][new_coord[0]] is None:
+            if game.board[new_coord[1]][new_coord[0]] is None:
                 moves_list.append(tuple(new_coord))
                 new_coord = sum_directions(coord, pawn_movement, pawn_movement)
-                if coord[1] == (6 if piece.color == 'w' else 1) and board[new_coord[1]][new_coord[0]] is None:
+                if coord[1] == (6 if piece.color == 'w' else 1) and game.board[new_coord[1]][new_coord[0]] is None:
                     moves_list.append(tuple(new_coord))
-                    print(moves_list, 'ml')
             for horizontal_shift in [W, E]:
                 new_coord = sum_directions(coord, (sum_directions(pawn_movement, horizontal_shift)))
+                if game.en_passant_coord == new_coord:
+                    moves_list.append(game.en_passant_coord)
+                    moves_list.append((coord, sum_directions(horizontal_shift, coord)))
                 if tuple(filter(lambda x: x < 7, coord)) == coord and\
-                        board[new_coord[1]][new_coord[0]] is not None and \
-                        board[new_coord[1]][new_coord[0]].color != piece.color:
+                        game.board[new_coord[1]][new_coord[0]] is not None and \
+                        game.board[new_coord[1]][new_coord[0]].color != piece.color:
                     moves_list.append(tuple(new_coord))
+
             #  MOVES OF OTHER PIECES
         else:
-            if piece.tag =='K':
+            if piece.tag == 'K':
                 moves_list.extend(self._castling(coord, piece.color))
             for singleMove in piece.movement:
                 for multiplier in range(piece.movement_range):
@@ -61,9 +59,9 @@ class GameState:
                     coords_after_move = sum_directions(coord, increased_piece_movement)
                     # IF PILNUJACY ABY GENEROWANE RUCHY NIE WYCHODZILY POZA ZAKRES BOARDA"""
                     if min(coords_after_move) >= 0 and max(coords_after_move) < 8:
-                        if board[coords_after_move[1]][coords_after_move[0]] is not None:
+                        if game.board[coords_after_move[1]][coords_after_move[0]] is not None:
                             # PRZERYWA ITERACJE PO NAPOTKANIU PRZESZKODY
-                            if board[coords_after_move[1]][coords_after_move[0]].color != piece.color:
+                            if game.board[coords_after_move[1]][coords_after_move[0]].color != piece.color:
                                 moves_list.append(coords_after_move)
                             break
                         else:
