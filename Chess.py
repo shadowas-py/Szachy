@@ -62,9 +62,14 @@ def main():
                     making_move(game.board, single_move_sequence)
                     if piece_selected.tag == 'K' or piece_selected.tag == 'R':
                         disabling_castling_flags(game=game, piece=piece_selected, base_coord=coord_selected)
-                    if piece_selected.tag == 'P' and \
-                            tuple(shift_value(coord, coord_selected)) == (0, 2):
-                        game.en_passant_coord = tuple(set_en_passant_tile(base_coord=coord_selected, target_coord=coord))
+                    if piece_selected.tag == 'P':
+                        print(coord, piece_selected.color)
+                        if tuple(shift_value(coord, coord_selected)) == (0, 2): # obsluga bicia w przelocie
+                            game.en_passant_coord = tuple(set_en_passant_tile(base_coord=coord_selected,
+                                                                              target_coord=coord))
+                        elif coord[1] == 0 and piece_selected.color == 'w' or\
+                                coord[1] == 7 and piece_selected.color == 'b':# obsluga promocji piona
+                            'Promocja'
                     drawing_board()
                     drawing_pieces(game.board)
                     active_player = switching_turns(active_player)
