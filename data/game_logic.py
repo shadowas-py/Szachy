@@ -2,6 +2,7 @@ import pygame
 
 from .constants import BOARD_POSITION, TILE_SIZE, BOARD_END_POSITION
 from .functions import midpoint_between_two_coords
+from .pieces import Piece
 
 def get_game_coord_from_mouse():
     mouse_pos = pygame.mouse.get_pos()
@@ -42,6 +43,13 @@ def disabling_castling_flags(game, piece, base_coord):
 def set_en_passant_tile(base_coord, target_coord):
     en_passant_tile = midpoint_between_two_coords(base_coord, target_coord)
     return en_passant_tile
+
+def pawn_promotion(player_color):
+    figures_to_promotion = 'Q,N,R,B'
+    print('A')
+    picked_tag = input('Wybierz tag figury')
+    while picked_tag in figures_to_promotion:
+        return player_color+picked_tag
 
 
 def switching_turns(active_player):
