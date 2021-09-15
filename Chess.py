@@ -60,14 +60,13 @@ def main():
                     if coord != possible_target_tiles[-1] and \
                             type(possible_target_tiles[possible_target_tiles.index(coord) + 1][0]) is tuple:
                         single_move_sequence.append(possible_target_tiles[possible_target_tiles.index(coord)+1])
-                    if coord[1] == 0 and piece_selected.color == 'w' or \
+                    if piece_selected.tag == 'P' and coord[1] == 0 and piece_selected.color == 'w' or \
                             coord[1] == 7 and piece_selected.color == 'b':  # obsluga promocji piona
-                        game.board[coord_selected[0]][coord_selected[1]] = pawn_promotion(player_color=active_player)
+                        game.board[coord_selected[1]][coord_selected[0]] = pawn_promotion(player_color=active_player)
                     making_move(game.board, single_move_sequence)
                     if piece_selected.tag == 'K' or piece_selected.tag == 'R':
                         disabling_castling_flags(game=game, piece=piece_selected, base_coord=coord_selected)
                     if piece_selected.tag == 'P':
-                        print(coord, piece_selected.color)
                         if tuple(shift_value(coord, coord_selected)) == (0, 2):  # zapamietuje pole do bicia w przelocie
                             game.en_passant_coord = tuple(set_en_passant_tile(base_coord=coord_selected,
                                                                               target_coord=coord))
@@ -93,8 +92,7 @@ if __name__ == "__main__":
 # dodac troche grafiki (wspolrzedne, tlo, ui)
 
 # later
-# 2.Promocja piona (interfejs wyboru figury)
-# 3.Bicie w przelocie
+# 2.interfejs wyboru promowanej figury
 # 4.generowac notacje szachowa
 # 5.cofanie ruchow
 # 6.sprawdzanie szacha

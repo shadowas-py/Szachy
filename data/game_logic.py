@@ -2,7 +2,8 @@ import pygame
 
 from .constants import BOARD_POSITION, TILE_SIZE, BOARD_END_POSITION
 from .functions import midpoint_between_two_coords
-from .pieces import Piece
+from .pieces import Pawn, Rook, Knight, Bishop, Queen, King
+
 
 def get_game_coord_from_mouse():
     mouse_pos = pygame.mouse.get_pos()
@@ -25,6 +26,7 @@ def making_move(board, moves_list):
         board[shift[0][1]][shift[0][0]] = None
         board[shift[1][1]][shift[1][0]] = piece
 
+
 # ZAKLADAM ZE RUCH ZOSTAL WYKONANY
 def disabling_castling_flags(game, piece, base_coord):
     if piece.tag == 'K':
@@ -40,16 +42,19 @@ def disabling_castling_flags(game, piece, base_coord):
         if base_coord == (7, 7):
             game.castling_flags[piece.color + '_short'] = False
 
+
 def set_en_passant_tile(base_coord, target_coord):
     en_passant_tile = midpoint_between_two_coords(base_coord, target_coord)
     return en_passant_tile
 
+
+pieces_to_promotion = {'R': Rook, 'N': Knight, 'B': Bishop, 'Q': Queen}
 def pawn_promotion(player_color):
-    figures_to_promotion = 'Q,N,R,B'
-    print('A')
-    picked_tag = input('Wybierz tag figury')
-    while picked_tag in figures_to_promotion:
-        return player_color+picked_tag
+    while True:
+        picked_tag = input('Wybierz tag figury: Q, N, R, B').upper()
+        if picked_tag in pieces_to_promotion:
+            print(pieces_to_promotion[picked_tag](player_color))
+            return pieces_to_promotion[picked_tag](player_color)
 
 
 def switching_turns(active_player):

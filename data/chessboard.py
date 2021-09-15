@@ -48,7 +48,6 @@ class GameState:
                         game.board[new_coord[1]][new_coord[0]] is not None and \
                         game.board[new_coord[1]][new_coord[0]].color != piece.color:
                     moves_list.append(tuple(new_coord))
-
             #  MOVES OF OTHER PIECES
         else:
             if piece.tag == 'K':
