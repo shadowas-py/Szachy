@@ -15,11 +15,6 @@ def shift_value(coord1, coord2):
         yield abs(coord1[i] - coord2[i])
 
 
-def midpoint_between_two_coords(coord1, coord2):
-    for i in range(2):
-        yield (coord1[i] + coord2[i])//2
-
-
 def rotations(v):
     x, y = v
     return [(x,y), (y,-x), (-x,-y), (-y,x)]

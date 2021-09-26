@@ -47,22 +47,19 @@ def main():
                 if piece_selected is None:  # Wchodzi jeżeli nic nie jest zaznaczone
                     piece_selected = selecting_piece(game.board, coord, active_player)
                     if piece_selected is not None:  # Sprawdzam czy sa mozliwe ruchy dla danego zaznaczenia
-                        possible_target_tiles = generating_all_moves_for_piece(game, piece_selected, coord)
-                        if possible_target_tiles is not None:
+                        possible_moves = generating_all_moves_for_piece(game, piece_selected, coord)
+                        if not possible_moves.empty():
                             refresh_flag = True  # zmienna do odswiezania ekranu
                             coord_selected = coord  # zapisuje w pamieci koordynaty prawidlowo wybranej figury
-                            translate_to_chess_notation(possible_target_tiles)
+                            translate_to_chess_notation(possible_moves)
                         else:
                             piece_selected = None  # odznacza figury jak nie ma mozliwosci ruchu lub nieprawidlowy wybor
-                elif coord in possible_target_tiles:  # Wchodzi jezeli jest mozliwosc ruchu dla zaznaczonej figury
-                    single_move_sequence = [(coord_selected, coord)]
+                elif coord in possible_moves:  # Wchodzi jezeli jest mozliwosc ruchu dla zaznaczonej figury
                     game.en_passant_coord = None
-                    if piece_selected.tag == 'P' and coord[1] == 0 and piece_selected.color == 'w' or \
-                            coord[1] == 7 and piece_selected.color == 'b':  # obsluga promocji piona
-                        game.board[coord_selected[1]][coord_selected[0]] = pawn_promotion(player_color=active_player)
-                    making_move(game.board, single_move_sequence)
-                    if piece_selected.tag == 'K' or piece_selected.tag == 'R':
-                        disabling_castling_flags(game=game, piece=piece_selected, base_coord=coord_selected)
+                    making_move(game.board, (coord_selected, coord))
+                    consequenceFunc = possible_moves[coord]
+                    if consequenceFunc is not None:
+                        consequenceFunc(game, piece_selected, coord_selected, coord)
                     drawing_board()
                     drawing_pieces(game.board)
                     active_player = switching_turns(active_player)

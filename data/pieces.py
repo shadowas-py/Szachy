@@ -33,6 +33,10 @@ def _pawnDiagonalConsequence(gameState, piece, coord, new_coord):
 def _pawnForwardCondition(gameState, piece, coord, new_coord):
     return gameState.board[new_coord[1]][new_coord[0]] is None
 
+def _pawnForwardConsequence(gameState, piece, coord, new_coord):
+    if coord[1] == (0 if piece_selected.color == GRID_SIZE-1):
+        gameState.board[new_coord[1]][new_coord[0]] = pawn_promotion(player_color=piece.color)
+
 def _pawnDoubleForwardCondition(gameState, piece, coord, new_coord):
     return gameState.board[new_coord[1]][new_coord[0]] is None and gameState.board[(new_coord[1]+coord[1])//2][new_coord[0]] is None and coord[1] == (6 if piece.color == 'w' else 1)
 
@@ -44,9 +48,13 @@ class King(Piece):
 
     def __init__(self, color):  # parametry do poprawienia
         self.color = color
-        self.movement = list(map(lambda it: (it, False, None, None), rotations(N) + rotations(NE)))
+        self.movement = list(map(lambda it: (it, False, None, _kingMoveConsequence), rotations(N) + rotations(NE)))
         self.movement.append((WW, False, self._castlingCondition, self._castlingConsequence))
         self.movement.append((EE, False, self._castlingCondition, self._castlingConsequence))
+
+def _kingMoveConsequence(gameState, piece, coord, new_coord):
+    gameState.castling_flags[piece.color + '_short'] = False
+    gameState.castling_flags[piece.color + '_long'] = False
 
 def _castlingCondition(gameState, piece, coord, new_coord)
     #TODO dopisać warunki na szach po drodze itd
@@ -54,6 +62,7 @@ def _castlingCondition(gameState, piece, coord, new_coord)
 
 def _castlingConsequences(gameState, piece, coord, new_coord):
     making_move(board, ((coord[1], 0 if new_coord[0] < coord[0] else (GRID_SIZE-1)), (coord[1], (coord[0]-new_coord[0])//2)))
+    _kingMoveConsequence(gameState, piece, coord, new_coord)
 
 
 class Rook(Piece):
@@ -61,7 +70,10 @@ class Rook(Piece):
 
     def __init__(self, color):
         self.color = color
-        self.movement = list(map(lambda it: (it, True, None, None), rotations(N)))
+        self.movement = list(map(lambda it: (it, True, None, _rookMoveConsequence), rotations(N)))
+
+def _rookMoveConsequence(gameState, piece, coord, new_coord):
+    gameState.castling_flags[piece.color + ('_long' if coord[0]==0 else '_short')] = False
 
 
 class Knight(Piece):
