@@ -44,7 +44,7 @@ class GameState:
                 if game.en_passant_coord == new_coord:
                     moves_list.append(game.en_passant_coord)
                     moves_list.append((coord, sum_directions(horizontal_shift, coord)))
-                if tuple(filter(lambda x: x < 7, coord)) == coord and\
+                if new_coord[0] >= 0 and new_coord[0] < 8 and\
                         game.board[new_coord[1]][new_coord[0]] is not None and \
                         game.board[new_coord[1]][new_coord[0]].color != piece.color:
                     moves_list.append(tuple(new_coord))
