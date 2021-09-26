@@ -20,11 +20,9 @@ def selecting_piece(board, coord, active_player):
         return piece
     return None
 
-def making_move(board, moves_list):
-    for shift in moves_list:
-        piece = board[shift[0][1]][shift[0][0]]
-        board[shift[0][1]][shift[0][0]] = None
-        board[shift[1][1]][shift[1][0]] = piece
+def making_move(board, shift):
+    board[shift[1][1]][shift[1][0]] = board[shift[0][1]][shift[0][0]]
+    board[shift[0][1]][shift[0][0]] = None
 
 
 # ZAKLADAM ZE RUCH ZOSTAL WYKONANY
@@ -59,7 +57,7 @@ def pawn_promotion(player_color):
 def generating_all_moves_for_piece(game, piece, coord):
     moves_list = []
     for movePack in piece.movement:
-        singleMove, scalable, conditionFunc, consequencesFunc = movePack
+        singleMove, scalable, conditionFunc, consequenceFunc = movePack
         for multiplier in range(1, GRID_SIZE if scalable else 1):
             new_coord = sum_directions(coord, multiply_direction(singleMove, multiplier))
             if min(coords_after_move) < 0 or max(coords_after_move) >= GRID_SIZE:
