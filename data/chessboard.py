@@ -56,7 +56,6 @@ class GameState:
                 for multiplier in range(piece.movement_range):
                     increased_piece_movement = multiply_direction(singleMove, multiplier + 1)
                     coords_after_move = sum_directions(coord, increased_piece_movement)
-                    # IF PILNUJACY ABY GENEROWANE RUCHY NIE WYCHODZILY POZA ZAKRES BOARDA"""
                     if min(coords_after_move) >= 0 and max(coords_after_move) < GRID_SIZE:
                         if game.board[coords_after_move[1]][coords_after_move[0]] is not None:
                             # PRZERYWA ITERACJE PO NAPOTKANIU PRZESZKODY
