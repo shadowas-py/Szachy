@@ -13,5 +13,9 @@ class GameState:
         self.castling_flags = {'w_long': True, 'w_short': True, 'b_long': True, 'b_short': True}
         self.en_passant_coord = None
 
+    def making_move(self, shift):
+        self.board[shift[1][1]][shift[1][0]] = self.board[shift[0][1]][shift[0][0]]
+        self.board[shift[0][1]][shift[0][0]] = None
+
     def __str__(self):
         return '\n'.join([' '.join(map(lambda x: '  ' if x is None else str(x), boardRow)) for boardRow in self.board])

@@ -2,7 +2,7 @@ import pygame
 import logging
 
 from data.chessboard import GameState
-from data.game_logic import selecting_piece, get_game_coord_from_mouse, making_move, switching_turns, generating_all_moves_for_piece
+from data.game_logic import selecting_piece, get_game_coord_from_mouse, switching_turns, generating_all_moves_for_piece
 from data.graphic import drawing_board, drawing_pieces
 from data.settings import FPS
 from data.display_info import translate_to_chess_notation
@@ -54,11 +54,12 @@ def main():
                         else:
                             piece_selected = None  # odznacza figury jak nie ma mozliwosci ruchu lub nieprawidlowy wybor
                 elif coord in possible_moves:  # Wchodzi jezeli jest mozliwosc ruchu dla zaznaczonej figury
-                    game.en_passant_coord = None
-                    making_move(game.board, (coord_selected, coord))
+                    game.new_en_passant_coord = None
+                    game.making_move((coord_selected, coord))
                     consequenceFunc = possible_moves[coord]
-                    if consequenceFunc is not None:
+                    if not consequenceFunc is None:
                         consequenceFunc(game, piece_selected, coord_selected, coord)
+                    game.en_passant_coord = game.new_en_passant_coord
                     drawing_board()
                     drawing_pieces(game.board)
                     active_player = switching_turns(active_player)
