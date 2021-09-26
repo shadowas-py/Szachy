@@ -19,9 +19,9 @@ class Pawn(Piece):
     def __init__(self, color):
         self.color = color
         direction = N if color == 'w' else S
-        self.movement = list(map(lambda it: (it, False, _pawnDiagonalCondition, _pawnDiagonalConsequence), [(1, direction), (-1, direction)]))
+        self.movement = list(map(lambda it: (it, False, _pawnDiagonalCondition, _pawnDiagonalConsequence), [(1, direction[1]), (-1, direction[1])]))
         self.movement.append((direction, False, _pawnForwardCondition, None))
-        self.movement.append((direction, False, _pawnDoubleForwardCondition, None))
+        self.movement.append((multiply_direction(direction,2), False, _pawnDoubleForwardCondition, None))
 
 def _pawnDiagonalCondition(gameState, piece, coord, new_coord):
     return (gameState.board[new_coord[1]][new_coord[0]] is not None and gameState.board[new_coord[1]][new_coord[0]].color != piece.color) or gameState.en_passant_coord == new_coord
@@ -29,12 +29,13 @@ def _pawnDiagonalCondition(gameState, piece, coord, new_coord):
 def _pawnDiagonalConsequence(gameState, piece, coord, new_coord):
     if gameState.en_passant_coord == new_coord:
         gameState.board[coord[1]][new_coord[0]] = None
+    _pawnForwardConsequence(gameState, piece, coord, new_coord)
 
 def _pawnForwardCondition(gameState, piece, coord, new_coord):
     return gameState.board[new_coord[1]][new_coord[0]] is None
 
 def _pawnForwardConsequence(gameState, piece, coord, new_coord):
-    if coord[1] == (0 if piece_selected.color == GRID_SIZE-1):
+    if coord[1] == (0 if piece_selected.color == 'w' else GRID_SIZE-1):
         gameState.board[new_coord[1]][new_coord[0]] = pawn_promotion(player_color=piece.color)
 
 def _pawnDoubleForwardCondition(gameState, piece, coord, new_coord):
@@ -49,18 +50,18 @@ class King(Piece):
     def __init__(self, color):  # parametry do poprawienia
         self.color = color
         self.movement = list(map(lambda it: (it, False, None, _kingMoveConsequence), rotations(N) + rotations(NE)))
-        self.movement.append((WW, False, self._castlingCondition, self._castlingConsequence))
-        self.movement.append((EE, False, self._castlingCondition, self._castlingConsequence))
+        self.movement.append((WW, False, _castlingCondition, _castlingConsequence))
+        self.movement.append((EE, False, _castlingCondition, _castlingConsequence))
 
 def _kingMoveConsequence(gameState, piece, coord, new_coord):
     gameState.castling_flags[piece.color + '_short'] = False
     gameState.castling_flags[piece.color + '_long'] = False
 
-def _castlingCondition(gameState, piece, coord, new_coord)
+def _castlingCondition(gameState, piece, coord, new_coord):
     #TODO dopisać warunki na szach po drodze itd
     return gameState.castling_flags[piece.color + ("_long" if new_coord[0] < coord[0] else "_short")]
 
-def _castlingConsequences(gameState, piece, coord, new_coord):
+def _castlingConsequence(gameState, piece, coord, new_coord):
     making_move(board, ((coord[1], 0 if new_coord[0] < coord[0] else (GRID_SIZE-1)), (coord[1], (coord[0]-new_coord[0])//2)))
     _kingMoveConsequence(gameState, piece, coord, new_coord)
 
