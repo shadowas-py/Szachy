@@ -56,6 +56,17 @@ def pawn_promotion(player_color):
             print(pieces_to_promotion[picked_tag](player_color))
             return pieces_to_promotion[picked_tag](player_color)
 
+def generating_all_moves_for_piece(game, piece, coord):
+    moves_list = []
+    for movePack in piece.movement:
+        singleMove, scalable, conditionFunc, consequencesFunc = movePack
+        for multiplier in range(1, GRID_SIZE if scalable else 1):
+            new_coord = sum_directions(coord, multiply_direction(singleMove, multiplier))
+            if min(coords_after_move) < 0 or max(coords_after_move) >= GRID_SIZE:
+                break
+            elif conditionFunc is None or conditionFunc(game, piece, coord, new_coord):
+                moves_list.append(new_coord, consequencesFunc)
+    return moves_list
 
 def switching_turns(active_player):
     return 'b' if active_player == 'w' else 'w'

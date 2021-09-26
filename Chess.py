@@ -3,7 +3,7 @@ import logging
 
 from data.chessboard import GameState
 from data.game_logic import selecting_piece, get_game_coord_from_mouse, making_move, switching_turns, \
-    disabling_castling_flags, set_en_passant_tile
+    disabling_castling_flags, set_en_passant_tile, generating_all_moves_for_piece
 from data.graphic import drawing_board, drawing_pieces
 from data.settings import FPS
 from data.display_info import translate_to_chess_notation
@@ -47,7 +47,7 @@ def main():
                 if piece_selected is None:  # Wchodzi jeżeli nic nie jest zaznaczone
                     piece_selected = selecting_piece(game.board, coord, active_player)
                     if piece_selected is not None:  # Sprawdzam czy sa mozliwe ruchy dla danego zaznaczenia
-                        possible_target_tiles = game.generating_all_moves_for_piece(game, piece_selected, coord)
+                        possible_target_tiles = generating_all_moves_for_piece(game, piece_selected, coord)
                         if possible_target_tiles is not None:
                             refresh_flag = True  # zmienna do odswiezania ekranu
                             coord_selected = coord  # zapisuje w pamieci koordynaty prawidlowo wybranej figury
