@@ -31,34 +31,31 @@ class GameState:
     def generating_all_moves_for_piece(self, game, piece, coord):
         # PAWN MOVES
         moves_list = []
-        if piece.tag == "P":
-            pawn_movement = piece.movement
-            new_coord = sum_directions(coord, pawn_movement)
-            if game.board[new_coord[1]][new_coord[0]] is None:
-                moves_list.append(tuple(new_coord))
-                new_coord = sum_directions(coord, pawn_movement, pawn_movement)
-                if coord[1] == (6 if piece.color == 'w' else 1) and game.board[new_coord[1]][new_coord[0]] is None:
-                    moves_list.append(tuple(new_coord))
-            for horizontal_shift in [W, E]:
-                new_coord = sum_directions(coord, (sum_directions(pawn_movement, horizontal_shift)))
-                if game.en_passant_coord == new_coord:
-                    moves_list.append(game.en_passant_coord)
-                    moves_list.append((coord, sum_directions(horizontal_shift, coord)))
-                if new_coord[0] >= 0 and new_coord[0] < GRID_SIZE and\
-                        game.board[new_coord[1]][new_coord[0]] is not None and \
-                        game.board[new_coord[1]][new_coord[0]].color != piece.color:
-                    moves_list.append(tuple(new_coord))
-            #  MOVES OF OTHER PIECES
-        else:
-            if piece.tag == 'K':
-                moves_list.extend(self._castling(coord, piece.color))
-            for singleMove in piece.movement:
-                for multiplier in range(piece.movement_range):
-                    increased_piece_movement = multiply_direction(singleMove, multiplier + 1)
-                    coords_after_move = sum_directions(coord, increased_piece_movement)
+        if piece.tag == 'K':
+            moves_list.extend(self._castling(coord, piece.color))
+        for singleMove in piece.movement:
+            for multiplier in range(1, piece.movement_range+1):
+                coords_after_move = sum_directions(coord, multiply_direction(singleMove, multiplier))
+                
+                if piece.tag == "P":
+                    if game.board[coords_after_move[1]][coords_after_move[0]] is None:
+                        moves_list.append(tuple(coords_after_move))
+                        new_coord = sum_directions(coord, singleMove, singleMove)
+                        if coord[1] == (6 if piece.color == 'w' else 1) and game.board[new_coord[1]][new_coord[0]] is None:
+                            moves_list.append(tuple(new_coord))
+                    for horizontal_shift in [W, E]:
+                        new_coord = sum_directions(coord, (sum_directions(singleMove, horizontal_shift)))
+                        if game.en_passant_coord == new_coord:
+                            moves_list.append(game.en_passant_coord)
+                            moves_list.append((coord, sum_directions(horizontal_shift, coord)))
+                        if new_coord[0] >= 0 and new_coord[0] < GRID_SIZE and\
+                                game.board[new_coord[1]][new_coord[0]] is not None and \
+                                game.board[new_coord[1]][new_coord[0]].color != piece.color:
+                            moves_list.append(tuple(new_coord))
+                            
+                else:
                     if min(coords_after_move) >= 0 and max(coords_after_move) < GRID_SIZE:
                         if game.board[coords_after_move[1]][coords_after_move[0]] is not None:
-                            # PRZERYWA ITERACJE PO NAPOTKANIU PRZESZKODY
                             if game.board[coords_after_move[1]][coords_after_move[0]].color != piece.color:
                                 moves_list.append(coords_after_move)
                             break
