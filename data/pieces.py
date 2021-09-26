@@ -1,5 +1,5 @@
-from .functions import sum_directions, rotations
-from .constants import N, S, W, E, GRID_SIZE
+from .functions import rotations
+from .constants import *
 
 
 class Piece:
@@ -28,7 +28,7 @@ class King(Piece):
     def __init__(self, color):  # parametry do poprawienia
         self.color = color
         self.movement_range = 1
-        self.movement = rotations(N) + rotations(sum_directions(N, E))
+        self.movement = rotations(N) + rotations(NE)
 
 
 class Rook(Piece):
@@ -46,7 +46,7 @@ class Knight(Piece):
     def __init__(self, color):
         self.color = color
         self.movement_range = 1
-        self.movement = rotations(sum_directions(N, N, E)) + rotations(sum_directions(N, N, W))
+        self.movement = rotations(NNE) + rotations(NNW)
 
 
 class Bishop(Piece):
@@ -55,7 +55,7 @@ class Bishop(Piece):
     def __init__(self, color):
         self.color = color
         self.movement_range = GRID_SIZE - 1
-        self.movement = rotations(sum_directions(N, E))
+        self.movement = rotations(NE)
 
 
 class Queen(Piece):
@@ -64,4 +64,4 @@ class Queen(Piece):
     def __init__(self, color):
         self.color = color
         self.movement_range = GRID_SIZE - 1
-        self.movement = rotations(N) + rotations(sum_directions(N, E))
+        self.movement = rotations(N) + rotations(NE)

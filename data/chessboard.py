@@ -1,4 +1,4 @@
-from data.constants import N, W, E, S
+from data.constants import N, W, E, S, GRID_SIZE
 from data.pieces import Pawn, Rook, Knight, Bishop, Queen, King
 from data.functions import sum_directions, multiply_direction
 
@@ -44,7 +44,7 @@ class GameState:
                 if game.en_passant_coord == new_coord:
                     moves_list.append(game.en_passant_coord)
                     moves_list.append((coord, sum_directions(horizontal_shift, coord)))
-                if new_coord[0] >= 0 and new_coord[0] < 8 and\
+                if new_coord[0] >= 0 and new_coord[0] < GRID_SIZE and\
                         game.board[new_coord[1]][new_coord[0]] is not None and \
                         game.board[new_coord[1]][new_coord[0]].color != piece.color:
                     moves_list.append(tuple(new_coord))
@@ -57,7 +57,7 @@ class GameState:
                     increased_piece_movement = multiply_direction(singleMove, multiplier + 1)
                     coords_after_move = sum_directions(coord, increased_piece_movement)
                     # IF PILNUJACY ABY GENEROWANE RUCHY NIE WYCHODZILY POZA ZAKRES BOARDA"""
-                    if min(coords_after_move) >= 0 and max(coords_after_move) < 8:
+                    if min(coords_after_move) >= 0 and max(coords_after_move) < GRID_SIZE:
                         if game.board[coords_after_move[1]][coords_after_move[0]] is not None:
                             # PRZERYWA ITERACJE PO NAPOTKANIU PRZESZKODY
                             if game.board[coords_after_move[1]][coords_after_move[0]].color != piece.color:
