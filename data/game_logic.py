@@ -2,16 +2,17 @@ import pygame
 
 from .constants import BOARD_POSITION, TILE_SIZE, BOARD_END_POSITION
 from .functions import midpoint_between_two_coords
-from .pieces import Pawn, Rook, Knight, Bishop, Queen, King
+from .pieces import Rook, Knight, Bishop, Queen
 
 
 def get_game_coord_from_mouse():
     mouse_pos = pygame.mouse.get_pos()
-    coord = ((mouse_pos[0] - BOARD_POSITION[1])//TILE_SIZE, (mouse_pos[1] - BOARD_POSITION[0])//TILE_SIZE)
+    coord = ((mouse_pos[0] - BOARD_POSITION[1]) // TILE_SIZE, (mouse_pos[1] - BOARD_POSITION[0]) // TILE_SIZE)
     if BOARD_END_POSITION >= mouse_pos >= BOARD_POSITION:
         return coord
     else:
         return None
+
 
 def selecting_piece(board, coord, active_player):
     row, col = coord
@@ -19,6 +20,7 @@ def selecting_piece(board, coord, active_player):
     if piece is not None and piece.color == active_player:
         return piece
     return None
+
 
 def making_move(board, moves_list):
     for shift in moves_list:
@@ -49,6 +51,8 @@ def set_en_passant_tile(base_coord, target_coord):
 
 
 pieces_to_promotion = {'R': Rook, 'N': Knight, 'B': Bishop, 'Q': Queen}
+
+
 def pawn_promotion(player_color):
     while True:
         picked_tag = input('Wybierz tag figury: Q, N, R, B').upper()

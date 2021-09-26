@@ -37,37 +37,38 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-            if event.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed()[0]:  # jezeli wcisniety LEFT MOUSE BUTTON
+            if event.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed(3)[0]:  # jezeli wcisniety LEFT
+                # MOUSE BUTTON
                 coord = get_game_coord_from_mouse()
-                # TODO dodac narzedzie zarzadzajace eventami klikniec itp, na przyszlosc do obslugi UI
-                if coord is None:  # Resetuje zaznaczenie jezeli zaznaczy sie puste pole lub kliknie poza board
+                # TODO dodać narzędzie zarządzające eventami kliknięć itp, na przyszłości do obsługi UI
+                if coord is None:  # Resetuje zaznaczenie jeżeli zaznaczy sie puste pole lub kliknie poza board
                     coord_selected = None
                     piece_selected = None
                     break
                 if piece_selected is None:  # Wchodzi jeżeli nic nie jest zaznaczone
                     piece_selected = selecting_piece(game.board, coord, active_player)
-                    if piece_selected is not None:  # Sprawdzam czy sa mozliwe ruchy dla danego zaznaczenia
+                    if piece_selected is not None:  # Sprawdzam czy sa możliwe ruchy dla danego zaznaczenia
                         possible_target_tiles = game.generating_all_moves_for_piece(game, piece_selected, coord)
                         if possible_target_tiles is not None:
-                            refresh_flag = True  # zmienna do odswiezania ekranu
-                            coord_selected = coord  # zapisuje w pamieci koordynaty prawidlowo wybranej figury
+                            refresh_flag = True  # zmienna do odświeżania ekranu
+                            coord_selected = coord  # zapisuje w pamięci koordynaty prawidłowo wybranej figury
                             translate_to_chess_notation(possible_target_tiles)
                         else:
-                            piece_selected = None  # odznacza figury jak nie ma mozliwosci ruchu lub nieprawidlowy wybor
-                elif coord in possible_target_tiles:  # Wchodzi jezeli jest mozliwosc ruchu dla zaznaczonej figury
+                            piece_selected = None  # odznacza figury jak nie ma możliwości ruchu lub nieprawidłowy wybor
+                elif coord in possible_target_tiles:  # Wchodzi jeżeli jest możliwości ruchu dla zaznaczonej figury
                     single_move_sequence = [(coord_selected, coord)]
                     game.en_passant_coord = None
                     if coord != possible_target_tiles[-1] and \
                             type(possible_target_tiles[possible_target_tiles.index(coord) + 1][0]) is tuple:
-                        single_move_sequence.append(possible_target_tiles[possible_target_tiles.index(coord)+1])
+                        single_move_sequence.append(possible_target_tiles[possible_target_tiles.index(coord) + 1])
                     if piece_selected.tag == 'P' and coord[1] == 0 and piece_selected.color == 'w' or \
-                            coord[1] == 7 and piece_selected.color == 'b':  # obsluga promocji piona
+                            coord[1] == 7 and piece_selected.color == 'b':  # obsługa promocji piona
                         game.board[coord_selected[1]][coord_selected[0]] = pawn_promotion(player_color=active_player)
                     making_move(game.board, single_move_sequence)
                     if piece_selected.tag == 'K' or piece_selected.tag == 'R':
                         disabling_castling_flags(game=game, piece=piece_selected, base_coord=coord_selected)
                     if piece_selected.tag == 'P':
-                        if tuple(shift_value(coord, coord_selected)) == (0, 2):  # zapamietuje pole do bicia w przelocie
+                        if tuple(shift_value(coord, coord_selected)) == (0, 2):  # zapamiętuje pole do bicia w przelocie
                             game.en_passant_coord = tuple(set_en_passant_tile(base_coord=coord_selected,
                                                                               target_coord=coord))
                     drawing_board()

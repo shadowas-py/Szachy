@@ -1,6 +1,6 @@
-from data.constants import N, W, E, S
-from data.pieces import Pawn, Rook, Knight, Bishop, Queen, King
+from data.constants import W, E
 from data.functions import sum_directions, multiply_direction
+from data.pieces import Pawn, Rook, Knight, Bishop, Queen, King
 
 
 class GameState:
@@ -56,7 +56,7 @@ class GameState:
                 for multiplier in range(piece.movement_range):
                     increased_piece_movement = multiply_direction(singleMove, multiplier + 1)
                     coords_after_move = sum_directions(coord, increased_piece_movement)
-                    # IF PILNUJACY ABY GENEROWANE RUCHY NIE WYCHODZILY POZA ZAKRES BOARDA"""
+                    # IF PILNUJĄCY ABY GENEROWANE RUCHY NIE WYCHODZIŁY POZA ZAKRES BOARD
                     if min(coords_after_move) >= 0 and max(coords_after_move) < 8:
                         if game.board[coords_after_move[1]][coords_after_move[0]] is not None:
                             # PRZERYWA ITERACJE PO NAPOTKANIU PRZESZKODY
