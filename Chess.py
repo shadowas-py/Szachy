@@ -39,6 +39,7 @@ def main():
                 coord = get_game_coord_from_mouse()
                 # TODO dodac narzedzie zarzadzajace eventami klikniec itp, na przyszlosc do obslugi UI
                 if coord is None:  # Resetuje zaznaczenie jezeli zaznaczy sie puste pole lub kliknie poza board
+                    print('None')
                     coord_selected = None
                     piece_selected = None
                     break

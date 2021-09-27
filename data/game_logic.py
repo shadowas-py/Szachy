@@ -7,7 +7,7 @@ from .functions import sum_directions, multiply_direction
 def get_game_coord_from_mouse():
     mouse_pos = pygame.mouse.get_pos()
     coord = ((mouse_pos[0] - BOARD_POSITION[1])//TILE_SIZE, (mouse_pos[1] - BOARD_POSITION[0])//TILE_SIZE)
-    if BOARD_END_POSITION >= mouse_pos >= BOARD_POSITION:
+    if max(BOARD_POSITION) <= min(mouse_pos) and max(mouse_pos) <= min(BOARD_END_POSITION):
         return coord
     else:
         return None
