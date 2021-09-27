@@ -29,13 +29,15 @@ def _pawnDiagonalCondition(gameState, piece, coord, new_coord):
 def _pawnDiagonalConsequence(gameState, piece, coord, new_coord):
     if gameState.en_passant_coord == new_coord:
         gameState.board[coord[1]][new_coord[0]] = None
+    print('in pawn diagonal')
     _pawnForwardConsequence(gameState, piece, coord, new_coord)
 
 def _pawnForwardCondition(gameState, piece, coord, new_coord):
     return gameState.board[new_coord[1]][new_coord[0]] is None
 
 def _pawnForwardConsequence(gameState, piece, coord, new_coord):
-    if coord[1] == (0 if piece.color == 'w' else GRID_SIZE-1):
+    print('in pawn forward')
+    if new_coord[1] == (0 if piece.color == 'w' else GRID_SIZE-1):
         gameState.board[new_coord[1]][new_coord[0]] = pawn_promotion(player_color=piece.color)
 
 def _pawnDoubleForwardCondition(gameState, piece, coord, new_coord):
@@ -48,7 +50,7 @@ def _pawnDoubleForwardConsequence(gameState, piece, coord, new_coord):
 class King(Piece):
     tag = 'K'
 
-    def __init__(self, color):  # parametry do poprawienia
+    def __init__(self, color):
         self.color = color
         self.movement = list(map(lambda it: (it, False, None, _kingMoveConsequence), rotations(N) + rotations(NE)))
         self.movement.append((WW, False, _castlingCondition, _castlingConsequence))
@@ -105,3 +107,13 @@ class Queen(Piece):
     def __init__(self, color):
         self.color = color
         self.movement = list(map(lambda it: (it, True, None, None), rotations(N) + rotations(NE)))
+
+
+pieces_to_promotion = {'R': Rook, 'N': Knight, 'B': Bishop, 'Q': Queen}
+def pawn_promotion(player_color):
+    while True:
+        picked_tag = input('Wybierz tag figury: Q, N, R, B').upper()
+        if picked_tag in pieces_to_promotion:
+            print(pieces_to_promotion[picked_tag](player_color))
+            return pieces_to_promotion[picked_tag](player_color)
+

@@ -7,7 +7,6 @@ from data.graphic import drawing_board, drawing_pieces
 from data.settings import FPS
 from data.display_info import translate_to_chess_notation
 from data.functions import shift_value
-from data.game_logic import pawn_promotion
 
 pygame.init()
 
@@ -36,7 +35,7 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-            if event.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed()[0]:  # jezeli wcisniety LEFT MOUSE BUTTON
+            if event.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed()[0]:  # LEFT MOUSE BUTTON
                 coord = get_game_coord_from_mouse()
                 # TODO dodac narzedzie zarzadzajace eventami klikniec itp, na przyszlosc do obslugi UI
                 if coord is None:  # Resetuje zaznaczenie jezeli zaznaczy sie puste pole lub kliknie poza board
@@ -57,7 +56,7 @@ def main():
                     game.new_en_passant_coord = None
                     game.making_move((coord_selected, coord))
                     consequenceFunc = possible_moves[coord]
-                    if not consequenceFunc is None:
+                    if consequenceFunc is not None:
                         consequenceFunc(game, piece_selected, coord_selected, coord)
                     game.en_passant_coord = game.new_en_passant_coord
                     drawing_board()
