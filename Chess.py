@@ -2,13 +2,11 @@ import pygame
 import logging
 
 from data.chessboard import GameState
-from data.game_logic import selecting_piece, get_game_coord_from_mouse, making_move, switching_turns, \
-    disabling_castling_flags, set_en_passant_tile
+from data.game_logic import selecting_piece, get_game_coord_from_mouse, switching_turns, generating_all_moves_for_piece
 from data.graphic import drawing_board, drawing_pieces
 from data.settings import FPS
 from data.display_info import translate_to_chess_notation
 from data.functions import shift_value
-from data.game_logic import pawn_promotion
 
 pygame.init()
 
@@ -24,10 +22,9 @@ logging.basicConfig(filename='logs.log', level=logging.DEBUG,
 def main():
     run = True
     clock = pygame.time.Clock()
-    possible_target_tiles = None
     piece_selected = None
     coord_selected = None
-    active_player = 'w'
+    active_player = game.nextMoveColor
     drawing_board()
     drawing_pieces(game.board)
     pygame.display.update()
@@ -37,8 +34,7 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-            if event.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed(3)[0]:  # jezeli wcisniety LEFT
-                # MOUSE BUTTON
+            if event.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed()[0]:  # LEFT MOUSE BUTTON
                 coord = get_game_coord_from_mouse()
                 # TODO dodać narzędzie zarządzające eventami kliknięć itp, na przyszłości do obsługi UI
                 if coord is None:  # Resetuje zaznaczenie jeżeli zaznaczy sie puste pole lub kliknie poza board
@@ -47,6 +43,21 @@ def main():
                     break
                 if piece_selected is None:  # Wchodzi jeżeli nic nie jest zaznaczone
                     piece_selected = selecting_piece(game.board, coord, active_player)
+                    if piece_selected is not None:  # Sprawdzam czy sa mozliwe ruchy dla danego zaznaczenia
+                        possible_moves = generating_all_moves_for_piece(game, piece_selected, coord)
+                        if possible_moves:
+                            refresh_flag = True  # zmienna do odswiezania ekranu
+                            coord_selected = coord  # zapisuje w pamieci koordynaty prawidlowo wybranej figury
+                            translate_to_chess_notation(possible_moves)
+                        else:
+                            piece_selected = None  # odznacza figury jak nie ma mozliwosci ruchu lub nieprawidlowy wybor
+                elif coord in possible_moves:  # Wchodzi jezeli jest mozliwosc ruchu dla zaznaczonej figury
+                    game.new_en_passant_coord = None
+                    game.making_move((coord_selected, coord))
+                    consequenceFunc = possible_moves[coord]
+                    if consequenceFunc is not None:
+                        consequenceFunc(game, piece_selected, coord_selected, coord)
+                    game.en_passant_coord = game.new_en_passant_coord
                     if piece_selected is not None:  # Sprawdzam czy sa możliwe ruchy dla danego zaznaczenia
                         possible_target_tiles = game.generating_all_moves_for_piece(game, piece_selected, coord)
                         if possible_target_tiles is not None:

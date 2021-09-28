@@ -1,5 +1,5 @@
-from .functions import sum_directions, rotations
-from .constants import N, S, W, E, GRID_SIZE
+from .functions import rotations, multiply_direction
+from .constants import *
 
 
 class Piece:
@@ -18,17 +18,67 @@ class Pawn(Piece):
 
     def __init__(self, color):
         self.color = color
-        self.movement_range = 1
-        self.movement = N if color == 'w' else S
+        direction = N if color == 'w' else S
+        self.movement = list(map(lambda it: (it, False, _pawnDiagonalCondition, _pawnDiagonalConsequence), [(1, direction[1]), (-1, direction[1])]))
+        self.movement.append((direction, False, _pawnForwardCondition, _pawnForwardConsequence))
+        self.movement.append((multiply_direction(direction,2), False, _pawnDoubleForwardCondition, _pawnDoubleForwardConsequence))
 
+def _pawnDiagonalCondition(gameState, piece, coord, new_coord):
+    return (gameState.board[new_coord[1]][new_coord[0]] is not None and gameState.board[new_coord[1]][new_coord[0]].color != piece.color) or gameState.en_passant_coord == new_coord
+
+def _pawnDiagonalConsequence(gameState, piece, coord, new_coord):
+    if gameState.en_passant_coord == new_coord:
+        gameState.board[coord[1]][new_coord[0]] = None
+    print('in pawn diagonal')
+    _pawnForwardConsequence(gameState, piece, coord, new_coord)
+
+def _pawnForwardCondition(gameState, piece, coord, new_coord):
+    return gameState.board[new_coord[1]][new_coord[0]] is None
+
+def _pawnForwardConsequence(gameState, piece, coord, new_coord):
+    print('in pawn forward', new_coord)
+    if new_coord[1] == (0 if piece.color == 'w' else GRID_SIZE-1):
+        gameState.board[new_coord[1]][new_coord[0]] = pawn_promotion(player_color=piece.color)
+
+def _pawnDoubleForwardCondition(gameState, piece, coord, new_coord):
+    return gameState.board[new_coord[1]][new_coord[0]] is None and gameState.board[(new_coord[1]+coord[1])//2][new_coord[0]] is None and coord[1] == (6 if piece.color == 'w' else 1)
+
+def _pawnDoubleForwardConsequence(gameState, piece, coord, new_coord):
+    gameState.new_en_passant_coord = (new_coord[0], (new_coord[1]+coord[1])//2)
+
+def pawn_promotion(player_color):
+    pieces_to_promotion = {'R': Rook, 'N': Knight, 'B': Bishop, 'Q': Queen}
+    while True:
+        picked_tag = input('Wybierz tag figury: Q, N, R, B').upper()
+        if picked_tag in pieces_to_promotion:
+            print(pieces_to_promotion[picked_tag](player_color))
+            return pieces_to_promotion[picked_tag](player_color)
 
 class King(Piece):
     tag = 'K'
 
-    def __init__(self, color):  # parametry do poprawienia
+    def __init__(self, color):
         self.color = color
-        self.movement_range = 1
-        self.movement = rotations(N) + rotations(sum_directions(N, E))
+        self.movement = list(map(lambda it: (it, False, None, _kingMoveConsequence), rotations(N) + rotations(NE)))
+        self.movement.append((WW, False, _castlingCondition, _castlingConsequence))
+        self.movement.append((EE, False, _castlingCondition, _castlingConsequence))
+
+def _kingMoveConsequence(gameState, piece, coord, new_coord):
+    gameState.castling_flags[piece.color + '_short'] = False
+    gameState.castling_flags[piece.color + '_long'] = False
+
+def _castlingCondition(gameState, piece, coord, new_coord):
+    neededEmpty = [(column, coord[1]) for column in (range(1, coord[0]) if new_coord[0]<coord[0] else range(coord[0]+1,GRID_SIZE-1))]
+    neededUnAttacked = [coord, new_coord, ((coord[0]+new_coord[0])//2, coord[1])]
+    return gameState.castling_flags[piece.color + ("_long" if new_coord[0] < coord[0] else "_short")] \
+        and not any(map((lambda x: gameState.board[x[1]][x[0]]), neededEmpty))
+    # and all([gameState.board[tmpCoord[1]][tmpCoord[0]] is None for tmpCoord in neededEmpty])
+                      # all(list(map(not isTileAttacked(gameState, tmpCoord), needenUnAttacked)))
+
+
+def _castlingConsequence(gameState, piece, coord, new_coord):
+    gameState.making_move(((0 if new_coord[0] < coord[0] else (GRID_SIZE-1), coord[1]), (((coord[0]+new_coord[0])//2), coord[1])))
+    _kingMoveConsequence(gameState, piece, coord, new_coord)
 
 
 class Rook(Piece):
@@ -36,8 +86,10 @@ class Rook(Piece):
 
     def __init__(self, color):
         self.color = color
-        self.movement_range = GRID_SIZE - 1
-        self.movement = rotations(N)
+        self.movement = list(map(lambda it: (it, True, None, _rookMoveConsequence), rotations(N)))
+
+def _rookMoveConsequence(gameState, piece, coord, new_coord):
+    gameState.castling_flags[piece.color + ('_long' if coord[0]==0 else '_short')] = False
 
 
 class Knight(Piece):
@@ -45,8 +97,7 @@ class Knight(Piece):
 
     def __init__(self, color):
         self.color = color
-        self.movement_range = 1
-        self.movement = rotations(sum_directions(N, N, E)) + rotations(sum_directions(N, N, W))
+        self.movement = list(map(lambda it: (it, False, None, None), rotations(NNE) + rotations(NNW)))
 
 
 class Bishop(Piece):
@@ -54,8 +105,7 @@ class Bishop(Piece):
 
     def __init__(self, color):
         self.color = color
-        self.movement_range = GRID_SIZE - 1
-        self.movement = rotations(sum_directions(N, E))
+        self.movement = list(map(lambda it: (it, True, None, None), rotations(NE)))
 
 
 class Queen(Piece):
@@ -63,5 +113,8 @@ class Queen(Piece):
 
     def __init__(self, color):
         self.color = color
-        self.movement_range = GRID_SIZE - 1
-        self.movement = rotations(N) + rotations(sum_directions(N, E))
+        self.movement = list(map(lambda it: (it, True, None, None), rotations(N) + rotations(NE)))
+
+
+
+
