@@ -22,10 +22,9 @@ logging.basicConfig(filename='logs.log', level=logging.DEBUG,
 def main():
     run = True
     clock = pygame.time.Clock()
-    possible_target_tiles = None
     piece_selected = None
     coord_selected = None
-    active_player = 'w'
+    active_player = game.nextMoveColor
     drawing_board()
     drawing_pieces(game.board)
     pygame.display.update()
@@ -39,7 +38,6 @@ def main():
                 coord = get_game_coord_from_mouse()
                 # TODO dodac narzedzie zarzadzajace eventami klikniec itp, na przyszlosc do obslugi UI
                 if coord is None:  # Resetuje zaznaczenie jezeli zaznaczy sie puste pole lub kliknie poza board
-                    print('None')
                     coord_selected = None
                     piece_selected = None
                     break

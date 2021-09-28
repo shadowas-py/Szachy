@@ -20,7 +20,7 @@ class Pawn(Piece):
         self.color = color
         direction = N if color == 'w' else S
         self.movement = list(map(lambda it: (it, False, _pawnDiagonalCondition, _pawnDiagonalConsequence), [(1, direction[1]), (-1, direction[1])]))
-        self.movement.append((direction, False, _pawnForwardCondition, None))
+        self.movement.append((direction, False, _pawnForwardCondition, _pawnForwardConsequence))
         self.movement.append((multiply_direction(direction,2), False, _pawnDoubleForwardCondition, _pawnDoubleForwardConsequence))
 
 def _pawnDiagonalCondition(gameState, piece, coord, new_coord):
@@ -36,7 +36,7 @@ def _pawnForwardCondition(gameState, piece, coord, new_coord):
     return gameState.board[new_coord[1]][new_coord[0]] is None
 
 def _pawnForwardConsequence(gameState, piece, coord, new_coord):
-    print('in pawn forward')
+    print('in pawn forward', new_coord)
     if new_coord[1] == (0 if piece.color == 'w' else GRID_SIZE-1):
         gameState.board[new_coord[1]][new_coord[0]] = pawn_promotion(player_color=piece.color)
 
@@ -46,6 +46,13 @@ def _pawnDoubleForwardCondition(gameState, piece, coord, new_coord):
 def _pawnDoubleForwardConsequence(gameState, piece, coord, new_coord):
     gameState.new_en_passant_coord = (new_coord[0], (new_coord[1]+coord[1])//2)
 
+def pawn_promotion(player_color):
+    pieces_to_promotion = {'R': Rook, 'N': Knight, 'B': Bishop, 'Q': Queen}
+    while True:
+        picked_tag = input('Wybierz tag figury: Q, N, R, B').upper()
+        if picked_tag in pieces_to_promotion:
+            print(pieces_to_promotion[picked_tag](player_color))
+            return pieces_to_promotion[picked_tag](player_color)
 
 class King(Piece):
     tag = 'K'
@@ -59,14 +66,14 @@ class King(Piece):
 def _kingMoveConsequence(gameState, piece, coord, new_coord):
     gameState.castling_flags[piece.color + '_short'] = False
     gameState.castling_flags[piece.color + '_long'] = False
-    print(gameState.castling_flags)
 
 def _castlingCondition(gameState, piece, coord, new_coord):
     neededEmpty = [(column, coord[1]) for column in (range(1, coord[0]) if new_coord[0]<coord[0] else range(coord[0]+1,GRID_SIZE-1))]
     neededUnAttacked = [coord, new_coord, ((coord[0]+new_coord[0])//2, coord[1])]
     return gameState.castling_flags[piece.color + ("_long" if new_coord[0] < coord[0] else "_short")] \
-        and all([gameState.board[tmpCoord[1]][tmpCoord[0]] is None for tmpCoord in neededEmpty]) \
-        and True # all(list(map(not isTileAttacked(gameState, tmpCoord), needenUnAttacked)))
+        and not any(map((lambda x: gameState.board[x[1]][x[0]]), neededEmpty))
+    # and all([gameState.board[tmpCoord[1]][tmpCoord[0]] is None for tmpCoord in neededEmpty])
+                      # all(list(map(not isTileAttacked(gameState, tmpCoord), needenUnAttacked)))
 
 
 def _castlingConsequence(gameState, piece, coord, new_coord):
@@ -109,11 +116,5 @@ class Queen(Piece):
         self.movement = list(map(lambda it: (it, True, None, None), rotations(N) + rotations(NE)))
 
 
-pieces_to_promotion = {'R': Rook, 'N': Knight, 'B': Bishop, 'Q': Queen}
-def pawn_promotion(player_color):
-    while True:
-        picked_tag = input('Wybierz tag figury: Q, N, R, B').upper()
-        if picked_tag in pieces_to_promotion:
-            print(pieces_to_promotion[picked_tag](player_color))
-            return pieces_to_promotion[picked_tag](player_color)
+
 
