@@ -18,6 +18,7 @@ BLACK = (0, 0, 0)
 DARK_GRAY = (50, 50, 50)
 PINK = (240, 50, 210)
 BROWN = (100, 50, 0)
+LIGHT_BROWN = (170, 50, 0)
 
 # DIRECTIONS
 N = (0, -1)
