@@ -44,7 +44,10 @@ def main():
                 if piece_selected is None:  # Wchodzi jeżeli nic nie jest zaznaczone
                     piece_selected = selecting_piece(game.board, coord, active_player)
                     if piece_selected is not None:  # Sprawdzam czy sa mozliwe ruchy dla danego zaznaczenia
+                        generating_bounded_figures_list():
+
                         possible_moves = generating_all_moves_for_piece(game, piece_selected, coord)
+
                         if possible_moves:
                             refresh_flag = True  # zmienna do odswiezania ekranu
                             coord_selected = coord  # zapisuje w pamieci koordynaty prawidlowo wybranej figury
@@ -61,6 +64,11 @@ def main():
                     drawing_board()
                     drawing_pieces(game.board)
                     active_player = switching_turns(active_player)
+                    pins_list = generating_pins_list()
+                    if is_any_move_possible():
+                        pass
+                    else:
+                        print('PAT')
                     piece_selected = None
                     refresh_flag = True
                 else:
