@@ -19,6 +19,24 @@ logging.basicConfig(filename='logs.log', level=logging.DEBUG,
                     format='%(asctime)s,:%(levelname)s:%(module)s:,%(message)s')
 
 
+
+def any_move_possible():
+    pass
+
+pins_list = {}
+
+def generating_pins(coord, active_player):
+    for col in game.board:
+        for row in game.board:
+            if game.board[col][row] is not None and game.board[col][row].color is not active_player:
+                pins_list[(col,row)] = generating_all_moves_for_piece(game, game.board[col][row], coord) if
+
+# zrobic z tego
+
+            # if selecting_piece(game.board, coord, opponent_color) is not None and :
+
+
+
 def main():
     run = True
     clock = pygame.time.Clock()
@@ -64,11 +82,8 @@ def main():
                     drawing_board()
                     drawing_pieces(game.board)
                     active_player = switching_turns(active_player)
-                    pins_list = generating_pins_list()
-                    if is_any_move_possible():
-                        pass
-                    else:
-                        print('PAT')
+                    pins_list = generating_pins()
+                    if any_move_possible() is False:print('PAT')
                     piece_selected = None
                     refresh_flag = True
                 else:
@@ -76,6 +91,9 @@ def main():
         if refresh_flag:
             pygame.display.update()
     pygame.quit()
+
+
+
 
 
 if __name__ == "__main__":

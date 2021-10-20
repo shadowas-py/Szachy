@@ -20,6 +20,29 @@ def selecting_piece(board, coord, active_player):
         return piece
     return None
 
+def generating_all_moves_for_piece(game, piece, coord):
+    moves_list = {}
+    for movePack in piece.movement:
+        singleMove, scalable, conditionFunc, consequenceFunc = movePack
+        for multiplier in range(1, GRID_SIZE if scalable else 2):
+            new_coord = sum_directions(coord, multiply_direction(singleMove, multiplier))
+            if min(new_coord) < 0 or max(new_coord) >= GRID_SIZE:
+                break
+            elif conditionFunc is None:
+                targetPiece = game.board[new_coord[1]][new_coord[0]]
+                if targetPiece is None:
+                    moves_list[new_coord] = consequenceFunc
+                else:
+                    if targetPiece.color != piece.color:
+                        moves_list[new_coord] = consequenceFunc
+
+                    break
+            elif conditionFunc(game, piece, coord, new_coord):
+                moves_list[new_coord] = consequenceFunc
+    return moves_list
+
+
+
 
 
 def generating_all_moves_for_piece(game, piece, coord):
