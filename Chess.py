@@ -2,7 +2,8 @@ import pygame
 import logging
 
 from data.chessboard import GameState
-from data.game_logic import selecting_piece, get_game_coord_from_mouse, switching_turns, generating_all_moves_for_piece
+from data.game_logic import selecting_piece, get_game_coord_from_mouse, switching_turns, \
+    generating_all_moves_for_piece, looking_for_absolute_pins
 from data.graphic import drawing_board, drawing_pieces
 from data.settings import FPS
 from data.display_info import translate_to_chess_notation
@@ -25,11 +26,11 @@ def any_move_possible():
 
 pins_list = {}
 
-def generating_pins(coord, active_player):
-    for col in game.board:
-        for row in game.board:
-            if game.board[col][row] is not None and game.board[col][row].color is not active_player:
-                pins_list[(col,row)] = generating_all_moves_for_piece(game, game.board[col][row], coord) if
+# def generating_pins(coord, active_player):
+#     for col in game.board:
+#         for row in game.board:
+#             if game.board[col][row] is not None and game.board[col][row].color is not active_player:
+#                 pins_list[(col,row)] = generating_all_moves_for_piece(game, game.board[col][row], coord) if
 
 # zrobic z tego
 
@@ -62,10 +63,10 @@ def main():
                 if piece_selected is None:  # Wchodzi jeżeli nic nie jest zaznaczone
                     piece_selected = selecting_piece(game.board, coord, active_player)
                     if piece_selected is not None:  # Sprawdzam czy sa mozliwe ruchy dla danego zaznaczenia
-                        generating_bounded_figures_list():
+                        # generating_bounded_figures_list():
 
-                        possible_moves = generating_all_moves_for_piece(game, piece_selected, coord)
-
+                        possible_moves = looking_for_absolute_pins(game, piece_selected, coord)
+                        print(possible_moves)
                         if possible_moves:
                             refresh_flag = True  # zmienna do odswiezania ekranu
                             coord_selected = coord  # zapisuje w pamieci koordynaty prawidlowo wybranej figury
@@ -82,7 +83,7 @@ def main():
                     drawing_board()
                     drawing_pieces(game.board)
                     active_player = switching_turns(active_player)
-                    pins_list = generating_pins()
+                    # pins_list = generating_pins()
                     if any_move_possible() is False:print('PAT')
                     piece_selected = None
                     refresh_flag = True

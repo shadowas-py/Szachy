@@ -12,6 +12,11 @@ def get_game_coord_from_mouse():
     else:
         return None
 
+class Player:
+    pinned_figures = {}
+
+    def __init__(self, color):
+        self.color = color
 
 def selecting_piece(board, coord, active_player):
     row, col = coord
@@ -20,8 +25,23 @@ def selecting_piece(board, coord, active_player):
         return piece
     return None
 
-def generating_all_moves_for_piece(game, piece, coord):
+def looking_for_pins(game, coord, multiplier, singleMove, piece, base_coord):
+    multiplier+=1
+    for _multiplier in range(multiplier, GRID_SIZE):
+        new_coord = sum_directions(coord, multiply_direction(singleMove, multiplier))
+        targetPiece = game.board[new_coord[1]][new_coord[0]]
+        if targetPiece.tag != 'K' and targetPiece.color != piece.color:
+            break
+        elif targetPiece.tag == 'K':
+            player.pinned_figures[new_coord]=base_coord
+
+
+def looking_for_absolute_pins(game, piece, coord):
     moves_list = {}
+    pinned_fields = {}# {wspolrzedne zwiazanej figury: suma wspolrzednych wchodzacych w zakresie zwiazania}
+    pinned_figure = {}# {coord zwiazanej figury: coord zwiazujacej}
+    base_coord = coord
+    blocked_by_piece = False
     for movePack in piece.movement:
         singleMove, scalable, conditionFunc, consequenceFunc = movePack
         for multiplier in range(1, GRID_SIZE if scalable else 2):
@@ -35,7 +55,7 @@ def generating_all_moves_for_piece(game, piece, coord):
                 else:
                     if targetPiece.color != piece.color:
                         moves_list[new_coord] = consequenceFunc
-
+                    looking_for_pins(game, new_coord, multiplier, singleMove, piece, base_coord)
                     break
             elif conditionFunc(game, piece, coord, new_coord):
                 moves_list[new_coord] = consequenceFunc
