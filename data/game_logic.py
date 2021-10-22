@@ -12,11 +12,6 @@ def get_game_coord_from_mouse():
     else:
         return None
 
-class Player:
-    pinned_figures = {}
-
-    def __init__(self, color):
-        self.color = color
 
 def selecting_piece(board, coord, active_player):
     row, col = coord

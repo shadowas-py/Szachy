@@ -7,35 +7,24 @@ from data.game_logic import selecting_piece, get_game_coord_from_mouse, switchin
 from data.graphic import drawing_board, drawing_pieces
 from data.settings import FPS
 from data.display_info import translate_to_chess_notation
+from data.players import Player
 from data.functions import shift_value
 
 pygame.init()
 
-# IMPORTS
+# INITIZING INSTANCES OF IMPORTED CLASSES
 game = GameState()
+player1 = Player(color='w')
+player2 = Player(color='b')
 
-# SETTINGS
-pygame.display.set_caption('Szachy')
-logging.basicConfig(filename='logs.log', level=logging.DEBUG,
-                    format='%(asctime)s,:%(levelname)s:%(module)s:,%(message)s')
-
+# # SETTINGS
+# pygame.display.set_caption('Szachy')
+# logging.basicConfig(filename='logs.log', level=logging.DEBUG,
+#                     format='%(asctime)s,:%(levelname)s:%(module)s:,%(message)s')
 
 
 def any_move_possible():
     pass
-
-pins_list = {}
-
-# def generating_pins(coord, active_player):
-#     for col in game.board:
-#         for row in game.board:
-#             if game.board[col][row] is not None and game.board[col][row].color is not active_player:
-#                 pins_list[(col,row)] = generating_all_moves_for_piece(game, game.board[col][row], coord) if
-
-# zrobic z tego
-
-            # if selecting_piece(game.board, coord, opponent_color) is not None and :
-
 
 
 def main():
@@ -43,7 +32,7 @@ def main():
     clock = pygame.time.Clock()
     piece_selected = None
     coord_selected = None
-    active_player = game.nextMoveColor
+    active_player = player1 if game.nextMoveColor is 'w' else player2
     drawing_board()
     drawing_pieces(game.board)
     pygame.display.update()
@@ -60,9 +49,9 @@ def main():
                     coord_selected = None
                     piece_selected = None
                     break
-                if piece_selected is None:  # Wchodzi jeżeli nic nie jest zaznaczone
-                    piece_selected = selecting_piece(game.board, coord, active_player)
-                    if piece_selected is not None:  # Sprawdzam czy sa mozliwe ruchy dla danego zaznaczenia
+                if piece_selected is None:
+                    piece_selected = selecting_piece(game.board, coord, active_player.color)
+                    if piece_selected is not None:
                         # generating_bounded_figures_list():
 
                         possible_moves = looking_for_absolute_pins(game, piece_selected, coord)
