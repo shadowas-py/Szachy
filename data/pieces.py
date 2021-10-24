@@ -29,14 +29,12 @@ def _pawnDiagonalCondition(gameState, piece, coord, new_coord):
 def _pawnDiagonalConsequence(gameState, piece, coord, new_coord):
     if gameState.en_passant_coord == new_coord:
         gameState.board[coord[1]][new_coord[0]] = None
-    print('in pawn diagonal')
     _pawnForwardConsequence(gameState, piece, coord, new_coord)
 
 def _pawnForwardCondition(gameState, piece, coord, new_coord):
     return gameState.board[new_coord[1]][new_coord[0]] is None
 
 def _pawnForwardConsequence(gameState, piece, coord, new_coord):
-    print('in pawn forward', new_coord)
     if new_coord[1] == (0 if piece.color == 'w' else GRID_SIZE-1):
         gameState.board[new_coord[1]][new_coord[0]] = pawn_promotion(player_color=piece.color)
 

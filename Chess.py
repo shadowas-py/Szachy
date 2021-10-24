@@ -2,7 +2,7 @@ import pygame
 import logging
 
 from data.chessboard import GameState
-from data.game_logic import selecting_piece, get_game_coord_from_mouse, switching_turns, \
+from data.game_logic import selecting_piece, get_game_coord_from_mouse, handling_players_order, \
     generating_all_moves_for_piece, looking_for_absolute_pins
 from data.graphic import drawing_board, drawing_pieces
 from data.settings import FPS
@@ -14,13 +14,19 @@ pygame.init()
 
 # INITIZING INSTANCES OF IMPORTED CLASSES
 game = GameState()
-players = {'player1' : Player(color='w'), 'player2' : Player(color='b')}
-
+players_dict = {'player1' : Player(color='w'), 'player2' : Player(color='b')}
+player_order_list = list(sorted(players_dict.values(), key=lambda i:('w','b')))
+# players = {'player1' : Player(color='w'), 'player2' : Player(color='b')}
 # # SETTINGS
 # pygame.display.set_caption('Szachy')
 # logging.basicConfig(filename='logs.log', level=logging.DEBUG,
 #                     format='%(asctime)s,:%(levelname)s:%(module)s:,%(message)s')
 
+
+def clear_data(*dicts):
+    print ('clearng')
+    for _dict in dicts:
+        _dict.clear()
 
 def any_move_possible():
     pass
@@ -32,7 +38,8 @@ def main():
     piece_selected = None
     coord_selected = None
     #TODO dodac liczbnik czasu dla kazdego gracza
-    active_player = players['player1'] if game.nextMoveColor is 'w' else players['player2']
+    # active_player = players_dict['player1'] if game.nextMoveColor is 'w' else players_dict['player2']
+    active_player, inactive_player = handling_players_order(players_dict, player_order_list, player_tag=game.nextMoveColor)
     drawing_board()
     drawing_pieces(game.board)
     pygame.display.update()
@@ -43,6 +50,7 @@ def main():
             if event.type == pygame.QUIT:
                 run = False
             if event.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed()[0]:  # LEFT MOUSE BUTTON
+                active_player.absolute_pins.clear()
                 coord = get_game_coord_from_mouse()
                 # TODO dodać narzędzie zarządzające eventami kliknięć itp, na przyszłości do obsługi UI
                 if coord is None:  # Resetuje zaznaczenie jeżeli zaznaczy sie puste pole lub kliknie poza board
@@ -53,10 +61,8 @@ def main():
                     piece_selected = selecting_piece(game.board, coord, active_player.color)
                     if piece_selected is not None:
                         # generating_bounded_figures_list():
-
                         possible_moves = looking_for_absolute_pins(game, piece_selected, coord, active_player)
-                        print(players['player1'].absolute_pins.items())
-                        print(players['player2'].absolute_pins.items())
+                        print('a:',active_player.absolute_pins.items(),'i:',inactive_player.absolute_pins.items())
                         if possible_moves:
                             refresh_flag = True  # zmienna do odswiezania ekranu
                             coord_selected = coord  # zapisuje w pamieci koordynaty prawidlowo wybranej figury
@@ -72,7 +78,7 @@ def main():
                     game.en_passant_coord = game.new_en_passant_coord
                     drawing_board()
                     drawing_pieces(game.board)
-                    active_player = switching_turns(active_player, **players)
+                    active_player, inactive_player = handling_players_order(players_dict, player_order_list)
                     # pins_list = generating_pins()
                     if any_move_possible() is False:print('PAT')
                     piece_selected = None

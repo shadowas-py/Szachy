@@ -33,8 +33,8 @@ def looking_for_pins(game, multiplier, singleMove, player, occupied_tile, base_c
         if targetPiece is None:
             continue
         elif targetPiece.tag == 'K' and targetPiece.color != player.color :
-            print('setting absolute pins', new_coord, occupied_tile)
             player.absolute_pins[occupied_tile]=base_coord
+            break
         else:
             # print('BREAK')
             break
@@ -67,9 +67,6 @@ def looking_for_absolute_pins(game, piece, coord, player):
     return moves_list
 
 
-
-
-
 def generating_all_moves_for_piece(game, piece, coord):
     moves_list = {}
     for movePack in piece.movement:
@@ -90,6 +87,12 @@ def generating_all_moves_for_piece(game, piece, coord):
                 moves_list[new_coord] = consequenceFunc
     return moves_list
 
-
-def switching_turns(active_player, **players):
-    return players['player1'] if active_player == players['player2'] else players['player2']
+def handling_players_order(players, player_order_list,*, player_tag = None):
+    if player_tag:
+        for p in players.values():
+            if p.color == player_tag:
+                player_order_list.insert(0, player_order_list.pop(player_order_list.index(p)))
+                return player_order_list
+    else:
+        player_order_list.insert(0, player_order_list.pop(-1))
+        return player_order_list

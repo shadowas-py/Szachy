@@ -12,15 +12,9 @@
 # setting_instances_global_names(Player,len(players_color_list),*players_color_list)
 
 class Player:
-    absolute_pins = {} # attacker: defender
-    pinned_tiles = {} # attacker: all tiles between attacker and enemy king
 
     def __init__(self, color):
         self.color = color
         self.time = ...
-
-
-
-
-
-
+        self.absolute_pins = {} # attacker: defender
+        self.pinned_tiles = {} # attacker: all tiles between attacker and enemy king
