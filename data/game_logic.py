@@ -20,23 +20,32 @@ def selecting_piece(board, coord, active_player):
         return piece
     return None
 
-def looking_for_pins(game, coord, multiplier, singleMove, piece, base_coord):
-    multiplier+=1
-    for _multiplier in range(multiplier, GRID_SIZE):
-        new_coord = sum_directions(coord, multiply_direction(singleMove, multiplier))
-        targetPiece = game.board[new_coord[1]][new_coord[0]]
-        if targetPiece.tag != 'K' and targetPiece.color != piece.color:
+def looking_for_pins(game, multiplier, singleMove, player, occupied_tile, base_coord):
+    # print(base_coord,'base coord', 'IN FUNCTION ______________')
+    # print(occupied_tile,'occupied tile')
+    for _multiplier in range(multiplier+1, GRID_SIZE):
+        new_coord = sum_directions(base_coord, multiply_direction(singleMove, _multiplier))
+        # print(new_coord, 'NEW_COORD')
+        if max(new_coord)>7 or min(new_coord)<0:
+            # print('BREAK out of range')
             break
-        elif targetPiece.tag == 'K':
-            player.pinned_figures[new_coord]=base_coord
+        targetPiece = game.board[new_coord[1]][new_coord[0]]
+        if targetPiece is None:
+            continue
+        elif targetPiece.tag == 'K' and targetPiece.color != player.color :
+            print('setting absolute pins', new_coord, occupied_tile)
+            player.absolute_pins[occupied_tile]=base_coord
+        else:
+            # print('BREAK')
+            break
 
 
-def looking_for_absolute_pins(game, piece, coord):
+
+
+
+def looking_for_absolute_pins(game, piece, coord, player):
     moves_list = {}
-    pinned_fields = {}# {wspolrzedne zwiazanej figury: suma wspolrzednych wchodzacych w zakresie zwiazania}
-    pinned_figure = {}# {coord zwiazanej figury: coord zwiazujacej}
     base_coord = coord
-    blocked_by_piece = False
     for movePack in piece.movement:
         singleMove, scalable, conditionFunc, consequenceFunc = movePack
         for multiplier in range(1, GRID_SIZE if scalable else 2):
@@ -48,9 +57,10 @@ def looking_for_absolute_pins(game, piece, coord):
                 if targetPiece is None:
                     moves_list[new_coord] = consequenceFunc
                 else:
+                    looking_for_pins(game, multiplier, singleMove,
+                                     player, occupied_tile=new_coord, base_coord=base_coord)
                     if targetPiece.color != piece.color:
                         moves_list[new_coord] = consequenceFunc
-                    looking_for_pins(game, new_coord, multiplier, singleMove, piece, base_coord)
                     break
             elif conditionFunc(game, piece, coord, new_coord):
                 moves_list[new_coord] = consequenceFunc

@@ -54,12 +54,13 @@ def main():
                     if piece_selected is not None:
                         # generating_bounded_figures_list():
 
-                        possible_moves = looking_for_absolute_pins(game, piece_selected, coord)
-                        print(possible_moves)
+                        possible_moves = looking_for_absolute_pins(game, piece_selected, coord, active_player)
+                        print(players['player1'].absolute_pins.items())
+                        print(players['player2'].absolute_pins.items())
                         if possible_moves:
                             refresh_flag = True  # zmienna do odswiezania ekranu
                             coord_selected = coord  # zapisuje w pamieci koordynaty prawidlowo wybranej figury
-                            translate_to_chess_notation(possible_moves)
+                            # translate_to_chess_notation(possible_moves)
                         else:
                             piece_selected = None  # odznacza figury jak nie ma mozliwosci ruchu lub nieprawidlowy wybor
                 elif coord in possible_moves:  # Wchodzi jezeli jest mozliwosc ruchu dla zaznaczonej figury
