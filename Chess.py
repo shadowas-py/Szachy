@@ -14,8 +14,7 @@ pygame.init()
 
 # INITIZING INSTANCES OF IMPORTED CLASSES
 game = GameState()
-player1 = Player(color='w')
-player2 = Player(color='b')
+players = {'player1' : Player(color='w'), 'player2' : Player(color='b')}
 
 # # SETTINGS
 # pygame.display.set_caption('Szachy')
@@ -32,7 +31,8 @@ def main():
     clock = pygame.time.Clock()
     piece_selected = None
     coord_selected = None
-    active_player = player1 if game.nextMoveColor is 'w' else player2
+    #TODO dodac liczbnik czasu dla kazdego gracza
+    active_player = players['player1'] if game.nextMoveColor is 'w' else players['player2']
     drawing_board()
     drawing_pieces(game.board)
     pygame.display.update()
@@ -71,7 +71,7 @@ def main():
                     game.en_passant_coord = game.new_en_passant_coord
                     drawing_board()
                     drawing_pieces(game.board)
-                    active_player = switching_turns(active_player)
+                    active_player = switching_turns(active_player, **players)
                     # pins_list = generating_pins()
                     if any_move_possible() is False:print('PAT')
                     piece_selected = None

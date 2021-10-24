@@ -81,5 +81,5 @@ def generating_all_moves_for_piece(game, piece, coord):
     return moves_list
 
 
-def switching_turns(active_player):
-    return 'b' if active_player == 'w' else 'w'
+def switching_turns(active_player, **players):
+    return players['player1'] if active_player == players['player2'] else players['player2']
