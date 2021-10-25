@@ -15,7 +15,6 @@ class GameState:
         self.en_passant_coord = None
 
 
-
     def making_move(self, shift):
         self.board[shift[1][1]][shift[1][0]] = self.board[shift[0][1]][shift[0][0]]
         self.board[shift[0][1]][shift[0][0]] = None

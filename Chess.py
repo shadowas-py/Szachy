@@ -9,6 +9,7 @@ from data.settings import FPS
 from data.display_info import translate_to_chess_notation
 from data.players import Player
 from data.functions import shift_value
+from data.constants import GRID_SIZE
 
 pygame.init()
 
@@ -27,6 +28,19 @@ def clear_data(*dicts):
     print ('clearng')
     for _dict in dicts:
         _dict.clear()
+
+# TODO skrocic to
+def generating_all_moves_for_inactive_player(player):
+    result = set()
+    for col in range(GRID_SIZE):
+        for row in range(GRID_SIZE):
+            if game.board[col][row] and game.board[col][row].color == player.color:
+                coord = (col,row)
+                piece = game.board[col][row]
+                result.update(set(looking_for_absolute_pins(game, piece, coord, player)))
+    return result
+
+
 
 def any_move_possible():
     pass
@@ -60,7 +74,9 @@ def main():
                 if piece_selected is None:
                     piece_selected = selecting_piece(game.board, coord, active_player.color)
                     if piece_selected is not None:
-                        # generating_bounded_figures_list():
+
+                        set_of_attacked_fields = generating_all_moves_for_inactive_player(inactive_player)
+                        print(list(set_of_attacked_fields))
                         possible_moves = looking_for_absolute_pins(game, piece_selected, coord, active_player)
                         print('a:',active_player.absolute_pins.items(),'i:',inactive_player.absolute_pins.items())
                         if possible_moves:
