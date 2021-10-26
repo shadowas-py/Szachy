@@ -1,4 +1,4 @@
-from .functions import rotations, multiply_direction
+from .functions import rotations, multiply_direction, sum_directions
 from .constants import *
 
 
@@ -18,10 +18,17 @@ class Pawn(Piece):
 
     def __init__(self, color):
         self.color = color
-        direction = N if color == 'w' else S
-        self.movement = list(map(lambda it: (it, False, _pawnDiagonalCondition, _pawnDiagonalConsequence), [(1, direction[1]), (-1, direction[1])]))
-        self.movement.append((direction, False, _pawnForwardCondition, _pawnForwardConsequence))
-        self.movement.append((multiply_direction(direction,2), False, _pawnDoubleForwardCondition, _pawnDoubleForwardConsequence))
+        self.direction = N if color == 'w' else S
+        self.movement = list(map(lambda it: (it, False, _pawnDiagonalCondition, _pawnDiagonalConsequence), [(1, self.direction[1]), (-1, self.direction[1])]))
+        self.movement.append((self.direction, False, _pawnForwardCondition, _pawnForwardConsequence))
+        self.movement.append((multiply_direction(self.direction,2), False, _pawnDoubleForwardCondition, _pawnDoubleForwardConsequence))
+
+    # PROTOTYP
+    def attacked_fields(self, coord):
+        direction = N if self.color == 'w' else S
+        diagonal_moves = (1, direction[1]), (-1, direction[1])
+        attacked_field_list= [sum_directions(coord, c) for c in diagonal_moves]
+        return attacked_field_list
 
 def _pawnDiagonalCondition(gameState, piece, coord, new_coord):
     return (gameState.board[new_coord[1]][new_coord[0]] is not None and gameState.board[new_coord[1]][new_coord[0]].color != piece.color) or gameState.en_passant_coord == new_coord

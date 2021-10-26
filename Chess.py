@@ -1,5 +1,7 @@
 import pygame
 import logging
+from itertools import chain
+
 
 from data.chessboard import GameState
 from data.game_logic import selecting_piece, get_game_coord_from_mouse, handling_players_order, \
@@ -31,14 +33,20 @@ def clear_data(*dicts):
 
 # TODO skrocic to
 def generating_all_moves_for_inactive_player(player):
-    result = set()
-    for col in range(GRID_SIZE):
-        for row in range(GRID_SIZE):
-            if game.board[col][row] and game.board[col][row].color == player.color:
-                coord = (col,row)
-                piece = game.board[col][row]
-                result.update(set(looking_for_absolute_pins(game, piece, coord, player)))
-    return result
+    all_attacked_tiles = set()
+    board_iter = chain(*game.board)
+    for tile in board_iter:
+        print (tile,'aaaa')
+    # for col in range(GRID_SIZE):
+    #     for row in range(GRID_SIZE):
+    #         if game.board[col][row] and game.board[col][row].color == player.color:
+    #             coord = (col,row)
+    #             print(coord, game.board[col][row])
+    #             piece = game.board[row][col]
+    #             # print(piece,coord)
+    #             all_attacked_tiles.update(set(looking_for_absolute_pins(game, piece, coord, player)))
+    #             # print(all_attacked_tiles)
+    return all_attacked_tiles
 
 
 
@@ -66,6 +74,7 @@ def main():
             if event.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed()[0]:  # LEFT MOUSE BUTTON
                 active_player.absolute_pins.clear()
                 coord = get_game_coord_from_mouse()
+                print(coord)
                 # TODO dodać narzędzie zarządzające eventami kliknięć itp, na przyszłości do obsługi UI
                 if coord is None:  # Resetuje zaznaczenie jeżeli zaznaczy sie puste pole lub kliknie poza board
                     coord_selected = None
@@ -76,9 +85,11 @@ def main():
                     if piece_selected is not None:
 
                         set_of_attacked_fields = generating_all_moves_for_inactive_player(inactive_player)
-                        print(list(set_of_attacked_fields))
+                        print(set_of_attacked_fields)
+                        print(len(set_of_attacked_fields))
                         possible_moves = looking_for_absolute_pins(game, piece_selected, coord, active_player)
-                        print('a:',active_player.absolute_pins.items(),'i:',inactive_player.absolute_pins.items())
+                        # print(possible_moves)
+                        # print('a:',active_player.absolute_pins.items(),'i:',inactive_player.absolute_pins.items())
                         if possible_moves:
                             refresh_flag = True  # zmienna do odswiezania ekranu
                             coord_selected = coord  # zapisuje w pamieci koordynaty prawidlowo wybranej figury

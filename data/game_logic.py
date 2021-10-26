@@ -43,28 +43,39 @@ def looking_for_pins(game, multiplier, singleMove, player, occupied_tile, base_c
 
 
 
-def looking_for_absolute_pins(game, piece, coord, player):
-    moves_list = {}
+def looking_for_absolute_pins(game, piece, coord, player):# amd attacked tiles
+    attacked_tiles = set()
     base_coord = coord
+    if piece.tag == 'P':
+        for i in piece.attacked_fields(coord):
+            attacked_tiles.update(i)
     for movePack in piece.movement:
+        # print(coord, piece, player.color)
         singleMove, scalable, conditionFunc, consequenceFunc = movePack
         for multiplier in range(1, GRID_SIZE if scalable else 2):
             new_coord = sum_directions(coord, multiply_direction(singleMove, multiplier))
             if min(new_coord) < 0 or max(new_coord) >= GRID_SIZE:
+                # print('BREAK out of range',new_coord,)
                 break
             elif conditionFunc is None:
-                targetPiece = game.board[new_coord[1]][new_coord[0]]
+                targetPiece = game.board[new_coord[0]][new_coord[1]]
                 if targetPiece is None:
-                    moves_list[new_coord] = consequenceFunc
+                    attacked_tiles.update(new_coord)
                 else:
                     looking_for_pins(game, multiplier, singleMove,
                                      player, occupied_tile=new_coord, base_coord=base_coord)
                     if targetPiece.color != piece.color:
-                        moves_list[new_coord] = consequenceFunc
-                    break
+                        # print('SET coord:',new_coord, targetPiece,piece )
+                        attacked_tiles.update(new_coord)
+                        # print('in', moves_list)
+                    else:
+                        # print('BREAK same_color', new_coord,targetPiece, 'NEW COORD',piece )
+                        break
             elif conditionFunc(game, piece, coord, new_coord):
-                moves_list[new_coord] = consequenceFunc
-    return moves_list
+                # print('PASS coord:condition_func',new_coord)
+                pass
+    # print(moves_list.keys(),',movesLIST')
+    return attacked_tiles
 
 
 def generating_all_moves_for_piece(game, piece, coord):
