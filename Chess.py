@@ -124,7 +124,10 @@ if __name__ == "__main__":
     main()
 
 #TODO
-# zrobic przeźroczystość pol szachownicy
+# 1.pozbyc sie problemu z odwolaniem do col, row
+# 2.zdebugowac generowanie ruchów dla przeciwnika tak żeby działało również dla pionow
+# 3.zajeta pola rowniez nalezy uwzglednic jako atakowane
+# 4.dodac do do kklasy player atrybut-slownik ze wspolrzednymi bierki zwiazujacej : lista pol miedzy nia a wrogim krolem
 # podswietlanie wybranej bierki
 # podswietlanie ostatnio wykonanego ruchu
 # dodac troche grafiki (wspolrzedne, tlo, ui)
