@@ -28,14 +28,12 @@ class Pawn(Piece):
         attacked_field_list = []
         direction = N if self.color == 'w' else S
         diagonal_moves = (1, direction[1]), (-1, direction[1])
-        print(self, list(reversed(coord)))
         for move in diagonal_moves:
             new_coord = sum_directions(move, coord)
-            # print(new_coord, 'new coord')
             if min(new_coord)>=0 and max(new_coord)<GRID_SIZE:
                 attacked_field_list.append(new_coord)
         # attacked_field_list = [sum_directions(coord, c) for c in diagonal_moves]
-        print('SET',attacked_field_list)
+        # print('SET',attacked_field_list)
         return attacked_field_list
 
 def _pawnDiagonalCondition(gameState, piece, coord, new_coord):

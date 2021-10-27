@@ -5,12 +5,11 @@ from itertools import chain
 
 from data.chessboard import GameState
 from data.game_logic import selecting_piece, get_game_coord_from_mouse, handling_players_order, \
-    generating_all_moves_for_piece, looking_for_absolute_pins
+    generating_all_moves_for_piece, looking_for_attacked_fields
 from data.graphic import drawing_board, drawing_pieces
 from data.settings import FPS
 from data.display_info import translate_to_chess_notation
 from data.players import Player
-from data.functions import shift_value
 from data.constants import GRID_SIZE
 
 pygame.init()
@@ -27,30 +26,23 @@ player_order_list = list(sorted(players_dict.values(), key=lambda i:('w','b')))
 
 
 def clear_data(*dicts):
-    print ('clearng')
     for _dict in dicts:
         _dict.clear()
 
-# TODO skrocic to
-def generating_all_moves_for_inactive_player(player):
+def all_same_color_pieces(player_tag):
     all_attacked_tiles = set()
     # board_iter = chain(*game.board)
     # for n, tile in enumerate(board_iter):
-    #     coord = n
-    #     print(tile,n)
     #     if tile and tile.color == player.color:
-    #         pass
     #         all_attacked_tiles.update(set(looking_for_absolute_pins(game, tile, coord, player)))
     for col in range(GRID_SIZE):
         for row in range(GRID_SIZE):
             real_coord = col, row
-            if game.board[row][col] and game.board[row][col].color == player.color:
-                # print (real_coord, game.board[row][col])
+            if game.board[row][col] and game.board[row][col].color == player_tag:
                 piece = game.board[row][col]
-                all_attacked_tiles.update(set(looking_for_absolute_pins(game, piece, real_coord, player)))
-    print(all_attacked_tiles, len(all_attacked_tiles))
+                all_attacked_tiles.update(set(looking_for_attacked_fields(game, piece, real_coord)))
+                # input(f'{real_coord}real coord')
     return all_attacked_tiles
-
 
 
 def any_move_possible():
@@ -76,6 +68,8 @@ def main():
                 run = False
             if event.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed()[0]:  # LEFT MOUSE BUTTON
                 active_player.absolute_pins.clear()
+                """DOKONCZYC"""
+                all_attacked_tiles = all_same_color_pieces(inactive_player.color)
                 coord = get_game_coord_from_mouse()
                 # TODO dodać narzędzie zarządzające eventami kliknięć itp, na przyszłości do obsługi UI
                 if coord is None:  # Resetuje zaznaczenie jeżeli zaznaczy sie puste pole lub kliknie poza board
@@ -85,13 +79,8 @@ def main():
                 if piece_selected is None:
                     piece_selected = selecting_piece(game.board, coord, active_player.color)
                     if piece_selected is not None:
-
-                        set_of_attacked_fields = generating_all_moves_for_inactive_player(inactive_player)
-                        # print(set_of_attacked_fields)
-                        # print(len(set_of_attacked_fields))
-                        possible_moves = looking_for_absolute_pins(game, piece_selected, coord, active_player)
-                        # print(possible_moves)
-                        # print('a:',active_player.absolute_pins.items(),'i:',inactive_player.absolute_pins.items())
+                        possible_moves = generating_all_moves_for_piece(game, piece_selected, coord, active_player)
+                        print('a:',active_player.absolute_pins.items(),'i:',inactive_player.absolute_pins.items())
                         if possible_moves:
                             refresh_flag = True  # zmienna do odswiezania ekranu
                             coord_selected = coord  # zapisuje w pamieci koordynaty prawidlowo wybranej figury
@@ -108,7 +97,6 @@ def main():
                     drawing_board()
                     drawing_pieces(game.board)
                     active_player, inactive_player = handling_players_order(players_dict, player_order_list)
-                    # pins_list = generating_pins()
                     if any_move_possible() is False:print('PAT')
                     piece_selected = None
                     refresh_flag = True
@@ -126,13 +114,12 @@ if __name__ == "__main__":
     main()
 
 #TODO
-# 1.pozbyc sie problemu z odwolaniem do col, row
-# 2.zdebugowac generowanie ruchów dla przeciwnika tak żeby działało również dla pionow
-# 3.zajeta pola rowniez nalezy uwzglednic jako atakowane - nie uwzgledniac pola krola
 # 4.dodac do do kklasy player atrybut-slownik ze wspolrzednymi bierki zwiazujacej : lista pol miedzy nia a wrogim krolem
+# - podswietlanie atakowanych pol i ew zwiazan
 # podswietlanie wybranej bierki
 # podswietlanie ostatnio wykonanego ruchu
 # dodac troche grafiki (wspolrzedne, tlo, ui)
+# ??? Czy pole króla tez liczyc jao pole atakowane
 
 # later
 # 2.interfejs wyboru promowanej figury
