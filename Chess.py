@@ -44,6 +44,13 @@ def coords_of_all_player_pieces(player_tag):
 def any_move_possible():
     pass
 
+def checking_check(game, base_coord, base_piece, inactive_player):
+    for coord in generating_all_moves_for_piece(game, base_piece, base_coord, base_piece.color):
+        piece = game.board[coord[1]][coord[0]]
+        if piece and piece.color != base_piece.color and piece.tag == 'K':
+            print('check')
+            inactive_player.in_check = True
+
 
 def main():
     run = True
@@ -75,7 +82,8 @@ def main():
                 if piece_selected is None:
                     piece_selected = selecting_piece(game.board, coord, active_player.color)
                     if piece_selected is not None:
-                        possible_moves = generating_all_moves_for_piece(game, piece_selected, coord, active_player)
+                        possible_moves = generating_all_moves_for_piece(game, piece_selected, coord, active_player,
+                                                                        looking_pins=True)
                         # print('a:',active_player.absolute_pins.items(),'i:',inactive_player.absolute_pins.items())
                         if possible_moves:
                             refresh_flag = True  # zmienna do odswiezania ekranu
@@ -90,6 +98,7 @@ def main():
                     if consequenceFunc is not None:
                         consequenceFunc(game, piece_selected, coord_selected, coord)
                     game.en_passant_coord = game.new_en_passant_coord
+                    checking_check(game,coord,piece_selected, inactive_player)
                     drawing_board()
                     drawing_pieces(game.board)
                     '''ZMIANA TUR'''
@@ -98,7 +107,7 @@ def main():
                     active_player.all_attacked_tiles = \
                         looking_for_attacked_fields(game, coords_seq=coords_of_all_player_pieces(inactive_player.color))
                     #TODO dołączyć zwiazania do generowanych ruchów
-                    if active_player.check:
+                    if active_player.in_check:
                         # sprawdz czy inne figury maja ruch w zakresie attacked_fields powiazanych ze zwiazaniem
                         if not any_move_possible():# to przelamania szacha
                             print('CHECKMATE')

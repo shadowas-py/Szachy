@@ -27,6 +27,7 @@ def looking_for_absolute_pins(game, multiplier, singleMove, occupied_tile, base_
         if max(new_coord)>7 or min(new_coord)<0:
             break
         targetPiece = game.board[new_coord[1]][new_coord[0]]
+        print(player)
         if targetPiece is None:
             continue
         elif targetPiece.tag == 'K' and targetPiece.color != player.color :
@@ -70,7 +71,7 @@ def looking_for_attacked_fields(game, coords_seq): # amd attacked tiles
     return attacked_tiles
 
 
-def generating_all_moves_for_piece(game, piece, base_coord, player):
+def generating_all_moves_for_piece(game, piece, base_coord, player, looking_pins=False):
     moves_list = {}
     for movePack in piece.movement:
         singleMove, scalable, conditionFunc, consequenceFunc = movePack
@@ -85,8 +86,9 @@ def generating_all_moves_for_piece(game, piece, base_coord, player):
                 else:
                     if targetPiece.color != piece.color:
                         moves_list[new_coord] = consequenceFunc
-                        looking_for_absolute_pins(game, multiplier, singleMove,
-                                                  player=player, occupied_tile=new_coord, base_coord=base_coord )
+                        if looking_pins:
+                            looking_for_absolute_pins(game, multiplier, singleMove,
+                                                      player=player, occupied_tile=new_coord, base_coord=base_coord )
                     break
             elif conditionFunc(game, piece, base_coord, new_coord):
                 moves_list[new_coord] = consequenceFunc
