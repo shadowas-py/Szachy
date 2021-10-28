@@ -59,6 +59,8 @@ def main():
     active_player, inactive_player = handling_players_order(players_dict, player_order_list, player_tag=game.nextMoveColor)
     drawing_board()
     drawing_pieces(game.board)
+    '''Wywalic jak zbedne'''
+    active_player.all_attacked_tiles = all_same_color_pieces(inactive_player.color)
     pygame.display.update()
     while run:
         refresh_flag = False
@@ -68,8 +70,7 @@ def main():
                 run = False
             if event.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed()[0]:  # LEFT MOUSE BUTTON
                 active_player.absolute_pins.clear()
-                """DOKONCZYC"""
-                all_attacked_tiles = all_same_color_pieces(inactive_player.color)
+                print(inactive_player.all_attacked_tiles, inactive_player)
                 coord = get_game_coord_from_mouse()
                 # TODO dodać narzędzie zarządzające eventami kliknięć itp, na przyszłości do obsługi UI
                 if coord is None:  # Resetuje zaznaczenie jeżeli zaznaczy sie puste pole lub kliknie poza board
@@ -80,7 +81,7 @@ def main():
                     piece_selected = selecting_piece(game.board, coord, active_player.color)
                     if piece_selected is not None:
                         possible_moves = generating_all_moves_for_piece(game, piece_selected, coord, active_player)
-                        print('a:',active_player.absolute_pins.items(),'i:',inactive_player.absolute_pins.items())
+                        # print('a:',active_player.absolute_pins.items(),'i:',inactive_player.absolute_pins.items())
                         if possible_moves:
                             refresh_flag = True  # zmienna do odswiezania ekranu
                             coord_selected = coord  # zapisuje w pamieci koordynaty prawidlowo wybranej figury
@@ -96,8 +97,18 @@ def main():
                     game.en_passant_coord = game.new_en_passant_coord
                     drawing_board()
                     drawing_pieces(game.board)
+                    '''ZMIANA TUR'''
                     active_player, inactive_player = handling_players_order(players_dict, player_order_list)
-                    if any_move_possible() is False:print('PAT')
+                    """WYGENEROWANIE WSZYSTKICH ATAKOWANYCH POL"""
+                    #TODO rozdzielic funkcje all_same_color_pieces od looking_for_attacked_fields
+                    active_player.all_attacked_tiles = all_same_color_pieces(inactive_player.color)
+                    #TODO dołączyć zwiazania do generowanych ruchów
+                    if active_player.check:
+                        # sprawdz czy inne figury maja ruch w zakresie attacked_fields powiazanych ze zwiazaniem
+                        if not any_move_possible():# to przelamania szacha
+                            print('CHECKMATE')
+                    if any_move_possible() is False:
+                        print('PAT')
                     piece_selected = None
                     refresh_flag = True
                 else:
@@ -114,7 +125,9 @@ if __name__ == "__main__":
     main()
 
 #TODO
-# 4.dodac do do kklasy player atrybut-slownik ze wspolrzednymi bierki zwiazujacej : lista pol miedzy nia a wrogim krolem
+# 1.dodac do do kklasy player atrybut-slownik ze wspolrzednymi bierki zwiazujacej : lista pol miedzy nia a wrogim krolem
+# 2.Wykrywanie szacha
+# 3.Wykrywanie pata i mata
 # - podswietlanie atakowanych pol i ew zwiazan
 # podswietlanie wybranej bierki
 # podswietlanie ostatnio wykonanego ruchu
