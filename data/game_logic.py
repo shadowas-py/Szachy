@@ -36,33 +36,36 @@ def looking_for_absolute_pins(game, multiplier, singleMove, occupied_tile, base_
             break
 
 
-def looking_for_attacked_fields(game, piece, base_coord): # amd attacked tiles
+def looking_for_attacked_fields(game, coords_seq): # amd attacked tiles
     attacked_tiles = set()
+    for row, col in coords_seq:
+        base_coord = (col,row)
+        piece = game.board[row][col]
     # print(piece, 'picked_piece', base_coord)
-    if piece.tag == 'P':
-        for i in piece.attacked_fields(base_coord):
-            # print('SET', base_coord, piece, i)
-            attacked_tiles.update([i])
-    else:
-        for movePack in piece.movement:
-            singleMove, scalable, conditionFunc, consequenceFunc = movePack
-            for multiplier in range(1, GRID_SIZE if scalable else 2):
-                new_coord = sum_directions(base_coord, multiply_direction(singleMove, multiplier))
-                if min(new_coord) < 0 or max(new_coord) >= GRID_SIZE:
-                    break
-                elif conditionFunc is None:
-                    targetPiece = game.board[new_coord[1]][new_coord[0]]
-                    if targetPiece is None:
-                        attacked_tiles.update([new_coord])
-                    else:
-                        if targetPiece.color != piece.color:
-                            # print('SET coord:','targer_coord:',new_coord, 'target:',targetPiece,'active:', piece)
+        if piece.tag == 'P':
+            for i in piece.attacked_fields(base_coord):
+                # print('SET', base_coord, piece, i)
+                attacked_tiles.update([i])
+        else:
+            for movePack in piece.movement:
+                singleMove, scalable, conditionFunc, consequenceFunc = movePack
+                for multiplier in range(1, GRID_SIZE if scalable else 2):
+                    new_coord = sum_directions(base_coord, multiply_direction(singleMove, multiplier))
+                    if min(new_coord) < 0 or max(new_coord) >= GRID_SIZE:
+                        break
+                    elif conditionFunc is None:
+                        targetPiece = game.board[new_coord[1]][new_coord[0]]
+                        if targetPiece is None:
                             attacked_tiles.update([new_coord])
-                            break
                         else:
-                            # print('SET same_color', new_coord,targetPiece, 'NEW COORD',piece )
-                            attacked_tiles.update([new_coord])
-                            break
+                            if targetPiece.color != piece.color:
+                                # print('SET coord:','targer_coord:',new_coord, 'target:',targetPiece,'active:', piece)
+                                attacked_tiles.update([new_coord])
+                                break
+                            else:
+                                # print('SET same_color', new_coord,targetPiece, 'NEW COORD',piece )
+                                attacked_tiles.update([new_coord])
+                                break
         # print(attacked_tiles,'value to return')
     return attacked_tiles
 
