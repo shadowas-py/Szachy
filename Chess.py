@@ -21,9 +21,13 @@ player_order_list = list(sorted(players_dict.values(), key=lambda i:('w','b')))
 #                     format='%(asctime)s,:%(levelname)s:%(module)s:,%(message)s')
 
 
-def clear_data(*dicts):
-    for _dict in dicts:
-        _dict.clear()
+def clear_player_data(player):
+    player.pins.clear()
+    player.attacked_tiles_in_pin.clear()
+    player.checks.clear()
+    player.attacked_tiles_in_check.clear()
+
+
 
 def coords_of_all_player_pieces(player_tag):
     pieces_coord_list = set()
@@ -96,16 +100,16 @@ def main():
                     drawing_board()
                     drawing_pieces(game.board)
 
-                    'SZUKANIE SZACHÓW I ZWIAZAN'
                     all_active_player_pieces_coords_LIST = coords_of_all_player_pieces(active_player.color)
-                    # looking_for_attacked_tiles sprawdza SZACHY i ZWIAZANIA
-                    active_player.all_attacked_tiles = looking_for_attacked_tiles(game,
-                                                                                  coords_seq=all_active_player_pieces_coords_LIST,
-                                                                                  player=inactive_player)
+                    'SZUKANIE SZACHÓW I ZWIAZAN'
+                    clear_player_data(active_player)
+                    active_player.all_attacked_tiles = \
+                        looking_for_attacked_tiles(game,
+                        coords_seq=all_active_player_pieces_coords_LIST,
+                        player=inactive_player)
                     # print(inactive_player.all_attacked_tiles)
                     # print(inactive_player.absolute_pins, active_player.absolute_pins)
                     # print(inactive_player.checks, active_player.checks)
-                    #TODO dołączyć zwiazania do generowanych ruchów
                     print('CHECKS',inactive_player.checks)
                     print('PINS',inactive_player.pins)
                     print('in pin', inactive_player.attacked_tiles_in_pin)

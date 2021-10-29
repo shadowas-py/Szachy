@@ -38,12 +38,10 @@ def looking_absolute_pins(game, singleMove, occupied_tile, attacker_coord, inact
         if max(new_coord)>7 or min(new_coord)<0:
             break
         newPiece = game.board[new_coord[1]][new_coord[0]]
-        if newPiece:
-            print(attacking_piece.color, newPiece.tag)
         if newPiece is None:
             continue
         elif newPiece.tag == 'K' and newPiece.color != attacking_piece.color:
-            print(newPiece,'IN', 'attacking=',attacking_piece, attacker_coord)
+            # print(newPiece,'IN', 'attacking=',attacking_piece, attacker_coord)
             inactive_player.pins[occupied_tile]=attacker_coord
             inactive_player.attacked_tiles_in_pin[attacker_coord]=get_attacked_tiles(vector=singleMove,
                                                                                      start_coord=attacker_coord,
@@ -74,7 +72,6 @@ def looking_for_attacked_tiles(game, coords_seq, player): # amd attacked tiles
                             attacked_tiles.update([new_coord])
                         else:
                             if targetPiece.color != piece.color:
-                                print(targetPiece)
                                 if targetPiece.tag == 'K':
                                     player.checks[base_coord] = [new_coord]
                             if scalable:

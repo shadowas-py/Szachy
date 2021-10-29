@@ -19,6 +19,5 @@ class Player:
         self.pins = {} # attacker: defender
         self.attacked_tiles_in_pin = {} # attacker: all tiles between attacker and enemy king
         self.checks = {}
-        self.checking_tiles = {}
-        self.in_check = False
+        self.attacked_tiles_in_check = {}
         self.all_attacked_tiles = []
