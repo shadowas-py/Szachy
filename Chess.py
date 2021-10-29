@@ -100,38 +100,41 @@ def main():
                     drawing_board()
                     drawing_pieces(game.board)
 
-                    all_active_player_pieces_coords_LIST = coords_of_all_player_pieces(active_player.color)
-                    'SZUKANIE SZACHÓW I ZWIAZAN'
+                    active_player.pieces_coords = coords_of_all_player_pieces(active_player.color)
+                    '''SZUKANIE SZACHÓW I ZWIAZAN'''
                     clear_player_data(active_player)
                     active_player.all_attacked_tiles = \
                         looking_for_attacked_tiles(game,
-                        coords_seq=all_active_player_pieces_coords_LIST,
+                        coords_seq=active_player.pieces_coords,
                         player=inactive_player)
-                    # print(inactive_player.all_attacked_tiles)
-                    # print(inactive_player.absolute_pins, active_player.absolute_pins)
-                    # print(inactive_player.checks, active_player.checks)
                     print('CHECKS',inactive_player.checks)
                     print('PINS',inactive_player.pins)
                     print('in pin', inactive_player.attacked_tiles_in_pin)
-                    if inactive_player.checks:
-                        print('check')
+
+
+                    '''ZMIANA TUR'''
+                    active_player, inactive_player = handling_players_order(players_dict, player_order_list)
+
+
+                    '''SPRAWDZAM CZY JEST MOZLIWY RUCH'''
+                    if active_player.checks:
+                        inactive_player.all_attacked_tiles
+                        print('CHECK')
+                        if any(inactive_player.all_attacked_tiles):
+                            print('NOT PAT')
+                        else:
+                            print('CHECKMATE')
                     else:
-                        active_player.in_check = False
+                        # active_player.pieces_coords = coords_of_all_player_pieces(active_player.color)
+                        if any(inactive_player.all_attacked_tiles):
+                            print('NOT PAT')
+                        else:
+                            print('PAT')
                         # sprawdz czy inne figury maja ruch w zakresie attacked_fields powiazanych ze zwiazaniem
                         if not any_move_possible():# to przelamania szacha
                             pass
                             # print('CHECKMATE')
 
-                    '''ZMIANA TUR'''
-                    active_player, inactive_player = handling_players_order(players_dict, player_order_list)
-                    """WYGENEROWANIE WSZYSTKICH ATAKOWANYCH POL
-                    SZACHOW i ZWIAZAN"""
-
-
-
-
-                    if any_move_possible() is False:
-                        print('PAT')
                     piece_selected = None
                     refresh_flag = True
                 else:
@@ -148,9 +151,10 @@ if __name__ == "__main__":
     main()
 
 #TODO
-# 1.dodac do do kklasy player atrybut-slownik ze wspolrzednymi bierki zwiazujacej : lista pol miedzy nia a wrogim krolem
-# 2.Wykrywanie szacha
-# 3.Wykrywanie pata i mata
+# 1.attacked_fields nie zawieraja ruchów pionow do przodu trzeba by je dodac jak mam sprawdzac pata
+# 2.dodac logike wyszukiwania ruchu w przypadku szacha i szacha podwojnego
+# 3.W przypadku zwiazania ograniczyc generowanie ruchow dla zwiazanej figury
+# 4.Wykrywanie pata i mata
 # - podswietlanie atakowanych pol i ew zwiazan
 # podswietlanie wybranej bierki
 # podswietlanie ostatnio wykonanego ruchu
@@ -161,7 +165,5 @@ if __name__ == "__main__":
 # 2.interfejs wyboru promowanej figury
 # 4.generowac notacje szachowa
 # 5.cofanie ruchow
-# 6.sprawdzanie szacha
-# 7.sprawdzanie mata i pata
 # 8.spradzanie legalnosci roszady
 # 9.zegary
