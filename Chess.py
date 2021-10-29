@@ -108,6 +108,7 @@ def main():
                     #TODO dołączyć zwiazania do generowanych ruchów
                     print('CHECKS',inactive_player.checks)
                     print('PINS',inactive_player.pins)
+                    print('in pin', inactive_player.attacked_tiles_in_pin)
                     if inactive_player.checks:
                         print('check')
                     else:

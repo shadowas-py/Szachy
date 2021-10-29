@@ -37,10 +37,13 @@ def looking_absolute_pins(game, singleMove, occupied_tile, attacker_coord, inact
         new_coord = sum_directions(attacker_coord, multiply_direction(singleMove, _multiplier))
         if max(new_coord)>7 or min(new_coord)<0:
             break
-        targetPiece = game.board[new_coord[1]][new_coord[0]]
-        if targetPiece is None:
+        newPiece = game.board[new_coord[1]][new_coord[0]]
+        if newPiece:
+            print(attacking_piece.color, newPiece.tag)
+        if newPiece is None:
             continue
-        elif targetPiece.tag == 'K' and targetPiece.color != attacking_piece.color :
+        elif newPiece.tag == 'K' and newPiece.color != attacking_piece.color:
+            print(newPiece,'IN', 'attacking=',attacking_piece, attacker_coord)
             inactive_player.pins[occupied_tile]=attacker_coord
             inactive_player.attacked_tiles_in_pin[attacker_coord]=get_attacked_tiles(vector=singleMove,
                                                                                      start_coord=attacker_coord,
@@ -74,13 +77,7 @@ def looking_for_attacked_tiles(game, coords_seq, player): # amd attacked tiles
                                 print(targetPiece)
                                 if targetPiece.tag == 'K':
                                     player.checks[base_coord] = [new_coord]
-                                looking_absolute_pins(game, multiplier=multiplier,
-                                                          singleMove=singleMove,
-                                                          inactive_player=player,
-                                                          occupied_tile=new_coord,
-                                                          attacker_coord=base_coord)
-                                break
-                            else:
+                            if scalable:
                                 looking_absolute_pins(game, multiplier=multiplier,
                                                       singleMove=singleMove,
                                                       inactive_player=player,
