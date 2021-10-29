@@ -1,16 +1,12 @@
 import pygame
-import logging
-from itertools import chain
-
 
 from data.chessboard import GameState
-from data.game_logic import selecting_piece, get_game_coord_from_mouse, handling_players_order, \
-    generating_all_moves_for_piece, looking_for_attacked_fields
-from data.graphic import drawing_board, drawing_pieces
-from data.settings import FPS
-from data.display_info import translate_to_chess_notation
-from data.players import Player
 from data.constants import GRID_SIZE
+from data.game_logic import selecting_piece, get_game_coord_from_mouse, handling_players_order, \
+    generating_all_moves_for_piece, looking_for_attacked_tiles
+from data.graphic import drawing_board, drawing_pieces
+from data.players import Player
+from data.settings import FPS
 
 pygame.init()
 
@@ -48,7 +44,6 @@ def checking_check(game, base_coord, base_piece, inactive_player):
     for coord in generating_all_moves_for_piece(game, base_piece, base_coord, base_piece.color):
         piece = game.board[coord[1]][coord[0]]
         if piece and piece.color != base_piece.color and piece.tag == 'K':
-            print('check')
             inactive_player.in_check = True
 
 
@@ -62,8 +57,8 @@ def main():
     drawing_board()
     drawing_pieces(game.board)
     '''Wywalic jak zbedne'''
-    active_player.all_attacked_tiles = \
-        looking_for_attacked_fields(game, coords_seq=coords_of_all_player_pieces(inactive_player.color))
+    # active_player.all_attacked_tiles = \
+    #     looking_for_attacked_tiles(game, coords_seq=coords_of_all_player_pieces(inactive_player.color), player=inactive_player)
     pygame.display.update()
     while run:
         refresh_flag = False
@@ -82,8 +77,7 @@ def main():
                 if piece_selected is None:
                     piece_selected = selecting_piece(game.board, coord, active_player.color)
                     if piece_selected is not None:
-                        possible_moves = generating_all_moves_for_piece(game, piece_selected, coord, active_player,
-                                                                        looking_pins=True)
+                        possible_moves = generating_all_moves_for_piece(game, piece_selected, coord, active_player)
                         # print('a:',active_player.absolute_pins.items(),'i:',inactive_player.absolute_pins.items())
                         if possible_moves:
                             refresh_flag = True  # zmienna do odswiezania ekranu
@@ -101,16 +95,34 @@ def main():
                     checking_check(game,coord,piece_selected, inactive_player)
                     drawing_board()
                     drawing_pieces(game.board)
-                    '''ZMIANA TUR'''
-                    active_player, inactive_player = handling_players_order(players_dict, player_order_list)
-                    """WYGENEROWANIE WSZYSTKICH ATAKOWANYCH POL"""
-                    active_player.all_attacked_tiles = \
-                        looking_for_attacked_fields(game, coords_seq=coords_of_all_player_pieces(inactive_player.color))
+
+                    'SZUKANIE SZACHÓW I ZWIAZAN'
+                    all_active_player_pieces_coords_LIST = coords_of_all_player_pieces(active_player.color)
+                    # looking_for_attacked_tiles sprawdza SZACHY i ZWIAZANIA
+                    active_player.all_attacked_tiles = looking_for_attacked_tiles(game,
+                                                                                  coords_seq=all_active_player_pieces_coords_LIST,
+                                                                                  player=inactive_player)
+                    # print(inactive_player.all_attacked_tiles)
+                    # print(inactive_player.absolute_pins, active_player.absolute_pins)
+                    # print(inactive_player.checks, active_player.checks)
                     #TODO dołączyć zwiazania do generowanych ruchów
-                    if active_player.in_check:
+                    if inactive_player.checks:
+                        print('check')
+                    else:
+                        active_player.in_check = False
                         # sprawdz czy inne figury maja ruch w zakresie attacked_fields powiazanych ze zwiazaniem
                         if not any_move_possible():# to przelamania szacha
-                            print('CHECKMATE')
+                            pass
+                            # print('CHECKMATE')
+
+                    '''ZMIANA TUR'''
+                    active_player, inactive_player = handling_players_order(players_dict, player_order_list)
+                    """WYGENEROWANIE WSZYSTKICH ATAKOWANYCH POL
+                    SZACHOW i ZWIAZAN"""
+
+
+
+
                     if any_move_possible() is False:
                         print('PAT')
                     piece_selected = None

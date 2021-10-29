@@ -21,23 +21,24 @@ def selecting_piece(board, coord, active_player):
         return piece
     return None
 
-def looking_for_absolute_pins(game, multiplier, singleMove, occupied_tile, base_coord, player):
+def looking_absolute_pins(game, singleMove, occupied_tile, attacker_coord, inactive_player, multiplier):
+    attacking_piece = game.board[attacker_coord[1]][attacker_coord[0]]
     for _multiplier in range(multiplier+1, GRID_SIZE):
-        new_coord = sum_directions(base_coord, multiply_direction(singleMove, _multiplier))
+        new_coord = sum_directions(attacker_coord, multiply_direction(singleMove, _multiplier))
         if max(new_coord)>7 or min(new_coord)<0:
             break
         targetPiece = game.board[new_coord[1]][new_coord[0]]
-        print(player)
         if targetPiece is None:
             continue
-        elif targetPiece.tag == 'K' and targetPiece.color != player.color :
-            player.absolute_pins[occupied_tile]=base_coord
+        elif targetPiece.tag == 'K' and targetPiece.color != attacking_piece.color :
+            inactive_player.absolute_pins[occupied_tile]=attacker_coord
+            print(inactive_player.absolute_pins)
             break
         else:
             break
 
 
-def looking_for_attacked_fields(game, coords_seq): # amd attacked tiles
+def looking_for_attacked_tiles(game, coords_seq, player): # amd attacked tiles
     attacked_tiles = set()
     for row, col in coords_seq:
         base_coord = (col,row)
@@ -60,18 +61,25 @@ def looking_for_attacked_fields(game, coords_seq): # amd attacked tiles
                             attacked_tiles.update([new_coord])
                         else:
                             if targetPiece.color != piece.color:
+                                if targetPiece.tag == 'K':
+                                    player.checks[base_coord] = [new_coord]
+                                looking_absolute_pins(game, multiplier=multiplier,
+                                                          singleMove=singleMove,
+                                                          inactive_player=player,
+                                                          occupied_tile=new_coord,
+                                                          attacker_coord=base_coord)
                                 # print('SET coord:','targer_coord:',new_coord, 'target:',targetPiece,'active:', piece)
-                                attacked_tiles.update([new_coord])
                                 break
-                            else:
-                                # print('SET same_color', new_coord,targetPiece, 'NEW COORD',piece )
-                                attacked_tiles.update([new_coord])
-                                break
+                            attacked_tiles.update([new_coord])
+                            # else:
+                            #     # print('SET same_color', new_coord,targetPiece, 'NEW COORD',piece )
+                            #     attacked_tiles.update([new_coord])
+                            #     break
         # print(attacked_tiles,'value to return')
     return attacked_tiles
 
 
-def generating_all_moves_for_piece(game, piece, base_coord, player, looking_pins=False):
+def generating_all_moves_for_piece(game, piece, base_coord, player=None, checks_pins=False):
     moves_list = {}
     for movePack in piece.movement:
         singleMove, scalable, conditionFunc, consequenceFunc = movePack
@@ -86,9 +94,10 @@ def generating_all_moves_for_piece(game, piece, base_coord, player, looking_pins
                 else:
                     if targetPiece.color != piece.color:
                         moves_list[new_coord] = consequenceFunc
-                        if looking_pins:
-                            looking_for_absolute_pins(game, multiplier, singleMove,
-                                                      player=player, occupied_tile=new_coord, base_coord=base_coord )
+                        '''DO WYWALENIA Z TĄD??'''
+                        if checks_pins:
+                            looking_absolute_pins(game, multiplier=multiplier, singleMove=singleMove,
+                                                  player=player, occupied_tile=new_coord, attacker_coord=base_coord)
                     break
             elif conditionFunc(game, piece, base_coord, new_coord):
                 moves_list[new_coord] = consequenceFunc
