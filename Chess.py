@@ -106,6 +106,8 @@ def main():
                     # print(inactive_player.absolute_pins, active_player.absolute_pins)
                     # print(inactive_player.checks, active_player.checks)
                     #TODO dołączyć zwiazania do generowanych ruchów
+                    print('CHECKS',inactive_player.checks)
+                    print('PINS',inactive_player.pins)
                     if inactive_player.checks:
                         print('check')
                     else:
