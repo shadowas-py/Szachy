@@ -21,3 +21,4 @@ class Player:
         self.checks = {}
         self.attacked_tiles_in_check = {}
         self.all_attacked_tiles = []
+
