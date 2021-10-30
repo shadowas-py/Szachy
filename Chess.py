@@ -108,6 +108,7 @@ def main():
                         coords_seq=active_player.pieces_coords,
                         player=inactive_player)
                     print('CHECKS',inactive_player.checks)
+                    print('in check', inactive_player.attacked_tiles_in_check)
                     print('PINS',inactive_player.pins)
                     print('in pin', inactive_player.attacked_tiles_in_pin)
 
@@ -118,10 +119,10 @@ def main():
 
                     '''SPRAWDZAM CZY JEST MOZLIWY RUCH'''
                     if active_player.checks:
-                        inactive_player.all_attacked_tiles
+                        active_player.pieces_coords = coords_of_all_player_pieces(active_player.color)
                         print('CHECK')
                         if any(inactive_player.all_attacked_tiles):
-                            print('NOT PAT')
+                            print('MOVE POSSIBLE')
                         else:
                             print('CHECKMATE')
                     else:

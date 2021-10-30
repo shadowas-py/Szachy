@@ -22,7 +22,7 @@ def selecting_piece(board, coord, active_player):
     return None
 
 def get_attacked_tiles(vector,start_coord,end_coord): #end_coord to krol
-    attacked_tiles = []
+    attacked_tiles = [start_coord]
     _multiplier = 1
     while end_coord != start_coord:
         start_coord = sum_directions(start_coord, multiply_direction(vector, _multiplier))
@@ -74,6 +74,10 @@ def looking_for_attacked_tiles(game, coords_seq, player): # amd attacked tiles
                             if targetPiece.color != piece.color:
                                 if targetPiece.tag == 'K':
                                     player.checks[base_coord] = [new_coord]
+                                    player.attacked_tiles_in_check[new_coord] = get_attacked_tiles(vector=singleMove,
+                                                                                     start_coord=base_coord,
+                                                                                     end_coord=new_coord)
+                                    print(player.attacked_tiles_in_check)
                             if scalable:
                                 looking_absolute_pins(game, multiplier=multiplier,
                                                       singleMove=singleMove,
