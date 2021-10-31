@@ -85,8 +85,9 @@ def looking_for_attacked_tiles(game, coords_seq, player): # amd attacked tiles
     return attacked_tiles
 
 
-def generating_all_moves_for_piece(game, piece, base_coord, player=None, checks_pins=False):
+def generating_all_moves_for_piece(game, piece, player=None, checks_pins=False):
     moves_list = {}
+    base_coord = piece.coord
     for movePack in piece.movement:
         singleMove, scalable, conditionFunc, consequenceFunc = movePack
         for multiplier in range(1, GRID_SIZE if scalable else 2):
@@ -107,7 +108,7 @@ def generating_all_moves_for_piece(game, piece, base_coord, player=None, checks_
                     break
             elif conditionFunc(game, piece, base_coord, new_coord):
                 moves_list[new_coord] = consequenceFunc
-    return moves_list
+    return moves_list if any(moves_list) else None
 
 def handling_players_order(players, player_order_list,*, player_tag = None):
     if player_tag:

@@ -17,16 +17,21 @@ class Player:
     def __init__(self, color):
         self.color = color
         self.time = ...
+
+        self.pieces = ...
+
         self.pins = {}  # attacker: defender
         self.attacked_tiles_in_pin = {}  # attacker: all tiles between attacker and enemy king
         self.checks = {}
         self.attacked_tiles_in_check = {}
+
         self.all_attacked_tiles = []
         self.all_possible_possible_moves = ...
 
-    def pieces_list(self, game):
-        for col in range(GRID_SIZE):
-            for row in range(GRID_SIZE):
-                if game.board[row][col] and game.board[row][col].color == self.color:
-                    yield game.board[row][col]
+
+
+
+
+
+
 

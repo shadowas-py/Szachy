@@ -29,26 +29,36 @@ def clear_player_data(player):
 
 
 
-def coords_of_all_player_pieces(player_tag):
-    pieces_coord_list = set()
-    # board_iter = chain(*game.board)
-    # for n, tile in enumerate(board_iter):
-    #     if tile and tile.color == player.color:
-    #         all_attacked_tiles.update(set(looking_for_absolute_pins(game, tile, coord, player)))
+# def coords_of_all_player_pieces(player_tag):
+#     pieces_coord_list = set()
+#     for col in range(GRID_SIZE):
+#         for row in range(GRID_SIZE):
+#             if game.board[row][col] and game.board[row][col].color == player_tag:
+#                 pieces_coord_list.update([(row,col)])
+#     return pieces_coord_list
+
+def all_possible_moves(game, player):
+    for piece in player.pieces_list:
+        print(piece,'test')
+
+'''DO PRZEROBIENIA'''
+def checking_check(game, piece_selected, inactive_player):
+    for coord in generating_all_moves_for_piece(game, piece_selected):
+        piece = game.board[coord[1]][coord[0]]
+        if piece and piece.color != piece_selected.color and piece.tag == 'K':
+            inactive_player.in_check = True
+
+def pieces_list(game, player):
     for col in range(GRID_SIZE):
         for row in range(GRID_SIZE):
-            if game.board[row][col] and game.board[row][col].color == player_tag:
-                pieces_coord_list.update([(row,col)])
-    return pieces_coord_list
+            if game.board[row][col] and game.board[row][col].color == player.color:
+                yield game.board[row][col]
 
-def any_move_possible():
-    pass
-
-def checking_check(game, base_coord, base_piece, inactive_player):
-    for coord in generating_all_moves_for_piece(game, base_piece, base_coord, base_piece.color):
-        piece = game.board[coord[1]][coord[0]]
-        if piece and piece.color != base_piece.color and piece.tag == 'K':
-            inactive_player.in_check = True
+def all_possible_player_moves(game, player):
+    moves_list = {}
+    for piece in player.pieces:
+        moves_list[piece.coord] = generating_all_moves_for_piece(game, piece)
+    return moves_list
 
 
 def main():
@@ -58,6 +68,11 @@ def main():
     coord_selected = None
     #TODO dodac licznik czasu dla kazdego gracza
     active_player, inactive_player = handling_players_order(players_dict, player_order_list, player_tag=game.nextMoveColor)
+    active_player.pieces = pieces_list(game, active_player)
+    inactive_player.pieces = pieces_list(game, inactive_player)
+    active_player.all_possible_possible_moves = all_possible_player_moves(game, active_player)
+    print(active_player.all_possible_possible_moves)
+    # print(all_possible_moves(game, active_player))
     drawing_board()
     drawing_pieces(game.board)
     '''Wywalic jak zbedne'''
@@ -78,6 +93,13 @@ def main():
                     coord_selected = None
                     piece_selected = None
                     break
+                '''DO PODMIANY'''
+                # if coord not in active_player.all_possible_possible_moves:
+                #         # and any(active_player.all_possible_possible_moves[coord]):
+                #     print(active_player.all_possible_possible_moves[coord])
+                #     # coord_selected = None
+                #     # piece_selected = None
+                #     # break
                 if piece_selected is None:
                     piece_selected = selecting_piece(game.board, coord, active_player.color)
                     if piece_selected is not None:
@@ -90,27 +112,27 @@ def main():
                         else:
                             piece_selected = None  # odznacza figury jak nie ma mozliwosci ruchu lub nieprawidlowy wybor
                 elif coord in possible_moves:  # Wchodzi jezeli jest mozliwosc ruchu dla zaznaczonej figury
-                    print(piece_selected.coord)
                     game.new_en_passant_coord = None
                     game.making_move((coord_selected, coord))
                     consequenceFunc = possible_moves[coord]
                     if consequenceFunc is not None:
                         consequenceFunc(game, piece_selected, coord_selected, coord)
                     game.en_passant_coord = game.new_en_passant_coord
-                    checking_check(game,coord,piece_selected, inactive_player)
+                    # checking_check(game, piece_selected, inactive_player)
                     drawing_board()
                     drawing_pieces(game.board)
 
-                    active_player.pieces_coords = coords_of_all_player_pieces(active_player.color)
+                    # active_player.pieces_coords = coords_of_all_player_pieces(active_player.color)
                     '''SZUKANIE SZACHÓW I ZWIAZAN'''
                     clear_player_data(active_player)
-                    active_player.all_attacked_tiles = \
-                        looking_for_attacked_tiles(game,
-                        coords_seq=active_player.pieces_coords,
-                        player=inactive_player)
-                    print('CHECKS',inactive_player.checks)
-                    print('PINS',inactive_player.pins)
-                    print('in pin', inactive_player.attacked_tiles_in_pin)
+                    '''DO PODMAINY'''
+                    # active_player.all_attacked_tiles = \
+                    #     looking_for_attacked_tiles(game,
+                    #     coords_seq=active_player.pieces_coords,
+                    #     player=inactive_player)
+                    # print('CHECKS',inactive_player.checks)
+                    # print('PINS',inactive_player.pins)
+                    # print('in pin', inactive_player.attacked_tiles_in_pin)
 
 
                     '''ZMIANA TUR'''
@@ -132,9 +154,9 @@ def main():
                         else:
                             print('PAT')
                         # sprawdz czy inne figury maja ruch w zakresie attacked_fields powiazanych ze zwiazaniem
-                        if not any_move_possible():# to przelamania szacha
-                            pass
-                            # print('CHECKMATE')
+                        # if not any_move_possible():# to przelamania szacha
+                        #     pass
+                        #     # print('CHECKMATE')
 
                     piece_selected = None
                     refresh_flag = True
