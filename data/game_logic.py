@@ -10,18 +10,13 @@ def get_game_coord_from_mouse():
     coord = ((mouse_pos[0] - BOARD_POSITION[1])//TILE_SIZE, (mouse_pos[1] - BOARD_POSITION[0])//TILE_SIZE)
     if max(BOARD_POSITION) <= min(mouse_pos) and max(mouse_pos) <= min(BOARD_END_POSITION):
         return coord
-    else:
-        return None
 
 
-def selecting_piece(board, coord, active_player):
-    row, col = coord
-    piece = board[col][row]
-    if piece is not None and piece.color == active_player:
-        return piece
-    return None
+def selecting_piece(board, coord, player):
+    if coord in player.all_possible_moves and any(player.all_possible_moves[coord]):
+        return board[coord[1]][coord[0]]
 
-def get_attacked_tiles(vector,start_coord,end_coord): #end_coord to krol
+def get_attacked_tiles(vector,start_coord,end_coord):  # end_coord to krol
     attacked_tiles = []
     _multiplier = 1
     while end_coord != start_coord:
@@ -54,7 +49,7 @@ def looking_absolute_pins(game, singleMove, occupied_tile, attacker_coord, inact
 def looking_for_attacked_tiles(game, coords_seq, player): # amd attacked tiles
     attacked_tiles = set()
     for row, col in coords_seq:
-        base_coord = (col,row)
+        base_coord = (col, row)
         piece = game.board[row][col]
         if piece.tag == 'P':
             for i in piece.attacked_fields(base_coord):
@@ -108,7 +103,7 @@ def generating_all_moves_for_piece(game, piece, player=None, checks_pins=False):
                     break
             elif conditionFunc(game, piece, base_coord, new_coord):
                 moves_list[new_coord] = consequenceFunc
-    return moves_list if any(moves_list) else None
+    return moves_list
 
 def handling_players_order(players, player_order_list,*, player_tag = None):
     if player_tag:

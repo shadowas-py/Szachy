@@ -2,8 +2,8 @@ import pygame
 
 from data.chessboard import GameState
 from data.constants import GRID_SIZE
-from data.game_logic import selecting_piece, get_game_coord_from_mouse, handling_players_order, \
-    generating_all_moves_for_piece, looking_for_attacked_tiles
+from data.game_logic import get_game_coord_from_mouse, handling_players_order, \
+    generating_all_moves_for_piece, looking_for_attacked_tiles, selecting_piece
 from data.graphic import drawing_board, drawing_pieces
 from data.players import Player
 from data.settings import FPS
@@ -12,8 +12,10 @@ pygame.init()
 
 # INITIZING INSTANCES OF IMPORTED CLASSES
 game = GameState()
-players_dict = {'player1' : Player(color='w'), 'player2' : Player(color='b')}
-player_order_list = list(sorted(players_dict.values(), key=lambda i:('w','b')))
+players_dict = {'player1': Player(color='w'), 'player2': Player(color='b')}
+player_order_list = list(sorted(players_dict.values(), key=lambda i: ('w', 'b')))
+
+
 # players = {'player1' : Player(color='w'), 'player2' : Player(color='b')}
 # # SETTINGS
 # pygame.display.set_caption('Szachy')
@@ -26,7 +28,7 @@ def clear_player_data(player):
     player.attacked_tiles_in_pin.clear()
     player.checks.clear()
     player.attacked_tiles_in_check.clear()
-
+    player.all_possible_moves.clear()
 
 
 # def coords_of_all_player_pieces(player_tag):
@@ -39,20 +41,25 @@ def clear_player_data(player):
 
 def all_possible_moves(game, player):
     for piece in player.pieces_list:
-        print(piece,'test')
+        print(piece, 'test')
+
 
 '''DO PRZEROBIENIA'''
+
+
 def checking_check(game, piece_selected, inactive_player):
     for coord in generating_all_moves_for_piece(game, piece_selected):
         piece = game.board[coord[1]][coord[0]]
         if piece and piece.color != piece_selected.color and piece.tag == 'K':
             inactive_player.in_check = True
 
+
 def pieces_list(game, player):
     for col in range(GRID_SIZE):
         for row in range(GRID_SIZE):
             if game.board[row][col] and game.board[row][col].color == player.color:
                 yield game.board[row][col]
+
 
 def all_possible_player_moves(game, player):
     moves_list = {}
@@ -66,13 +73,12 @@ def main():
     clock = pygame.time.Clock()
     piece_selected = None
     coord_selected = None
-    #TODO dodac licznik czasu dla kazdego gracza
-    active_player, inactive_player = handling_players_order(players_dict, player_order_list, player_tag=game.nextMoveColor)
+    # TODO dodac licznik czasu dla kazdego gracza
+    active_player, inactive_player = handling_players_order(players_dict, player_order_list,
+                                                            player_tag=game.nextMoveColor)
     active_player.pieces = pieces_list(game, active_player)
     inactive_player.pieces = pieces_list(game, inactive_player)
-    active_player.all_possible_possible_moves = all_possible_player_moves(game, active_player)
-    print(active_player.all_possible_possible_moves)
-    # print(all_possible_moves(game, active_player))
+    active_player.all_possible_moves = all_possible_player_moves(game, active_player)
     drawing_board()
     drawing_pieces(game.board)
     '''Wywalic jak zbedne'''
@@ -86,45 +92,33 @@ def main():
             if event.type == pygame.QUIT:
                 run = False
             if event.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed()[0]:  # LEFT MOUSE BUTTON
-                # active_player.absolute_pins.clear()
                 coord = get_game_coord_from_mouse()
-                # TODO dodać narzędzie zarządzające eventami kliknięć itp, na przyszłości do obsługi UI
-                if coord is None:  # Resetuje zaznaczenie jeżeli zaznaczy sie puste pole lub kliknie poza board
-                    coord_selected = None
-                    piece_selected = None
-                    break
-                '''DO PODMIANY'''
-                # if coord not in active_player.all_possible_possible_moves:
-                #         # and any(active_player.all_possible_possible_moves[coord]):
-                #     print(active_player.all_possible_possible_moves[coord])
-                #     # coord_selected = None
-                #     # piece_selected = None
-                #     # break
                 if piece_selected is None:
-                    piece_selected = selecting_piece(game.board, coord, active_player.color)
-                    if piece_selected is not None:
-                        possible_moves = generating_all_moves_for_piece(game, piece_selected, coord, active_player)
-                        # print('a:',active_player.absolute_pins.items(),'i:',inactive_player.absolute_pins.items())
-                        if possible_moves:
-                            refresh_flag = True  # zmienna do odswiezania ekranu
-                            coord_selected = coord  # zapisuje w pamieci koordynaty prawidlowo wybranej figury
+                    if piece_selected := selecting_piece(game.board, coord, active_player):
+                        if possible_moves := active_player.all_possible_moves[piece_selected.coord]:
+                            refresh_flag = True
+                            coord_selected = coord
                             # translate_to_chess_notation(possible_moves)
-                        else:
-                            piece_selected = None  # odznacza figury jak nie ma mozliwosci ruchu lub nieprawidlowy wybor
                 elif coord in possible_moves:  # Wchodzi jezeli jest mozliwosc ruchu dla zaznaczonej figury
                     game.new_en_passant_coord = None
+                    """WYKONYWANIE RUCHU"""
                     game.making_move((coord_selected, coord))
                     consequenceFunc = possible_moves[coord]
+                    piece_selected.coord = coord
                     if consequenceFunc is not None:
                         consequenceFunc(game, piece_selected, coord_selected, coord)
                     game.en_passant_coord = game.new_en_passant_coord
-                    # checking_check(game, piece_selected, inactive_player)
+                    checking_check(game, piece_selected, inactive_player)
                     drawing_board()
                     drawing_pieces(game.board)
+
+                    """GENEROWANIE RUCHOW DLA NASTEPNEGO GRACZA"""
+                    inactive_player.all_possible_moves = all_possible_player_moves(game, inactive_player)
 
                     # active_player.pieces_coords = coords_of_all_player_pieces(active_player.color)
                     '''SZUKANIE SZACHÓW I ZWIAZAN'''
                     clear_player_data(active_player)
+
                     '''DO PODMAINY'''
                     # active_player.all_attacked_tiles = \
                     #     looking_for_attacked_tiles(game,
@@ -134,14 +128,15 @@ def main():
                     # print('PINS',inactive_player.pins)
                     # print('in pin', inactive_player.attacked_tiles_in_pin)
 
-
                     '''ZMIANA TUR'''
                     active_player, inactive_player = handling_players_order(players_dict, player_order_list)
 
+                    active_player.pieces = pieces_list(game, active_player)
+                    inactive_player.pieces = pieces_list(game, inactive_player)
 
                     '''SPRAWDZAM CZY JEST MOZLIWY RUCH'''
                     if active_player.checks:
-                        inactive_player.all_attacked_tiles
+                        # inactive_player.all_attacked_tiles
                         print('CHECK')
                         if any(inactive_player.all_attacked_tiles):
                             print('NOT PAT')
@@ -161,19 +156,19 @@ def main():
                     piece_selected = None
                     refresh_flag = True
                 else:
-                    piece_selected = None
+                    coord_selected = get_game_coord_from_mouse()
+                    if piece_selected := selecting_piece(game.board, coord_selected, active_player):
+                        possible_moves = active_player.all_possible_moves[piece_selected.coord]
+
         if refresh_flag:
             pygame.display.update()
     pygame.quit()
 
 
-
-
-
 if __name__ == "__main__":
     main()
 
-#TODO
+# TODO
 # 1.attacked_fields nie zawieraja ruchów pionow do przodu trzeba by je dodac jak mam sprawdzac pata
 # 2.dodac logike wyszukiwania ruchu w przypadku szacha i szacha podwojnego
 # 3.W przypadku zwiazania ograniczyc generowanie ruchow dla zwiazanej figury
@@ -183,6 +178,7 @@ if __name__ == "__main__":
 # podswietlanie ostatnio wykonanego ruchu
 # dodac troche grafiki (wspolrzedne, tlo, ui)
 # ??? Czy pole króla tez liczyc jao pole atakowane
+# TODO dodać narzędzie zarządzające eventami kliknięć itp, na przyszłości do obsługi UI
 
 # later
 # 2.interfejs wyboru promowanej figury

@@ -26,7 +26,7 @@ class Player:
         self.attacked_tiles_in_check = {}
 
         self.all_attacked_tiles = []
-        self.all_possible_possible_moves = ...
+        self.all_possible_moves = ...
 
 
 
