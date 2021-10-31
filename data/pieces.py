@@ -5,6 +5,9 @@ from .constants import *
 class Piece:
     color = None
     tag = None
+    def __init__(self, coord):
+        self.coord = coord
+
 
     def __str__(self):
         return self.color + self.tag
@@ -13,10 +16,13 @@ class Piece:
         return '_'.join(['black' if self.color == 'b' else 'white', type(self).__name__.lower()])
 
 
+
+
 class Pawn(Piece):
     tag = 'P'
 
-    def __init__(self, color):
+    def __init__(self, color, coord):
+        super().__init__(coord)
         self.color = color
         self.direction = N if color == 'w' else S
         self.movement = list(map(lambda it: (it, False, _pawnDiagonalCondition, _pawnDiagonalConsequence), [(1, self.direction[1]), (-1, self.direction[1])]))
@@ -68,7 +74,8 @@ def pawn_promotion(player_color):
 class King(Piece):
     tag = 'K'
 
-    def __init__(self, color):
+    def __init__(self, color, coord):
+        super().__init__(coord)
         self.color = color
         self.movement = list(map(lambda it: (it, False, None, _kingMoveConsequence), rotations(N) + rotations(NE)))
         self.movement.append((WW, False, _castlingCondition, _castlingConsequence))
@@ -95,7 +102,8 @@ def _castlingConsequence(gameState, piece, coord, new_coord):
 class Rook(Piece):
     tag = 'R'
 
-    def __init__(self, color):
+    def __init__(self, color, coord):
+        super().__init__(coord)
         self.color = color
         self.movement = list(map(lambda it: (it, True, None, _rookMoveConsequence), rotations(N)))
 
@@ -106,7 +114,8 @@ def _rookMoveConsequence(gameState, piece, coord, new_coord):
 class Knight(Piece):
     tag = 'N'
 
-    def __init__(self, color):
+    def __init__(self, color, coord):
+        super().__init__(coord)
         self.color = color
         self.movement = list(map(lambda it: (it, False, None, None), rotations(NNE) + rotations(NNW)))
 
@@ -114,7 +123,8 @@ class Knight(Piece):
 class Bishop(Piece):
     tag = 'B'
 
-    def __init__(self, color):
+    def __init__(self, color, coord):
+        super().__init__(coord)
         self.color = color
         self.movement = list(map(lambda it: (it, True, None, None), rotations(NE)))
 
@@ -122,7 +132,8 @@ class Bishop(Piece):
 class Queen(Piece):
     tag = 'Q'
 
-    def __init__(self, color):
+    def __init__(self, color, coord):
+        super().__init__(coord)
         self.color = color
         self.movement = list(map(lambda it: (it, True, None, None), rotations(N) + rotations(NE)))
 

@@ -10,7 +10,10 @@ class GameState:
         with open(game_filepath, 'r') as file:
             self.nextMoveColor, *boardRowsText = file.read().split('\n')
         piecesClsDict = {pieceClass.tag: pieceClass for pieceClass in [Pawn, Rook, Knight, Bishop, Queen, King]}
-        self.board = [[None if tag == '' else piecesClsDict[tag[1]](tag[0]) for tag in row.split(',')] for row in boardRowsText]
+        self.board = [[None if tag == '' else
+                       piecesClsDict[tag[1]](tag[0], coord=(col, row))
+                       for col, tag in enumerate(line.split(','))]
+                      for row, line in enumerate(boardRowsText)]
         self.castling_flags = {'w_long': True, 'w_short': True, 'b_long': True, 'b_short': True}
         self.en_passant_coord = None
 

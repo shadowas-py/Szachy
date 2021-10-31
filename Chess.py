@@ -90,6 +90,7 @@ def main():
                         else:
                             piece_selected = None  # odznacza figury jak nie ma mozliwosci ruchu lub nieprawidlowy wybor
                 elif coord in possible_moves:  # Wchodzi jezeli jest mozliwosc ruchu dla zaznaczonej figury
+                    print(piece_selected.coord)
                     game.new_en_passant_coord = None
                     game.making_move((coord_selected, coord))
                     consequenceFunc = possible_moves[coord]
