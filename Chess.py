@@ -76,8 +76,8 @@ def main():
     # TODO dodac licznik czasu dla kazdego gracza
     active_player, inactive_player = handling_players_order(players_dict, player_order_list,
                                                             player_tag=game.nextMoveColor)
-    active_player.pieces = pieces_list(game, active_player)
-    inactive_player.pieces = pieces_list(game, inactive_player)
+    active_player.pieces = list(pieces_list(game, active_player))
+    inactive_player.pieces = list(pieces_list(game, inactive_player))
     active_player.all_possible_moves = all_possible_player_moves(game, active_player)
     drawing_board()
     drawing_pieces(game.board)
@@ -115,39 +115,43 @@ def main():
                     """GENEROWANIE RUCHOW DLA NASTEPNEGO GRACZA"""
                     inactive_player.all_possible_moves = all_possible_player_moves(game, inactive_player)
 
-                    # active_player.pieces_coords = coords_of_all_player_pieces(active_player.color)
-                    '''SZUKANIE SZACHÓW I ZWIAZAN'''
+                    '''CLEAR ACTIVE PLAYER DATA'''
                     clear_player_data(active_player)
 
-                    '''DO PODMAINY'''
-                    # active_player.all_attacked_tiles = \
-                    #     looking_for_attacked_tiles(game,
-                    #     coords_seq=active_player.pieces_coords,
-                    #     player=inactive_player)
-                    # print('CHECKS',inactive_player.checks)
-                    # print('PINS',inactive_player.pins)
+                    active_player.all_attacked_tiles = looking_for_attacked_tiles(game,
+                                                                                  player=active_player,
+                                                                                  inactive_player=inactive_player)
+                    # print(list(active_player.pieces))
+                    # print(inactive_player.all_attacked_tiles, 'all_attacked_tiles',active_player.all_attacked_tiles)
+                    print('CHECKS',inactive_player.checks, active_player.checks)
+                    print('inCHeck',inactive_player.attacked_tiles_in_check, active_player.attacked_tiles_in_check)
+                    print('PINS',inactive_player.pins, active_player.pins)
+                    print('inPin', inactive_player.attacked_tiles_in_pin, active_player.attacked_tiles_in_pin)
                     # print('in pin', inactive_player.attacked_tiles_in_pin)
 
+
+
+                    if inactive_player.checks:
+                        # inactive_player.all_attacked_tiles
+                        print('CHECK!!!')
+                    #     if any(inactive_player.all_attacked_tiles):
+                    #         print('NOT PAT')
+                    #     else:
+                    #         print('CHECKMATE')
+                    # else:
+                    #     # active_player.pieces_coords = coords_of_all_player_pieces(active_player.color)
+                    #     if any(inactive_player.all_attacked_tiles):
+                    #         print('NOT PAT')
+                    #     else:
+                    #         print('PAT')
                     '''ZMIANA TUR'''
                     active_player, inactive_player = handling_players_order(players_dict, player_order_list)
 
-                    active_player.pieces = pieces_list(game, active_player)
-                    inactive_player.pieces = pieces_list(game, inactive_player)
+                    # active_player.pieces = pieces_list(game, active_player)
+                    # inactive_player.pieces = pieces_list(game, inactive_player)
 
                     '''SPRAWDZAM CZY JEST MOZLIWY RUCH'''
-                    if active_player.checks:
-                        # inactive_player.all_attacked_tiles
-                        print('CHECK')
-                        if any(inactive_player.all_attacked_tiles):
-                            print('NOT PAT')
-                        else:
-                            print('CHECKMATE')
-                    else:
-                        # active_player.pieces_coords = coords_of_all_player_pieces(active_player.color)
-                        if any(inactive_player.all_attacked_tiles):
-                            print('NOT PAT')
-                        else:
-                            print('PAT')
+
                         # sprawdz czy inne figury maja ruch w zakresie attacked_fields powiazanych ze zwiazaniem
                         # if not any_move_possible():# to przelamania szacha
                         #     pass
@@ -169,7 +173,6 @@ if __name__ == "__main__":
     main()
 
 # TODO
-# 1.attacked_fields nie zawieraja ruchów pionow do przodu trzeba by je dodac jak mam sprawdzac pata
 # 2.dodac logike wyszukiwania ruchu w przypadku szacha i szacha podwojnego
 # 3.W przypadku zwiazania ograniczyc generowanie ruchow dla zwiazanej figury
 # 4.Wykrywanie pata i mata
