@@ -78,11 +78,17 @@ def looking_for_attacked_tiles(game, player, inactive_player):  # amd attacked t
                                                       attacking_piece=piece)
                             attacked_tiles.update([new_coord])
                             break
-    print('player_checks', player.checks)
     return attacked_tiles
 
+def validating_moves_in_check(coords, allowed_coords):
+    coord_set = set()
+    for coord in coords:
+        if coord[0] in allowed_coords.values():
+            coord_set.update([[coord][0]])
+    return
 
-def generating_all_moves_for_piece(game, piece, player=None, checks_pins=False):
+
+def generating_all_moves_for_piece(game, piece, inactive_player=None, check=False, pin=False):
     moves_list = {}
     base_coord = piece.coord
     for movePack in piece.movement:
@@ -105,6 +111,9 @@ def generating_all_moves_for_piece(game, piece, player=None, checks_pins=False):
                     break
             elif conditionFunc(game, piece, base_coord, new_coord):
                 moves_list[new_coord] = consequenceFunc
+    if check:
+        print('in checklist')
+        moves_list = validating_moves_in_check(moves_list, inactive_player.attacked_tiles_in_check)
     return moves_list
 
 

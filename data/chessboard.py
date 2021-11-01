@@ -1,5 +1,4 @@
 from data.constants import N, W, E, S, GRID_SIZE
-from data.pieces import Pawn, Rook, Knight, Bishop, Queen, King
 from data.functions import sum_directions, multiply_direction
 from data.pieces import Pawn, Rook, Knight, Bishop, Queen, King
 
@@ -21,6 +20,8 @@ class GameState:
     def making_move(self, shift):
         self.board[shift[1][1]][shift[1][0]] = self.board[shift[0][1]][shift[0][0]]
         self.board[shift[0][1]][shift[0][0]] = None
+
+
 
     def __str__(self):
         return '\n'.join([' '.join(map(lambda x: '  ' if x is None else str(x), boardRow)) for boardRow in self.board])

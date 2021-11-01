@@ -22,7 +22,6 @@ player_order_list = list(sorted(players_dict.values(), key=lambda i: ('w', 'b'))
 # logging.basicConfig(filename='logs.log', level=logging.DEBUG,
 #                     format='%(asctime)s,:%(levelname)s:%(module)s:,%(message)s')
 
-
 def clear_player_data(player):
     player.pins.clear()
     player.attacked_tiles_in_pin.clear()
@@ -61,10 +60,13 @@ def pieces_list(game, player):
                 yield game.board[row][col]
 
 
-def all_possible_player_moves(game, player):
+def all_possible_player_moves(game, active_player, inactive_player, pin=False):
     moves_list = {}
-    for piece in player.pieces:
-        moves_list[piece.coord] = generating_all_moves_for_piece(game, piece)
+    for piece in active_player.pieces:
+        moves_list[piece.coord] = generating_all_moves_for_piece(game, piece,
+                                                                 inactive_player=inactive_player,
+                                                                 check=bool(inactive_player.checks),
+                                                                 pin=pin)
     return moves_list
 
 
@@ -78,7 +80,7 @@ def main():
                                                             player_tag=game.nextMoveColor)
     active_player.pieces = list(pieces_list(game, active_player))
     inactive_player.pieces = list(pieces_list(game, inactive_player))
-    active_player.all_possible_moves = all_possible_player_moves(game, active_player)
+    active_player.all_possible_moves = all_possible_player_moves(game, active_player, inactive_player)
     drawing_board()
     drawing_pieces(game.board)
     '''Wywalic jak zbedne'''
@@ -111,39 +113,28 @@ def main():
                     checking_check(game, piece_selected, inactive_player)
                     drawing_board()
                     drawing_pieces(game.board)
-
-                    """GENEROWANIE RUCHOW DLA NASTEPNEGO GRACZA"""
-                    inactive_player.all_possible_moves = all_possible_player_moves(game, inactive_player)
-
                     '''CLEAR ACTIVE PLAYER DATA'''
                     clear_player_data(active_player)
 
+                    '''SZUKANIE ZWIAZAN I SZACHOWANYCH POL'''
                     active_player.all_attacked_tiles = looking_for_attacked_tiles(game,
                                                                                   player=active_player,
                                                                                   inactive_player=inactive_player)
+                    """GENEROWANIE RUCHOW DLA NASTEPNEGO GRACZA"""
+                    inactive_player.all_possible_moves = all_possible_player_moves(game,
+                                                                                   active_player=inactive_player,
+                                                                                   inactive_player=active_player)
+
+                    print(inactive_player.all_possible_moves)
+
                     # print(list(active_player.pieces))
                     # print(inactive_player.all_attacked_tiles, 'all_attacked_tiles',active_player.all_attacked_tiles)
-                    print('CHECKS',inactive_player.checks, active_player.checks)
-                    print('inCHeck',inactive_player.attacked_tiles_in_check, active_player.attacked_tiles_in_check)
-                    print('PINS',inactive_player.pins, active_player.pins)
-                    print('inPin', inactive_player.attacked_tiles_in_pin, active_player.attacked_tiles_in_pin)
+                    # print('CHECKS', inactive_player.checks, active_player.checks)
+                    # print('inCHeck', inactive_player.attacked_tiles_in_check, active_player.attacked_tiles_in_check)
+                    # print('PINS', inactive_player.pins, active_player.pins)
+                    # print('inPin', inactive_player.attacked_tiles_in_pin, active_player.attacked_tiles_in_pin)
                     # print('in pin', inactive_player.attacked_tiles_in_pin)
 
-
-
-                    if inactive_player.checks:
-                        # inactive_player.all_attacked_tiles
-                        print('CHECK!!!')
-                    #     if any(inactive_player.all_attacked_tiles):
-                    #         print('NOT PAT')
-                    #     else:
-                    #         print('CHECKMATE')
-                    # else:
-                    #     # active_player.pieces_coords = coords_of_all_player_pieces(active_player.color)
-                    #     if any(inactive_player.all_attacked_tiles):
-                    #         print('NOT PAT')
-                    #     else:
-                    #         print('PAT')
                     '''ZMIANA TUR'''
                     active_player, inactive_player = handling_players_order(players_dict, player_order_list)
 
@@ -152,10 +143,10 @@ def main():
 
                     '''SPRAWDZAM CZY JEST MOZLIWY RUCH'''
 
-                        # sprawdz czy inne figury maja ruch w zakresie attacked_fields powiazanych ze zwiazaniem
-                        # if not any_move_possible():# to przelamania szacha
-                        #     pass
-                        #     # print('CHECKMATE')
+                    # sprawdz czy inne figury maja ruch w zakresie attacked_fields powiazanych ze zwiazaniem
+                    # if not any_move_possible():# to przelamania szacha
+                    #     pass
+                    #     # print('CHECKMATE')
 
                     piece_selected = None
                     refresh_flag = True
