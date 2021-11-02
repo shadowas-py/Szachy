@@ -41,7 +41,9 @@ def all_possible_player_moves(game, active_player, inactive_player, pin=False):
     for piece in active_player.pieces:
         moves_list[piece.coord] = generating_all_moves_for_piece(game, piece,
                                                                  inactive_player=active_player,
-                                                                 check=any(inactive_player.checks))
+                                                                 active_player=inactive_player,
+                                                                 check=any(active_player.checks),
+                                                                 active_player=inactive_player)
     return moves_list
 
 
@@ -90,28 +92,31 @@ def main():
                     '''CZYSZCZENIE ZWIAZAN I SZACHOWANYCH POL'''
                     active_player.clear_checks_and_pins()
 
+
                     '''SZUKANIE ZWIAZAN I SZACHOWANYCH POL'''
                     active_player.all_attacked_tiles = looking_for_attacked_tiles(game,
-                                                                                  player=active_player,
+                                                                                  active_player=active_player,
                                                                                   inactive_player=inactive_player)
 
-                    '''GENEROWANIE RUCHOW DLA NASTEPNEGO GRACZA'''
-                    inactive_player.all_possible_moves = all_possible_player_moves(game,
-                                                                                   active_player=inactive_player,
-                                                                                   inactive_player=active_player)
-
-
                     '''ZMIANA TUR'''
+
                     active_player, inactive_player = handling_players_order(players_dict, player_order_list)
+
+                    print('CHECKS', inactive_player.checks,'A',active_player.checks)
+                    print('inCHeck', inactive_player.attacked_tiles_in_check, 'A',active_player.attacked_tiles_in_check)
+                    print('PINS', inactive_player.pins, 'A',active_player.pins)
+
+                    '''GENEROWANIE RUCHOW DLA KOLEJNEGO GRACZA'''
+                    active_player.all_possible_moves = all_possible_player_moves(game,
+                                                                                 active_player=active_player,
+                                                                                 inactive_player=inactive_player)
 
 
 
                     '''SPRAWDZAM WARUNKI WYGRANEJ'''
                     game.move_counter+=1
                     # print('test',game.move_counter)
-                    # print('CHECKS', inactive_player.checks, active_player.checks)
-                    # print('inCHeck', inactive_player.attacked_tiles_in_check, active_player.attacked_tiles_in_check)
-                    # print('PINS', inactive_player.pins, active_player.pins)
+
                     # if active_player.checks and not inactive_player.all_possible_moves:
                     #     print(f'Wygrał gracz {active_player.color} w {game.move_counter} ruchach')
                     # elif any (inactive_player.all_possible_moves):

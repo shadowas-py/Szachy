@@ -44,9 +44,9 @@ def looking_absolute_pins(game, singleMove, occupied_coord, attacking_piece, ina
             break
 
 
-def looking_for_attacked_tiles(game, player, inactive_player):
+def looking_for_attacked_tiles(game, active_player, inactive_player):
     attacked_tiles = set()
-    for piece in player.pieces:
+    for piece in active_player.pieces:
         if piece.tag == 'P':
             for i in piece.attacked_fields(piece.coord):
                 attacked_tiles.update([i])
@@ -67,7 +67,7 @@ def looking_for_attacked_tiles(game, player, inactive_player):
                                     vector=singleMove,
                                     start_coord=piece.coord,
                                     end_coord=new_coord)
-                                player.checks[piece.coord] = tiles[:-1]#FIXME zdebugowac bo cos chyba pomieszane
+                                inactive_player.checks[piece.coord] = tiles[:-1]
                             elif scalable:
                                 looking_absolute_pins(game, multiplier=multiplier,
                                                       singleMove=singleMove,
@@ -78,22 +78,14 @@ def looking_for_attacked_tiles(game, player, inactive_player):
                             break
     return attacked_tiles
 
-def validating_moves(moves_list, allowed_coords, piece):
-    print(moves_list, 'in validating moves')
-    # if piece.tag == 'K':
-    #     for coord in list(moves_list):
-    #         print('in King')
-    #         if coord in allowed_coords:
-    #             moves_list.pop(coord)
-    # else:
+def validating_moves(moves_list, allowed_coords):
     for coord in list(moves_list):
-        print(coord,'coord', allowed_coords,'allowed')
         if coord not in allowed_coords:
             moves_list.pop(coord)
     return moves_list
 
 
-def generating_all_moves_for_piece(game, piece, inactive_player=None, check=False, pin=False):
+def generating_all_moves_for_piece(game, piece, inactive_player=None, check=False, active_player=None):
     moves_list = {}
     if check and inactive_player.pins and piece.coord in inactive_player.pins.keys():
         return moves_list
@@ -114,13 +106,15 @@ def generating_all_moves_for_piece(game, piece, inactive_player=None, check=Fals
             elif conditionFunc(game, piece, piece.coord, new_coord):
                 moves_list[new_coord] = consequenceFunc
     if check:
-        print('check')
+        print('CHECK')
         if piece.tag == 'K':
-            pass
+            print('CHECK')
+            print(active_player.all_attacked_tiles)
+            moves_list = {k : moves_list[k] for k in set(moves_list) - set(active_player.all_attacked_tiles) }
         else:
-            moves_list = validating_moves(moves_list, inactive_player.checks, piece)
+            moves_list = validating_moves(moves_list, *inactive_player.checks.values())
     if inactive_player.pins and piece.coord in inactive_player.pins.keys():
-        moves_list = validating_moves(moves_list, inactive_player.pins[piece.coord], piece)
+        moves_list = validating_moves(moves_list, inactive_player.pins[piece.coord])
     return moves_list
 
 
