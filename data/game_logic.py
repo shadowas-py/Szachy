@@ -66,7 +66,7 @@ def looking_for_attacked_tiles(game, player, inactive_player):  # amd attacked t
                             if targetPiece.color != piece.color and targetPiece.tag == 'K':
                                 print('Zapisuje Szacha')
                                 player.checks[piece.coord] = [new_coord]
-                                player.attacked_tiles_in_check[new_coord] = get_attacked_tiles(
+                                player.attacked_tiles_in_check = get_attacked_tiles(
                                     vector=singleMove,
                                     start_coord=piece.coord,
                                     end_coord=new_coord)
@@ -80,12 +80,16 @@ def looking_for_attacked_tiles(game, player, inactive_player):  # amd attacked t
                             break
     return attacked_tiles
 
-def validating_moves_in_check(coords, allowed_coords):
-    coord_set = set()
-    for coord in coords:
-        if coord[0] in allowed_coords.values():
-            coord_set.update([[coord][0]])
-    return
+def validating_moves_in_check(moves_list, allowed_coords, piece):
+    if piece.tag == 'K':
+        for coord in list(moves_list):
+            if coord in allowed_coords:
+                moves_list.pop(coord)
+    else:
+        for coord in list(moves_list):
+            if coord not in allowed_coords:
+                moves_list.pop(coord)
+    return moves_list
 
 
 def generating_all_moves_for_piece(game, piece, inactive_player=None, check=False, pin=False):
@@ -112,8 +116,7 @@ def generating_all_moves_for_piece(game, piece, inactive_player=None, check=Fals
             elif conditionFunc(game, piece, base_coord, new_coord):
                 moves_list[new_coord] = consequenceFunc
     if check:
-        print('in checklist')
-        moves_list = validating_moves_in_check(moves_list, inactive_player.attacked_tiles_in_check)
+        moves_list = validating_moves_in_check(moves_list, inactive_player.attacked_tiles_in_check, piece)
     return moves_list
 
 

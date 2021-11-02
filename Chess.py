@@ -65,7 +65,7 @@ def all_possible_player_moves(game, active_player, inactive_player, pin=False):
     for piece in active_player.pieces:
         moves_list[piece.coord] = generating_all_moves_for_piece(game, piece,
                                                                  inactive_player=inactive_player,
-                                                                 check=bool(inactive_player.checks),
+                                                                 check=any(inactive_player.checks),
                                                                  pin=pin)
     return moves_list
 
@@ -125,7 +125,7 @@ def main():
                                                                                    active_player=inactive_player,
                                                                                    inactive_player=active_player)
 
-                    print(inactive_player.all_possible_moves)
+                    # print(inactive_player.all_possible_moves)
 
                     # print(list(active_player.pieces))
                     # print(inactive_player.all_attacked_tiles, 'all_attacked_tiles',active_player.all_attacked_tiles)
