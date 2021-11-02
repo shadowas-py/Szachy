@@ -10,36 +10,13 @@ from data.settings import FPS
 
 pygame.init()
 
-# INITIZING INSTANCES OF IMPORTED CLASSES
+# SETTING INSTANCES OF IMPORTED CLASSES
 game = GameState()
 players_dict = {'player1': Player(color='w'), 'player2': Player(color='b')}
 player_order_list = list(sorted(players_dict.values(), key=lambda i: ('w', 'b')))
 
 
-# players = {'player1' : Player(color='w'), 'player2' : Player(color='b')}
-# # SETTINGS
-# pygame.display.set_caption('Szachy')
-# logging.basicConfig(filename='logs.log', level=logging.DEBUG,
-#                     format='%(asctime)s,:%(levelname)s:%(module)s:,%(message)s')
 
-def clear_player_data(player):
-    player.pins.clear()
-    player.checks.clear()
-    player.attacked_tiles_in_check.clear()
-    player.all_possible_moves.clear()
-
-
-# def coords_of_all_player_pieces(player_tag):
-#     pieces_coord_list = set()
-#     for col in range(GRID_SIZE):
-#         for row in range(GRID_SIZE):
-#             if game.board[row][col] and game.board[row][col].color == player_tag:
-#                 pieces_coord_list.update([(row,col)])
-#     return pieces_coord_list
-
-def all_possible_moves(game, player):
-    for piece in player.pieces_list:
-        print(piece, 'test')
 
 
 '''DO PRZEROBIENIA'''
@@ -107,42 +84,38 @@ def main():
                     if consequenceFunc is not None:
                         consequenceFunc(game, piece_selected, coord_selected, coord)
                     game.en_passant_coord = game.new_en_passant_coord
-                    # checking_check(game, piece_selected, inactive_player)
                     drawing_board()
                     drawing_pieces(game.board)
-                    '''CLEAR ACTIVE PLAYER DATA'''
-                    clear_player_data(active_player)
+
+                    '''CZYSZCZENIE ZWIAZAN I SZACHOWANYCH POL'''
+                    active_player.clear_checks_and_pins()
 
                     '''SZUKANIE ZWIAZAN I SZACHOWANYCH POL'''
                     active_player.all_attacked_tiles = looking_for_attacked_tiles(game,
                                                                                   player=active_player,
                                                                                   inactive_player=inactive_player)
-                    """GENEROWANIE RUCHOW DLA NASTEPNEGO GRACZA"""
+
+                    '''GENEROWANIE RUCHOW DLA NASTEPNEGO GRACZA'''
                     inactive_player.all_possible_moves = all_possible_player_moves(game,
                                                                                    active_player=inactive_player,
                                                                                    inactive_player=active_player)
 
-                    # print(inactive_player.all_possible_moves)
-
-                    # print(list(active_player.pieces))
-                    # print(inactive_player.all_attacked_tiles, 'all_attacked_tiles',active_player.all_attacked_tiles)
-                    print('CHECKS', inactive_player.checks, active_player.checks)
-                    print('inCHeck', inactive_player.attacked_tiles_in_check, active_player.attacked_tiles_in_check)
-                    print('PINS', inactive_player.pins, active_player.pins)
-                    # print('in pin', inactive_player.attacked_tiles_in_pin)
 
                     '''ZMIANA TUR'''
                     active_player, inactive_player = handling_players_order(players_dict, player_order_list)
 
-                    # active_player.pieces = pieces_list(game, active_player)
-                    # inactive_player.pieces = pieces_list(game, inactive_player)
 
-                    '''SPRAWDZAM CZY JEST MOZLIWY RUCH'''
 
-                    # sprawdz czy inne figury maja ruch w zakresie attacked_fields powiazanych ze zwiazaniem
-                    # if not any_move_possible():# to przelamania szacha
-                    #     pass
-                    #     # print('CHECKMATE')
+                    '''SPRAWDZAM WARUNKI WYGRANEJ'''
+                    game.move_counter+=1
+                    # print('test',game.move_counter)
+                    # print('CHECKS', inactive_player.checks, active_player.checks)
+                    # print('inCHeck', inactive_player.attacked_tiles_in_check, active_player.attacked_tiles_in_check)
+                    # print('PINS', inactive_player.pins, active_player.pins)
+                    # if active_player.checks and not inactive_player.all_possible_moves:
+                    #     print(f'Wygrał gracz {active_player.color} w {game.move_counter} ruchach')
+                    # elif any (inactive_player.all_possible_moves):
+                    #     print('PAT')
 
                     piece_selected = None
                     refresh_flag = True

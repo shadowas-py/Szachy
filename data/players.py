@@ -11,7 +11,10 @@ class Player:
         self.attacked_tiles_in_check = {}
 
         self.all_attacked_tiles = []
-        self.all_possible_moves = ...
+        self.all_possible_moves = []
+
+    def clear_checks_and_pins(self):
+        self.pins.clear(); self.checks.clear(); self.attacked_tiles_in_check.clear(); self.all_possible_moves.clear()
 
 
 

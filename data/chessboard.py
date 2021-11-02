@@ -15,6 +15,7 @@ class GameState:
                       for row, line in enumerate(boardRowsText)]
         self.castling_flags = {'w_long': True, 'w_short': True, 'b_long': True, 'b_short': True}
         self.en_passant_coord = None
+        self.move_counter = 0
 
 
     def making_move(self, shift):
