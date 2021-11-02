@@ -36,17 +36,16 @@ def looking_absolute_pins(game, singleMove, occupied_coord, attacking_piece, ina
         if newPiece is None:
             continue
         elif newPiece.tag == 'K' and newPiece.color != attacking_piece.color:
-            inactive_player.pins[occupied_coord] = attacking_piece.coord
-            inactive_player.attacked_tiles_in_pin[attacking_piece.coord] = \
-            get_attacked_tiles(vector=singleMove,
-                               start_coord=attacking_piece.coord,
-                            end_coord=sum_directions(attacking_piece.coord, multiply_direction(singleMove, _multiplier-1)))
+            inactive_player.pins[occupied_coord] = get_attacked_tiles(vector=singleMove,
+                                                                      start_coord=attacking_piece.coord,
+                                                                      end_coord=sum_directions(
+                                                                          attacking_piece.coord,
+                                                                          multiply_direction(singleMove, _multiplier-1)))
             break
 
 
-def looking_for_attacked_tiles(game, player, inactive_player):  # amd attacked tiles
+def looking_for_attacked_tiles(game, player, inactive_player):
     attacked_tiles = set()
-
     for piece in player.pieces:
         if piece.tag == 'P':
             for i in piece.attacked_fields(piece.coord):
@@ -64,7 +63,6 @@ def looking_for_attacked_tiles(game, player, inactive_player):  # amd attacked t
                             attacked_tiles.update([new_coord])
                         else:
                             if targetPiece.color != piece.color and targetPiece.tag == 'K':
-                                print('Zapisuje Szacha')
                                 player.checks[piece.coord] = [new_coord]
                                 player.attacked_tiles_in_check = get_attacked_tiles(
                                     vector=singleMove,
@@ -80,7 +78,7 @@ def looking_for_attacked_tiles(game, player, inactive_player):  # amd attacked t
                             break
     return attacked_tiles
 
-def validating_moves_in_check(moves_list, allowed_coords, piece):
+def validating_moves(moves_list, allowed_coords, piece):
     if piece.tag == 'K':
         for coord in list(moves_list):
             if coord in allowed_coords:
@@ -94,11 +92,12 @@ def validating_moves_in_check(moves_list, allowed_coords, piece):
 
 def generating_all_moves_for_piece(game, piece, inactive_player=None, check=False, pin=False):
     moves_list = {}
-    base_coord = piece.coord
+    if check and inactive_player.pins and piece.coord in inactive_player.pins.keys():
+        return moves_list
     for movePack in piece.movement:
         singleMove, scalable, conditionFunc, consequenceFunc = movePack
         for multiplier in range(1, GRID_SIZE if scalable else 2):
-            new_coord = sum_directions(base_coord, multiply_direction(singleMove, multiplier))
+            new_coord = sum_directions(piece.coord, multiply_direction(singleMove, multiplier))
             if min(new_coord) < 0 or max(new_coord) >= GRID_SIZE:
                 break
             elif conditionFunc is None:
@@ -108,15 +107,13 @@ def generating_all_moves_for_piece(game, piece, inactive_player=None, check=Fals
                 else:
                     if targetPiece.color != piece.color:
                         moves_list[new_coord] = consequenceFunc
-                        # '''DO WYWALENIA Z TĄD??'''
-                        # if checks_pins:
-                        #     looking_absolute_pins(game, multiplier=multiplier, singleMove=singleMove,
-                        #                           player=player, occupied_tile=new_coord, attacker_coord=base_coord)
                     break
-            elif conditionFunc(game, piece, base_coord, new_coord):
+            elif conditionFunc(game, piece, piece.coord, new_coord):
                 moves_list[new_coord] = consequenceFunc
     if check:
-        moves_list = validating_moves_in_check(moves_list, inactive_player.attacked_tiles_in_check, piece)
+        moves_list = validating_moves(moves_list, inactive_player.attacked_tiles_in_check, piece)
+    if inactive_player.pins and piece.coord in inactive_player.pins.keys():
+        moves_list = validating_moves(moves_list, inactive_player.pins[piece.coord], piece)
     return moves_list
 
 

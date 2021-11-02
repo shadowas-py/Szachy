@@ -24,7 +24,6 @@ player_order_list = list(sorted(players_dict.values(), key=lambda i: ('w', 'b'))
 
 def clear_player_data(player):
     player.pins.clear()
-    player.attacked_tiles_in_pin.clear()
     player.checks.clear()
     player.attacked_tiles_in_check.clear()
     player.all_possible_moves.clear()
@@ -46,11 +45,11 @@ def all_possible_moves(game, player):
 '''DO PRZEROBIENIA'''
 
 
-def checking_check(game, piece_selected, inactive_player):
-    for coord in generating_all_moves_for_piece(game, piece_selected):
-        piece = game.board[coord[1]][coord[0]]
-        if piece and piece.color != piece_selected.color and piece.tag == 'K':
-            inactive_player.in_check = True
+# def checking_check(game, piece_selected, inactive_player):
+#     for coord in generating_all_moves_for_piece(game, piece_selected):
+#         piece = game.board[coord[1]][coord[0]]
+#         if piece and piece.color != piece_selected.color and piece.tag == 'K':
+#             inactive_player.in_check = True
 
 
 def pieces_list(game, player):
@@ -64,9 +63,8 @@ def all_possible_player_moves(game, active_player, inactive_player, pin=False):
     moves_list = {}
     for piece in active_player.pieces:
         moves_list[piece.coord] = generating_all_moves_for_piece(game, piece,
-                                                                 inactive_player=inactive_player,
-                                                                 check=any(inactive_player.checks),
-                                                                 pin=pin)
+                                                                 inactive_player=active_player,
+                                                                 check=any(inactive_player.checks))
     return moves_list
 
 
@@ -75,7 +73,6 @@ def main():
     clock = pygame.time.Clock()
     piece_selected = None
     coord_selected = None
-    # TODO dodac licznik czasu dla kazdego gracza
     active_player, inactive_player = handling_players_order(players_dict, player_order_list,
                                                             player_tag=game.nextMoveColor)
     active_player.pieces = list(pieces_list(game, active_player))
@@ -110,7 +107,7 @@ def main():
                     if consequenceFunc is not None:
                         consequenceFunc(game, piece_selected, coord_selected, coord)
                     game.en_passant_coord = game.new_en_passant_coord
-                    checking_check(game, piece_selected, inactive_player)
+                    # checking_check(game, piece_selected, inactive_player)
                     drawing_board()
                     drawing_pieces(game.board)
                     '''CLEAR ACTIVE PLAYER DATA'''
@@ -129,10 +126,9 @@ def main():
 
                     # print(list(active_player.pieces))
                     # print(inactive_player.all_attacked_tiles, 'all_attacked_tiles',active_player.all_attacked_tiles)
-                    # print('CHECKS', inactive_player.checks, active_player.checks)
-                    # print('inCHeck', inactive_player.attacked_tiles_in_check, active_player.attacked_tiles_in_check)
-                    # print('PINS', inactive_player.pins, active_player.pins)
-                    # print('inPin', inactive_player.attacked_tiles_in_pin, active_player.attacked_tiles_in_pin)
+                    print('CHECKS', inactive_player.checks, active_player.checks)
+                    print('inCHeck', inactive_player.attacked_tiles_in_check, active_player.attacked_tiles_in_check)
+                    print('PINS', inactive_player.pins, active_player.pins)
                     # print('in pin', inactive_player.attacked_tiles_in_pin)
 
                     '''ZMIANA TUR'''
@@ -167,6 +163,7 @@ if __name__ == "__main__":
 # 2.dodac logike wyszukiwania ruchu w przypadku szacha i szacha podwojnego
 # 3.W przypadku zwiazania ograniczyc generowanie ruchow dla zwiazanej figury
 # 4.Wykrywanie pata i mata
+# 5.Dodac czas dla graczy
 # - podswietlanie atakowanych pol i ew zwiazan
 # podswietlanie wybranej bierki
 # podswietlanie ostatnio wykonanego ruchu
