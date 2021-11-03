@@ -54,7 +54,7 @@ def main():
                     consequenceFunc = possible_moves[coord]
                     piece_selected.coord = coord
                     if consequenceFunc is not None:
-                        consequenceFunc(game, piece_selected, coord_selected, coord)
+                        consequenceFunc(game, piece_selected, coord_selected, coord, player=active_player)
                     game.en_passant_coord = game.new_en_passant_coord
                     game.move_counter+=1
 

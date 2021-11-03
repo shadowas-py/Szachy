@@ -45,19 +45,22 @@ def _pawnDiagonalCondition(gameState, piece, new_coord, attacked_tiles):
         new_coord[0]].color != piece.color) or gameState.en_passant_coord == new_coord
 
 
-def _pawnDiagonalConsequence(gameState, piece, coord, new_coord):
+def _pawnDiagonalConsequence(gameState, piece, coord, new_coord, player):
     if gameState.en_passant_coord == new_coord:
         gameState.board[coord[1]][new_coord[0]] = None
-    _pawnForwardConsequence(gameState, piece, coord, new_coord)
+    _pawnForwardConsequence(gameState, piece, coord, new_coord, player)
 
 
 def _pawnForwardCondition(gameState, piece, new_coord, attacked_tiles):
     return gameState.board[new_coord[1]][new_coord[0]] is None
 
 
-def _pawnForwardConsequence(gameState, piece, coord, new_coord):
+def _pawnForwardConsequence(gameState, piece, coord, new_coord, player):
     if new_coord[1] == (0 if piece.color == 'w' else GRID_SIZE - 1):
         gameState.board[new_coord[1]][new_coord[0]] = pawn_promotion(piece)
+        player.pieces.remove(piece)
+        new_piece = gameState.board[new_coord[1]][new_coord[0]]
+        player.pieces.append(new_piece)
 
 
 def _pawnDoubleForwardCondition(gameState, piece, new_coord, attacked_tiles):
@@ -65,7 +68,7 @@ def _pawnDoubleForwardCondition(gameState, piece, new_coord, attacked_tiles):
         new_coord[0]] is None and piece.coord[1] == (6 if piece.color == 'w' else 1)
 
 
-def _pawnDoubleForwardConsequence(gameState, piece, coord, new_coord):
+def _pawnDoubleForwardConsequence(gameState, piece, coord, new_coord, player):
     gameState.new_en_passant_coord = (new_coord[0], (new_coord[1] + coord[1]) // 2)
 
 def pawn_promotion(piece):
@@ -73,7 +76,6 @@ def pawn_promotion(piece):
     while True:
         picked_tag = input('Wybierz tag figury: Q, N, R, B').upper()
         if picked_tag in pieces_to_promotion:
-            print(pieces_to_promotion[picked_tag](piece.color, piece.coord))
             return pieces_to_promotion[picked_tag](piece.color, piece.coord)
 
 class King(Piece):
@@ -87,7 +89,7 @@ class King(Piece):
         self.movement.append((EE, False, _castlingCondition, _castlingConsequence))
 
 
-def _kingMoveConsequence(gameState, piece, coord, new_coord):
+def _kingMoveConsequence(gameState, piece, coord, new_coord, player):
     gameState.castling_flags[piece.color + '_short'] = False
     gameState.castling_flags[piece.color + '_long'] = False
 
@@ -103,12 +105,11 @@ def _castlingCondition(gameState, piece, new_coord, attacked_tiles):
                          piece.coord[1])}
     return gameState.castling_flags[piece.color + ("_long" if new_coord[0] < piece.coord[0]
                                                    else "_short")
-           ] and not any(map((lambda x: gameState.board[x[1]][x[0]]), neededEmpty))
-        #    and \
-        # any(neededUnAttacked.intersection(attacked))
+           ] and not any(map((lambda x: gameState.board[x[1]][x[0]]), neededEmpty)
+                         )and any(neededUnAttacked.intersection(attacked_tiles))
 
 
-def _castlingConsequence(gameState, piece, coord, new_coord):
+def _castlingConsequence(gameState, piece, coord, new_coord, player):
     gameState.making_move(
         ((0 if new_coord[0] < coord[0] else (GRID_SIZE - 1), coord[1]), (((coord[0] + new_coord[0]) // 2), coord[1])))
     _kingMoveConsequence(gameState, piece, coord, new_coord)
@@ -122,7 +123,7 @@ class Rook(Piece):
         self.color = color
         self.movement = list(map(lambda it: (it, True, None, _rookMoveConsequence), rotations(N)))
 
-def _rookMoveConsequence(gameState, piece, coord, new_coord):
+def _rookMoveConsequence(gameState, piece, coord, new_coord, player):
     gameState.castling_flags[piece.color + ('_long' if coord[0] == 0 else '_short')] = False
 
 
