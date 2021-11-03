@@ -112,7 +112,7 @@ def _castlingCondition(gameState, piece, new_coord, attacked_tiles):
 def _castlingConsequence(gameState, piece, coord, new_coord, player):
     gameState.making_move(
         ((0 if new_coord[0] < coord[0] else (GRID_SIZE - 1), coord[1]), (((coord[0] + new_coord[0]) // 2), coord[1])))
-    _kingMoveConsequence(gameState, piece, coord, new_coord)
+    _kingMoveConsequence(gameState, piece, coord, new_coord, player)
 
 
 class Rook(Piece):
