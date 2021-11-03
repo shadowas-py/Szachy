@@ -106,12 +106,11 @@ def main():
 
                     '''SPRAWDZAM WARUNKI WYGRANEJ'''
                     game.move_counter+=1
-                    # print('test',game.move_counter)
 
-                    # if active_player.checks and not inactive_player.all_possible_moves:
-                    #     print(f'Wygrał gracz {active_player.color} w {game.move_counter} ruchach')
-                    # elif any (inactive_player.all_possible_moves):
-                    #     print('PAT')
+                    if active_player.checks and not any(active_player.all_possible_moves.values()):
+                        print(f'Wygrał gracz {inactive_player.color.upper()} w {game.move_counter} ruchach')
+                    elif not any(active_player.all_possible_moves.values()):
+                        print('PAT')
                     piece_selected = None
                     refresh_flag = True
                 else:
