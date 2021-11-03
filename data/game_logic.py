@@ -3,8 +3,6 @@ import pygame
 from .constants import BOARD_POSITION, TILE_SIZE, BOARD_END_POSITION, GRID_SIZE
 from .functions import sum_directions, multiply_direction
 
-"""ABSOLUTE PINS"""
-
 
 def get_game_coord_from_mouse():
     mouse_pos = pygame.mouse.get_pos()
@@ -12,20 +10,17 @@ def get_game_coord_from_mouse():
     if max(BOARD_POSITION) <= min(mouse_pos) and max(mouse_pos) <= min(BOARD_END_POSITION):
         return coord
 
-
 def selecting_piece(board, coord, player):
     if coord in player.all_possible_moves and any(player.all_possible_moves[coord]):
         return board[coord[1]][coord[0]]
 
-
-def get_attacked_tiles(vector,start_coord,end_coord): #end_coord to krol
+def get_attacked_tiles(vector,start_coord,end_coord): #  end_coord to krol
     attacked_tiles = [start_coord]
     _multiplier = 1
     while end_coord != start_coord:
         start_coord = sum_directions(start_coord, multiply_direction(vector, _multiplier))
         attacked_tiles.append(start_coord)
     return attacked_tiles
-
 
 def looking_absolute_pins(game, singleMove, occupied_coord, attacking_piece, inactive_player, multiplier):
     for _multiplier in range(multiplier + 1, GRID_SIZE):
@@ -42,7 +37,6 @@ def looking_absolute_pins(game, singleMove, occupied_coord, attacking_piece, ina
                                                                           attacking_piece.coord,
                                                                           multiply_direction(singleMove, _multiplier-1)))
             break
-
 
 def looking_for_attacked_tiles(game, active_player, inactive_player):
     attacked_tiles = set()
@@ -68,10 +62,12 @@ def looking_for_attacked_tiles(game, active_player, inactive_player):
                                     start_coord=piece.coord,
                                     end_coord=new_coord)
 
+
                                 #FIXME
                                 cd = sum_directions(tiles[0], multiply_direction(singleMove, multiplier+2))
                                 if max(cd)<8 and min(cd)>=0 and game.board[cd[1]][cd[0]] is None :
                                     attacked_tiles.update([sum_directions(tiles[0], multiply_direction(singleMove, multiplier+1))])
+
 
                                 inactive_player.checks[piece.coord] = tiles[:-1]
                             elif scalable:
@@ -89,7 +85,6 @@ def validating_moves(moves_list, allowed_coords):
         if coord not in allowed_coords:
             moves_list.pop(coord)
     return moves_list
-
 
 def generating_all_moves_for_piece(game, piece, inactive_player=None, check=False, active_player=None):
     moves_list = {}
@@ -122,6 +117,14 @@ def generating_all_moves_for_piece(game, piece, inactive_player=None, check=Fals
         moves_list = validating_moves(moves_list, inactive_player.pins[piece.coord])
     return moves_list
 
+def all_possible_player_moves(game, active_player, inactive_player, pin=False):
+    moves_list = {}
+    for piece in active_player.pieces:
+        moves_list[piece.coord] = generating_all_moves_for_piece(game, piece,
+                                                                 inactive_player=active_player,
+                                                                 active_player=inactive_player,
+                                                                 check=any(active_player.checks))
+    return moves_list
 
 def handling_players_order(players, player_order_list, *, player_tag=None):
     if player_tag:

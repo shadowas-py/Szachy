@@ -1,10 +1,17 @@
+from data.constants import GRID_SIZE
+
 class Player:
+    def pieces_list(self, game):
+        for col in range(GRID_SIZE):
+            for row in range(GRID_SIZE):
+                if game.board[row][col] and game.board[row][col].color == self.color:
+                    yield game.board[row][col]
 
     def __init__(self, color):
         self.color = color
         self.time = ...
 
-        self.pieces = ...
+        self.pieces = self.pieces_list
 
         self.pins = {}  # pinned_tile: all tiles between attacker and enemy king
         self.checks = {}
