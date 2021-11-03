@@ -85,14 +85,6 @@ class King(Piece):
         self.movement = list(map(lambda it: (it, False, None, _kingMoveConsequence), rotations(N) + rotations(NE)))
         self.movement.append((WW, False, _castlingCondition, _castlingConsequence))
         self.movement.append((EE, False, _castlingCondition, _castlingConsequence))
-        #
-        # def movement_if_check(self, player):
-        #     for movePack in self.movement:
-        #         if movePack[0] not in player.attacked_tiles_in_check:
-        #             self.movement.remove(movePack)
-        #
-        #
-        #
 
 
 def _kingMoveConsequence(gameState, piece, coord, new_coord):

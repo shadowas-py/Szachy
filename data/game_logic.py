@@ -18,7 +18,7 @@ def selecting_piece(board, coord, player):
         return board[coord[1]][coord[0]]
 
 
-def get_attacked_tiles(vector, start_coord, end_coord):  # end_coord to krol
+def get_attacked_tiles(vector, start_coord, end_coord, for_check=False):  # end_coord to krol
     attacked_tiles = [start_coord]
     _multiplier = 1
     while end_coord != start_coord:
@@ -66,7 +66,14 @@ def looking_for_attacked_tiles(game, active_player, inactive_player):
                                 tiles = get_attacked_tiles(
                                     vector=singleMove,
                                     start_coord=piece.coord,
-                                    end_coord=new_coord)
+                                    end_coord=new_coord,
+                                    for_check = True)
+
+                                #FIXME
+                                cd = sum_directions(tiles[0], multiply_direction(singleMove, multiplier+2))
+                                if max(cd)<8 and min(cd)>=0 and game.board[cd[1]][cd[0]] is None :
+                                    attacked_tiles.update([sum_directions(tiles[0], multiply_direction(singleMove, multiplier+1))])
+
                                 inactive_player.checks[piece.coord] = tiles[:-1]
                             elif scalable:
                                 looking_absolute_pins(game, multiplier=multiplier,
@@ -106,13 +113,12 @@ def generating_all_moves_for_piece(game, piece, inactive_player=None, check=Fals
             elif conditionFunc(game, piece, piece.coord, new_coord):
                 moves_list[new_coord] = consequenceFunc
     if check:
-        print('CHECK')
         if piece.tag == 'K':
-            print('CHECK')
-            print(active_player.all_attacked_tiles)
             moves_list = {k : moves_list[k] for k in set(moves_list) - set(active_player.all_attacked_tiles) }
         else:
             moves_list = validating_moves(moves_list, *inactive_player.checks.values())
+    elif piece.tag == 'K':
+        moves_list = {k : moves_list[k] for k in set(moves_list) - set(active_player.all_attacked_tiles) }
     if inactive_player.pins and piece.coord in inactive_player.pins.keys():
         moves_list = validating_moves(moves_list, inactive_player.pins[piece.coord])
     return moves_list

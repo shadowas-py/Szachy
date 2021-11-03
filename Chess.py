@@ -42,8 +42,7 @@ def all_possible_player_moves(game, active_player, inactive_player, pin=False):
         moves_list[piece.coord] = generating_all_moves_for_piece(game, piece,
                                                                  inactive_player=active_player,
                                                                  active_player=inactive_player,
-                                                                 check=any(active_player.checks),
-                                                                 active_player=inactive_player)
+                                                                 check=any(active_player.checks))
     return moves_list
 
 
@@ -59,9 +58,7 @@ def main():
     active_player.all_possible_moves = all_possible_player_moves(game, active_player, inactive_player)
     drawing_board()
     drawing_pieces(game.board)
-    '''Wywalic jak zbedne'''
-    # active_player.all_attacked_tiles = \
-    #     looking_for_attacked_tiles(game, coords_seq=coords_of_all_player_pieces(inactive_player.color), player=inactive_player)
+
     pygame.display.update()
     while run:
         refresh_flag = False
@@ -97,21 +94,15 @@ def main():
                     active_player.all_attacked_tiles = looking_for_attacked_tiles(game,
                                                                                   active_player=active_player,
                                                                                   inactive_player=inactive_player)
-
                     '''ZMIANA TUR'''
 
                     active_player, inactive_player = handling_players_order(players_dict, player_order_list)
 
-                    print('CHECKS', inactive_player.checks,'A',active_player.checks)
-                    print('inCHeck', inactive_player.attacked_tiles_in_check, 'A',active_player.attacked_tiles_in_check)
-                    print('PINS', inactive_player.pins, 'A',active_player.pins)
 
                     '''GENEROWANIE RUCHOW DLA KOLEJNEGO GRACZA'''
                     active_player.all_possible_moves = all_possible_player_moves(game,
                                                                                  active_player=active_player,
                                                                                  inactive_player=inactive_player)
-
-
 
                     '''SPRAWDZAM WARUNKI WYGRANEJ'''
                     game.move_counter+=1
@@ -121,7 +112,6 @@ def main():
                     #     print(f'Wygrał gracz {active_player.color} w {game.move_counter} ruchach')
                     # elif any (inactive_player.all_possible_moves):
                     #     print('PAT')
-
                     piece_selected = None
                     refresh_flag = True
                 else:
@@ -138,15 +128,14 @@ if __name__ == "__main__":
     main()
 
 # TODO
-# 2.dodac logike wyszukiwania ruchu w przypadku szacha i szacha podwojnego
-# 3.W przypadku zwiazania ograniczyc generowanie ruchow dla zwiazanej figury
-# 4.Wykrywanie pata i mata
+# 1. naprafic promocje ppionow
+# 2. przetestowac i poprawic roszade
+# 4.Dokonczyc PAT i MAT
 # 5.Dodac czas dla graczy
 # - podswietlanie atakowanych pol i ew zwiazan
 # podswietlanie wybranej bierki
 # podswietlanie ostatnio wykonanego ruchu
 # dodac troche grafiki (wspolrzedne, tlo, ui)
-# ??? Czy pole króla tez liczyc jao pole atakowane
 # TODO dodać narzędzie zarządzające eventami kliknięć itp, na przyszłości do obsługi UI
 
 # later
@@ -154,4 +143,3 @@ if __name__ == "__main__":
 # 4.generowac notacje szachowa
 # 5.cofanie ruchow
 # 8.spradzanie legalnosci roszady
-# 9.zegary

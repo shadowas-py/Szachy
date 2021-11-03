@@ -15,11 +15,3 @@ class Player:
 
     def clear_checks_and_pins(self):
         self.pins.clear(); self.checks.clear(); self.attacked_tiles_in_check.clear(); self.all_possible_moves.clear()
-
-
-
-
-
-
-
-
