@@ -1,4 +1,5 @@
 import pygame
+import logging
 
 from .constants import BOARD_POSITION, TILE_SIZE, BOARD_END_POSITION, GRID_SIZE
 from .functions import sum_directions, multiply_direction

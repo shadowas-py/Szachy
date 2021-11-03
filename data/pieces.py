@@ -109,10 +109,25 @@ def _castlingCondition(gameState, piece, new_coord, attacked_tiles):
                          )and any(neededUnAttacked.intersection(attacked_tiles))
 
 
-def _castlingConsequence(gameState, piece, coord, new_coord, player):
+def _castlingConsequence_copyt(gameState, piece, coord, new_coord, player):
+    print(coord, 'cooord', new_coord)
     gameState.making_move(
-        ((0 if new_coord[0] < coord[0] else (GRID_SIZE - 1), coord[1]), (((coord[0] + new_coord[0]) // 2), coord[1])))
+        ((0 if new_coord[0] < coord[0]
+          else (GRID_SIZE - 1), coord[1]), (((coord[0] + new_coord[0]) // 2), coord[1])))
     _kingMoveConsequence(gameState, piece, coord, new_coord, player)
+    print((coord[0] + new_coord[0]) // 2,coord[1])
+    print(gameState)
+
+def _castlingConsequence(gameState, piece, coord, new_coord, player):
+    old_rook_coord = (0 if new_coord[0] < coord[0] else (GRID_SIZE - 1), coord[1])
+    new_rook_coord = ((coord[0] + new_coord[0]) // 2,coord[1])
+    gameState.making_move(
+        (old_rook_coord, new_rook_coord))
+    _kingMoveConsequence(gameState, piece, coord, new_coord, player)
+    for p in player.pieces:
+        if p.coord == old_rook_coord:
+            p.coord = new_rook_coord
+            break
 
 
 class Rook(Piece):

@@ -1,4 +1,5 @@
 import pygame
+import logging
 
 from data.chessboard import GameState
 from data.constants import GRID_SIZE
@@ -68,6 +69,7 @@ def main():
                     active_player.all_attacked_tiles = looking_for_attacked_tiles(game,
                                                                                   active_player=active_player,
                                                                                   inactive_player=inactive_player)
+                    print('CHECK!!!') if inactive_player.checks else ''
                     '''ZMIANA TUR'''
                     active_player, inactive_player = handling_players_order(players_dict, player_order_list)
 
@@ -94,17 +96,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-# TODO
-# 5.Dodac czas dla graczy
-# - podswietlanie atakowanych pol i ew zwiazan
-# podswietlanie wybranej bierki
-# podswietlanie ostatnio wykonanego ruchu
-# dodac troche grafiki (wspolrzedne, tlo, ui)
-# TODO dodać narzędzie zarządzające eventami kliknięć itp, na przyszłości do obsługi UI
-
-# later
-# 2.interfejs wyboru promowanej figury
-# 4.generowac notacje szachowa
-# 5.cofanie ruchow
-# 8.spradzanie legalnosci roszady
