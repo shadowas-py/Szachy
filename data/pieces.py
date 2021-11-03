@@ -40,7 +40,7 @@ class Pawn(Piece):
                 attacked_field_list.append(new_coord)
         return attacked_field_list
 
-def _pawnDiagonalCondition(gameState, piece, coord, new_coord):
+def _pawnDiagonalCondition(gameState, piece, new_coord, attacked_tiles):
     return (gameState.board[new_coord[1]][new_coord[0]] is not None and gameState.board[new_coord[1]][
         new_coord[0]].color != piece.color) or gameState.en_passant_coord == new_coord
 
@@ -51,30 +51,30 @@ def _pawnDiagonalConsequence(gameState, piece, coord, new_coord):
     _pawnForwardConsequence(gameState, piece, coord, new_coord)
 
 
-def _pawnForwardCondition(gameState, piece, coord, new_coord):
+def _pawnForwardCondition(gameState, piece, new_coord, attacked_tiles):
     return gameState.board[new_coord[1]][new_coord[0]] is None
 
 
 def _pawnForwardConsequence(gameState, piece, coord, new_coord):
     if new_coord[1] == (0 if piece.color == 'w' else GRID_SIZE - 1):
-        gameState.board[new_coord[1]][new_coord[0]] = pawn_promotion(player_color=piece.color)
+        gameState.board[new_coord[1]][new_coord[0]] = pawn_promotion(piece)
 
 
-def _pawnDoubleForwardCondition(gameState, piece, coord, new_coord):
-    return gameState.board[new_coord[1]][new_coord[0]] is None and gameState.board[(new_coord[1] + coord[1]) // 2][
-        new_coord[0]] is None and coord[1] == (6 if piece.color == 'w' else 1)
+def _pawnDoubleForwardCondition(gameState, piece, new_coord, attacked_tiles):
+    return gameState.board[new_coord[1]][new_coord[0]] is None and gameState.board[(new_coord[1] + piece.coord[1]) // 2][
+        new_coord[0]] is None and piece.coord[1] == (6 if piece.color == 'w' else 1)
 
 
 def _pawnDoubleForwardConsequence(gameState, piece, coord, new_coord):
     gameState.new_en_passant_coord = (new_coord[0], (new_coord[1] + coord[1]) // 2)
 
-def pawn_promotion(player_color):
+def pawn_promotion(piece):
     pieces_to_promotion = {'R': Rook, 'N': Knight, 'B': Bishop, 'Q': Queen}
     while True:
         picked_tag = input('Wybierz tag figury: Q, N, R, B').upper()
         if picked_tag in pieces_to_promotion:
-            print(pieces_to_promotion[picked_tag](player_color))
-            return pieces_to_promotion[picked_tag](player_color)
+            print(pieces_to_promotion[picked_tag](piece.color, piece.coord))
+            return pieces_to_promotion[picked_tag](piece.color, piece.coord)
 
 class King(Piece):
     tag = 'K'
@@ -92,14 +92,20 @@ def _kingMoveConsequence(gameState, piece, coord, new_coord):
     gameState.castling_flags[piece.color + '_long'] = False
 
 
-def _castlingCondition(gameState, piece, coord, new_coord):
-    neededEmpty = [(column, coord[1]) for column in
-                   (range(1, coord[0]) if new_coord[0] < coord[0] else range(coord[0] + 1, GRID_SIZE - 1))]
-    neededUnAttacked = [coord, new_coord, ((coord[0] + new_coord[0]) // 2, coord[1])]
-    return gameState.castling_flags[piece.color + ("_long" if new_coord[0] < coord[0] else "_short")] \
-           and not any(map((lambda x: gameState.board[x[1]][x[0]]), neededEmpty))
-    # and all([gameState.board[tmpCoord[1]][tmpCoord[0]] is None for tmpCoord in neededEmpty])
-    # all(list(map(not isTileAttacked(gameState, tmpCoord), needenUnAttacked)))
+def _castlingCondition(gameState, piece, new_coord, attacked_tiles):
+    neededEmpty = [(column,piece.coord[1]) for column in
+                   (range(1,piece.coord[0])
+                    if new_coord[0] <piece.coord[0]
+                    else range(piece.coord[0] + 1, GRID_SIZE - 1))]
+    neededUnAttacked = {piece.coord,
+                        new_coord,
+                        ((piece.coord[0] + new_coord[0]) // 2,
+                         piece.coord[1])}
+    return gameState.castling_flags[piece.color + ("_long" if new_coord[0] < piece.coord[0]
+                                                   else "_short")
+           ] and not any(map((lambda x: gameState.board[x[1]][x[0]]), neededEmpty))
+        #    and \
+        # any(neededUnAttacked.intersection(attacked))
 
 
 def _castlingConsequence(gameState, piece, coord, new_coord):

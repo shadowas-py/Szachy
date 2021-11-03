@@ -128,8 +128,6 @@ if __name__ == "__main__":
     main()
 
 # TODO
-# 1. naprafic promocje ppionow
-# 2. przetestowac i poprawic roszade
 # 4.Dokonczyc PAT i MAT
 # 5.Dodac czas dla graczy
 # - podswietlanie atakowanych pol i ew zwiazan

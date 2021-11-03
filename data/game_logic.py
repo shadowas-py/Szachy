@@ -109,7 +109,7 @@ def generating_all_moves_for_piece(game, piece, inactive_player=None, check=Fals
                     if targetPiece.color != piece.color:
                         moves_list[new_coord] = consequenceFunc
                     break
-            elif conditionFunc(game, piece, piece.coord, new_coord):
+            elif conditionFunc(game, piece, new_coord=new_coord, attacked_tiles=inactive_player.all_attacked_tiles):
                 moves_list[new_coord] = consequenceFunc
     if check:
         if piece.tag == 'K':
