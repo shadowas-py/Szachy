@@ -1,24 +1,17 @@
-# players_color_list = ['w','b']
-#
-# def setting_instances_global_names(cls, how_many, *args):
-#     cls.id_counter = 1
-#
-#     def instance_name(cls):
-#         return 'player'+(str(cls.id_counter))
-#
-#     for i in range(0, how_many):
-#         globals()[instance_name(cls)] = cls(args[i])
-#         cls.id_counter += 1
-# setting_instances_global_names(Player,len(players_color_list),*players_color_list)
-
 class Player:
 
     def __init__(self, color):
         self.color = color
         self.time = ...
-        self.pins = {} # attacker: defender
-        self.attacked_tiles_in_pin = {} # attacker: all tiles between attacker and enemy king
+
+        self.pieces = ...
+
+        self.pins = {}  # pinned_tile: all tiles between attacker and enemy king
         self.checks = {}
         self.attacked_tiles_in_check = {}
-        self.all_attacked_tiles = []
 
+        self.all_attacked_tiles = []
+        self.all_possible_moves = []
+
+    def clear_checks_and_pins(self):
+        self.pins.clear(); self.checks.clear(); self.attacked_tiles_in_check.clear(); self.all_possible_moves.clear()

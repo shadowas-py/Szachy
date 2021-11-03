@@ -1,7 +1,6 @@
 import os
 import pygame
 
-from .constants import *
 from .settings import WIDTH, HEIGHT
 from .pieces import *
 
