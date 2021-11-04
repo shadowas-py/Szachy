@@ -9,13 +9,18 @@ from data.graphic import drawing_board, drawing_pieces
 from data.players import Player
 from data.settings import FPS
 
+
+LOG_FORMAT = '%(levelname)-5s | %(message)s'
+logging.basicConfig(filename= 'szachy.log', level=logging.DEBUG, format=LOG_FORMAT, filemode='w')
+logger = logging.getLogger()
+
+logger.info("START")
+
 pygame.init()
 
 # SETTING INSTANCES OF IMPORTED CLASSES
 game = GameState()
 players_dict = {'player1': Player(color='w'), 'player2': Player(color='b')}
-
-
 
 
 def main():
@@ -24,12 +29,25 @@ def main():
     player_order_list = list(sorted(players_dict.values(), key=lambda i: ('w', 'b')))
     piece_selected = None
     coord_selected = None
-    active_player, inactive_player = handling_players_order(players_dict, player_order_list,                                                        player_tag=game.nextMoveColor)
-    active_player.pieces = list(Player.pieces_list(active_player,game))
-    inactive_player.pieces = list(Player.pieces_list(inactive_player,game))
-    active_player.all_possible_moves = all_possible_player_moves(game, active_player, inactive_player)
+    active_player, inactive_player = handling_players_order(players_dict, player_order_list,
+                                                            player_tag=game.nextMoveColor)
+    # def name_value_log(*args, **kwargs):
+    #     vars()['coord']
+    #     return (arg for arg in args)
 
+
+    logger.info('START LOG')
+    logger.debug(f'{active_player=} init Player instance')
+    logger.debug(f'{inactive_player=} init Player instance')
+
+    active_player.pieces = list(Player.pieces_list(active_player,game))
+    logger.debug(f'{active_player.pieces=} len={len(active_player.pieces)}')
+    inactive_player.pieces = list(Player.pieces_list(inactive_player,game))
+    logger.debug(f'{inactive_player.pieces=} len={len(inactive_player.pieces)}')
+    active_player.all_possible_moves = all_possible_player_moves(game, active_player, inactive_player)
+    logger.debug(f'{active_player.all_possible_moves}')
     clock = pygame.time.Clock()
+
     drawing_board()
     drawing_pieces(game.board)
     pygame.display.update()
@@ -42,12 +60,16 @@ def main():
                 run = False
             if event.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed()[0]:  # LEFT MOUSE BUTTON
                 coord = get_game_coord_from_mouse()
+                logger.debug(f'{coord=}')
                 if piece_selected is None:
+                    logger.debug(f'{piece_selected=}')
                     if piece_selected := selecting_piece(game.board, coord, active_player):
                         if possible_moves := active_player.all_possible_moves[piece_selected.coord]:
                             refresh_flag = True
                             coord_selected = coord
+                            logger.info(f'Wybrano coord{coord} mozliwe ruchy na pola {list(possible_moves.keys())}')
                             # translate_to_chess_notation(possible_moves)
+
                 elif coord in possible_moves:  # Wchodzi jezeli jest mozliwosc ruchu dla zaznaczonej figury
                     game.new_en_passant_coord = None
                     """WYKONYWANIE RUCHU"""
