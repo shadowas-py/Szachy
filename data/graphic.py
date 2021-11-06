@@ -34,6 +34,13 @@ def drawing_pieces(board):
             if board[col][row] is not None:
                 file_name = board[col][row].get_full_name()
                 piece = pygame.transform.scale(pygame.image.load(
-                    os.path.join('Images', file_name + '.png')),
-                    (TILE_SIZE, TILE_SIZE))
+                    os.path.join('Images', file_name + '.png')),(TILE_SIZE, TILE_SIZE))
                 WINDOW.blit(piece, (BOARD_POSITION[0] + (TILE_SIZE * row), BOARD_POSITION[1] + (TILE_SIZE * col)))
+
+def drawing_possible_moves(attacked_coord_list):
+    for coord in attacked_coord_list:
+        attack_marker = pygame.transform.scale(pygame.image.load(
+            os.path.join('Images/red_dot.png')),(TILE_SIZE/3,TILE_SIZE/3))
+        WINDOW.blit(attack_marker, (BOARD_POSITION[0] + (TILE_SIZE + row), BOARD_POSITION[1] + (TILE_SIZE + col)))
+
+
