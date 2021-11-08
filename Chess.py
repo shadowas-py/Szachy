@@ -5,7 +5,7 @@ from data.chessboard import GameState
 from data.constants import GRID_SIZE
 from data.game_logic import get_game_coord_from_mouse, handling_players_order, \
     generating_all_moves_for_piece, looking_for_attacked_tiles, selecting_piece, all_possible_player_moves
-from data.graphic import drawing_board, drawing_pieces
+from data.graphic import drawing_board, drawing_pieces, drawing_possible_moves
 from data.players import Player
 from data.settings import FPS
 
@@ -30,6 +30,7 @@ def main():
     active_player.all_possible_moves = all_possible_player_moves(game, active_player, inactive_player)
 
     clock = pygame.time.Clock()
+
     drawing_board()
     drawing_pieces(game.board)
     pygame.display.update()
@@ -48,6 +49,9 @@ def main():
                             refresh_flag = True
                             coord_selected = coord
                             # translate_to_chess_notation(possible_moves)
+                            print(inactive_player.all_attacked_tiles)
+                            drawing_possible_moves(inactive_player.all_attacked_tiles)
+
                 elif coord in possible_moves:  # Wchodzi jezeli jest mozliwosc ruchu dla zaznaczonej figury
                     game.new_en_passant_coord = None
                     """WYKONYWANIE RUCHU"""
@@ -58,7 +62,6 @@ def main():
                         consequenceFunc(game, piece_selected, coord_selected, coord, player=active_player)
                     game.en_passant_coord = game.new_en_passant_coord
                     game.move_counter+=1
-
                     drawing_board()
                     drawing_pieces(game.board)
 

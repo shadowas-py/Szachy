@@ -6,8 +6,7 @@ from .pieces import *
 
 WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
 
-dark_tile = pygame.transform.scale(pygame.image.load(
-    os.path.join('Images', 'dark_tile.png')),
+dark_tile = pygame.transform.scale(pygame.image.load(os.path.join('Images', 'dark_tile.png')),
     (TILE_SIZE, TILE_SIZE))
 dark_tile.set_alpha(90)
 
@@ -37,10 +36,12 @@ def drawing_pieces(board):
                     os.path.join('Images', file_name + '.png')),(TILE_SIZE, TILE_SIZE))
                 WINDOW.blit(piece, (BOARD_POSITION[0] + (TILE_SIZE * row), BOARD_POSITION[1] + (TILE_SIZE * col)))
 
-def drawing_possible_moves(attacked_coord_list):
+def drawing_possible_moves(attacked_coord_list, color='CRIMSON'):
     for coord in attacked_coord_list:
-        attack_marker = pygame.transform.scale(pygame.image.load(
-            os.path.join('Images/red_dot.png')),(TILE_SIZE/3,TILE_SIZE/3))
-        WINDOW.blit(attack_marker, (BOARD_POSITION[0] + (TILE_SIZE + row), BOARD_POSITION[1] + (TILE_SIZE + col)))
-
+        col, row = coord
+        pygame.draw.circle(surface=WINDOW,
+                           color=color,
+                           center=((BOARD_POSITION[0] + (TILE_SIZE * col)+TILE_SIZE/2),
+                                   BOARD_POSITION[1] + (TILE_SIZE * row)+TILE_SIZE/2),
+                           radius=TILE_SIZE / 8)
 
