@@ -5,7 +5,7 @@ from data.chessboard import GameState
 from data.constants import GRID_SIZE
 from data.game_logic import get_game_coord_from_mouse, handling_players_order, \
     generating_all_moves_for_piece, looking_for_attacked_tiles, selecting_piece, all_possible_player_moves
-from data.graphic import drawing_board, drawing_pieces, drawing_possible_moves
+from data.graphic import drawing_board, drawing_pieces, draw_markers_in_game_coords
 from data.players import Player
 from data.settings import FPS
 
@@ -46,12 +46,13 @@ def main():
                 if piece_selected is None:
                     if piece_selected := selecting_piece(game.board, coord, active_player):
                         if possible_moves := active_player.all_possible_moves[piece_selected.coord]:
+                            drawing_board()
+                            drawing_pieces(game.board)
+                            draw_markers_in_game_coords(inactive_player.all_attacked_tiles)
+                            draw_markers_in_game_coords(possible_moves.keys(),color='green')
                             refresh_flag = True
                             coord_selected = coord
                             # translate_to_chess_notation(possible_moves)
-                            print(inactive_player.all_attacked_tiles)
-                            drawing_possible_moves(inactive_player.all_attacked_tiles)
-
                 elif coord in possible_moves:  # Wchodzi jezeli jest mozliwosc ruchu dla zaznaczonej figury
                     game.new_en_passant_coord = None
                     """WYKONYWANIE RUCHU"""
@@ -93,6 +94,11 @@ def main():
                     coord_selected = get_game_coord_from_mouse()
                     if piece_selected := selecting_piece(game.board, coord_selected, active_player):
                         possible_moves = active_player.all_possible_moves[piece_selected.coord]
+                        drawing_board()
+                        drawing_pieces(game.board)
+                        draw_markers_in_game_coords(inactive_player.all_attacked_tiles)
+                        draw_markers_in_game_coords(possible_moves.keys(),color='green')
+                        pygame.display.update()
         if refresh_flag:
             pygame.display.update()
     pygame.quit()

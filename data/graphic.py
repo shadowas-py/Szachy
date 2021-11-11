@@ -4,44 +4,54 @@ import pygame
 from .settings import WIDTH, HEIGHT
 from .pieces import *
 
-WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
+WINDOW = pygame.display.set_mode((WIDTH, HEIGHT),pygame.DOUBLEBUF, 32) # Only 32bit surfaces support alpha channel
 
 dark_tile = pygame.transform.scale(pygame.image.load(os.path.join('Images', 'dark_tile.png')),
     (TILE_SIZE, TILE_SIZE))
-dark_tile.set_alpha(90)
+dark_tile.set_alpha(40)
 
 board_white_tiles = pygame.transform.scale(pygame.image.load(
     os.path.join('Images', 'white_tiles.jpg')),
     (B_BACKGROUND_WIDTH, B_BACKGROUND_HEIGHT))
+
+def get_colored_square(color, transparency=100):
+    marker = pygame.transform.scale(pygame.image.load(
+        os.path.join('Images\markers', color + '.png')),(TILE_SIZE, TILE_SIZE))
+    marker.set_alpha(transparency)
+    return marker
+
+# def get_tile_center(coord):
+#     col = (BOARD_POSITION[0] + (TILE_SIZE * coord[0])+TILE_SIZE/2)
+#     row = (BOARD_POSITION[1] + (TILE_SIZE * coord[1])+TILE_SIZE/2)
+#     return (col,row)
+
+def get_tile_left_top(coord):
+    col = (BOARD_POSITION[0] + (TILE_SIZE * coord[0]))
+    row = (BOARD_POSITION[1] + (TILE_SIZE * coord[1]))
+    return (col,row)
 
 def drawing_coordinates_bar():
     ...
 
 def drawing_board():
     WINDOW.blit(board_white_tiles, BOARD_BACKGROUND_POSITION)
-    for i in range(GRID_SIZE):
-        for j in range(GRID_SIZE):
-            if (i + j) % 2 != 0:
-                WINDOW.blit(dark_tile, (
-                    (TILE_SIZE * i) + BOARD_POSITION[0],
-                    (TILE_SIZE * j) + BOARD_POSITION[1]))
-
+    for row in range(GRID_SIZE):
+        for col in range(GRID_SIZE):
+            if (row + col) % 2 != 0:
+                WINDOW.blit(dark_tile, get_tile_left_top((row,col)))
 
 def drawing_pieces(board):
-    for col in range(GRID_SIZE):
-        for row in range(GRID_SIZE):
+    for row in range(GRID_SIZE):
+        for col in range(GRID_SIZE):
             if board[col][row] is not None:
                 file_name = board[col][row].get_full_name()
                 piece = pygame.transform.scale(pygame.image.load(
                     os.path.join('Images', file_name + '.png')),(TILE_SIZE, TILE_SIZE))
-                WINDOW.blit(piece, (BOARD_POSITION[0] + (TILE_SIZE * row), BOARD_POSITION[1] + (TILE_SIZE * col)))
+                WINDOW.blit(piece, get_tile_left_top((row,col)))
 
-def drawing_possible_moves(attacked_coord_list, color='CRIMSON'):
-    for coord in attacked_coord_list:
-        col, row = coord
-        pygame.draw.circle(surface=WINDOW,
-                           color=color,
-                           center=((BOARD_POSITION[0] + (TILE_SIZE * col)+TILE_SIZE/2),
-                                   BOARD_POSITION[1] + (TILE_SIZE * row)+TILE_SIZE/2),
-                           radius=TILE_SIZE / 8)
+def draw_markers_in_game_coords(game_coords, color='red'):
+    '''COLORS : red, blue, green'''
+    for coord in game_coords:
+        marker=get_colored_square(color)
+        WINDOW.blit(marker,(get_tile_left_top(coord)))
 
