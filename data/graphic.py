@@ -14,6 +14,9 @@ board_white_tiles = pygame.transform.scale(pygame.image.load(
     os.path.join('Images', 'white_tiles.jpg')),
     (B_BACKGROUND_WIDTH, B_BACKGROUND_HEIGHT))
 
+def draw_whole_board():
+    ... # Funkcja do rysowania odswiezania widoku boarda
+
 def get_colored_square(color, transparency=100):
     marker = pygame.transform.scale(pygame.image.load(
         os.path.join('Images\markers', color + '.png')),(TILE_SIZE, TILE_SIZE))

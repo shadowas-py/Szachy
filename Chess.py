@@ -47,9 +47,9 @@ def main():
                     if piece_selected := selecting_piece(game.board, coord, active_player):
                         if possible_moves := active_player.all_possible_moves[piece_selected.coord]:
                             drawing_board()
-                            drawing_pieces(game.board)
                             draw_markers_in_game_coords(inactive_player.all_attacked_tiles)
                             draw_markers_in_game_coords(possible_moves.keys(),color='green')
+                            drawing_pieces(game.board)
                             refresh_flag = True
                             coord_selected = coord
                             # translate_to_chess_notation(possible_moves)
@@ -95,9 +95,9 @@ def main():
                     if piece_selected := selecting_piece(game.board, coord_selected, active_player):
                         possible_moves = active_player.all_possible_moves[piece_selected.coord]
                         drawing_board()
-                        drawing_pieces(game.board)
                         draw_markers_in_game_coords(inactive_player.all_attacked_tiles)
                         draw_markers_in_game_coords(possible_moves.keys(),color='green')
+                        drawing_pieces(game.board)
                         pygame.display.update()
         if refresh_flag:
             pygame.display.update()
