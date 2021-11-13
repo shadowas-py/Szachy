@@ -1,5 +1,4 @@
 import pygame
-import logging
 
 from .constants import BOARD_POSITION, TILE_SIZE, BOARD_END_POSITION, GRID_SIZE
 from .functions import sum_directions, multiply_direction
@@ -54,31 +53,29 @@ def looking_for_attacked_tiles(game, active_player, inactive_player):
                         break
                     elif conditionFunc is None:
                         targetPiece = game.board[new_coord[1]][new_coord[0]]
-                        if targetPiece is None:
-                            attacked_tiles.update([new_coord])
-                        else:
+
+                        attacked_tiles.update([new_coord])
+                        if targetPiece:
                             if targetPiece.color != piece.color and targetPiece.tag == 'K':
                                 tiles = get_attacked_tiles(
                                     vector=singleMove,
                                     start_coord=piece.coord,
                                     end_coord=new_coord)
-
-
-                                #FIXME
-                                cd = sum_directions(tiles[0], multiply_direction(singleMove, multiplier+2))
-                                if max(cd)<8 and min(cd)>=0 and game.board[cd[1]][cd[0]] is None :
-                                    attacked_tiles.update([sum_directions(tiles[0], multiply_direction(singleMove, multiplier+1))])
-
-
+                                #FIXME  # NIE SKALOWANIE SKOCZKA PIONA ITP PRZY SZUKANIU SZACHOW - chyba do tego ten kod
+                                # cd = sum_directions(tiles[0], multiply_direction(singleMove, multiplier+2))
+                                # if max(cd)<8 and min(cd)>=0 and game.board[cd[1]][cd[0]] is None :
+                                #     print('IN')
+                                #     attacked_tiles.update([sum_directions(tiles[0], multiply_direction(singleMove, multiplier+1))])
                                 inactive_player.checks[piece.coord] = tiles[:-1]
+
                             elif scalable:
                                 looking_absolute_pins(game, multiplier=multiplier,
                                                       singleMove=singleMove,
                                                       inactive_player=inactive_player,
                                                       occupied_coord=new_coord,
                                                       attacking_piece=piece)
-                            attacked_tiles.update([new_coord])
-                            break
+                            if targetPiece.color != piece.color and targetPiece.tag != 'K':
+                                break
     return attacked_tiles
 
 def validating_moves(moves_list, allowed_coords):

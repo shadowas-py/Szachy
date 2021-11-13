@@ -120,22 +120,22 @@ def main():
                         possible_moves = active_player.all_possible_moves[piece_selected.coord]
                         refresh_flag = True
         if refresh_flag:
-            if active_player.checks:
-                drawing_board()
-                draw_markers_in_game_coords(list(*active_player.checks.values()),color='red')
-                draw_markers_in_game_coords(list(active_player.checks.keys()),color='blue')
-                draw_markers_in_game_coords(possible_moves.keys(),color='green')
-                drawing_pieces(game.board)
+            # if active_player.checks:
+            #     drawing_board()
+            #     draw_markers_in_game_coords(list(*active_player.checks.values()),color='red')
+            #     draw_markers_in_game_coords(list(active_player.checks.keys()),color='blue')
+            #     draw_markers_in_game_coords(possible_moves.keys(),color='green')
+            #     drawing_pieces(game.board)
+            # else:
+            drawing_board()
+            draw_markers_in_game_coords(inactive_player.all_attacked_tiles, color='red')
+            draw_markers_in_game_coords(possible_moves.keys(),color='green')
+            if len(active_player.pins) > 1:
+                for pin_coords in active_player.pins.values():
+                    draw_markers_in_game_coords(game_coords=list(pin_coords), color='blue')
             else:
-                drawing_board()
-                draw_markers_in_game_coords(inactive_player.all_attacked_tiles, color='red')
-                draw_markers_in_game_coords(possible_moves.keys(),color='green')
-                if len(active_player.pins) > 1:
-                    for pin_coords in active_player.pins.values():
-                        draw_markers_in_game_coords(game_coords=list(pin_coords), color='blue')
-                else:
-                    draw_markers_in_game_coords(game_coords=list(*active_player.pins.values()), color='blue')
-                drawing_pieces(game.board)
+                draw_markers_in_game_coords(game_coords=list(*active_player.pins.values()), color='blue')
+            drawing_pieces(game.board)
             pygame.display.update()
     pygame.quit()
 
