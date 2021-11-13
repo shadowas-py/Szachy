@@ -54,7 +54,6 @@ def looking_for_attacked_tiles(game, active_player, inactive_player):
                         break
                     elif conditionFunc is None:
                         targetPiece = game.board[new_coord[1]][new_coord[0]]
-
                         attacked_tiles.update([new_coord])
                         if targetPiece:
                             if targetPiece.color != piece.color and targetPiece.tag == 'K':
@@ -75,7 +74,8 @@ def looking_for_attacked_tiles(game, active_player, inactive_player):
                                                       inactive_player=inactive_player,
                                                       occupied_coord=new_coord,
                                                       attacking_piece=piece)
-                            if targetPiece.color != piece.color and targetPiece.tag != 'K':
+                            if targetPiece.color != piece.color and targetPiece.tag != 'K' \
+                                or targetPiece.color == piece.color:
                                 break
     return attacked_tiles
 
@@ -90,8 +90,8 @@ def generating_all_moves_for_piece(game, piece, inactive_player=None, check=Fals
     if check and inactive_player.pins and piece.coord in inactive_player.pins.keys():
         return moves_list
     for movePack in piece.movement:
-        # print(f'{inactive_player.all_attacked_tiles=}')
-        # print(f'{active_player.all_attacked_tiles=}')
+        logger.debug(f'{inactive_player.all_attacked_tiles=}')
+        logger.debug(f'{active_player.all_attacked_tiles=}')
         singleMove, scalable, conditionFunc, consequenceFunc = movePack
         for multiplier in range(1, GRID_SIZE if scalable else 2):
             new_coord = sum_directions(piece.coord, multiply_direction(singleMove, multiplier))

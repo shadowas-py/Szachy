@@ -3,3 +3,4 @@ data/__pycache__
 *.log
 venv/
 test.py
+__pycache__/Chess.cpython-39.pyc
