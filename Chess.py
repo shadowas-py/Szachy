@@ -61,19 +61,15 @@ def main():
                 run = False
             if event.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed()[0]:  # LEFT MOUSE BUTTON
                 coord = get_game_coord_from_mouse()
-                logger.debug(f'{coord=}')
                 if piece_selected is None:
-                    logger.debug(f'{piece_selected=}')
                     if piece_selected := selecting_piece(game.board, coord, active_player):
                         if possible_moves := active_player.all_possible_moves[piece_selected.coord]:
-                            drawing_board()
-                            draw_markers_in_game_coords(inactive_player.all_attacked_tiles)
-                            draw_markers_in_game_coords(possible_moves.keys(),color='green')
-                            drawing_pieces(game.board)
+                            # DRAW ALL ON CHESSBOARD
                             refresh_flag = True
                             coord_selected = coord
-                            logger.info(f'Wybrano coord{coord} mozliwe ruchy na pola {list(possible_moves.keys())}')
                             # translate_to_chess_notation(possible_moves)
+                            # logger.info(f'----{possible_moves=}, {active_player.pins=}')
+                            # logger.info(f'Wybrano coord{coord} mozliwe ruchy na pola {list(possible_moves.keys())}')
 
                 elif coord in possible_moves:  # Wchodzi jezeli jest mozliwosc ruchu dla zaznaczonej figury
                     game.new_en_passant_coord = None
@@ -95,6 +91,8 @@ def main():
                     active_player.all_attacked_tiles = looking_for_attacked_tiles(game,
                                                                                   active_player=active_player,
                                                                                   inactive_player=inactive_player)
+
+
                     print('CHECK!!!') if inactive_player.checks else ''
                     '''ZMIANA TUR'''
                     active_player, inactive_player = handling_players_order(players_dict, player_order_list)
@@ -116,12 +114,24 @@ def main():
                     coord_selected = get_game_coord_from_mouse()
                     if piece_selected := selecting_piece(game.board, coord_selected, active_player):
                         possible_moves = active_player.all_possible_moves[piece_selected.coord]
-                        drawing_board()
-                        drawing_pieces(game.board)
-                        draw_markers_in_game_coords(inactive_player.all_attacked_tiles)
-                        draw_markers_in_game_coords(possible_moves.keys(),color='green')
-                        pygame.display.update()
+                        refresh_flag = True
         if refresh_flag:
+            if active_player.checks:
+                drawing_board()
+                draw_markers_in_game_coords(list(*active_player.checks.values()),color='red')
+                draw_markers_in_game_coords(list(active_player.checks.keys()),color='blue')
+                draw_markers_in_game_coords(possible_moves.keys(),color='green')
+                drawing_pieces(game.board)
+            else:
+                drawing_board()
+                draw_markers_in_game_coords(inactive_player.all_attacked_tiles, color='red')
+                draw_markers_in_game_coords(possible_moves.keys(),color='green')
+                if len(active_player.pins) > 1:
+                    for pin_coords in active_player.pins.values():
+                        draw_markers_in_game_coords(game_coords=list(pin_coords), color='blue')
+                else:
+                    draw_markers_in_game_coords(game_coords=list(*active_player.pins.values()), color='blue')
+                drawing_pieces(game.board)
             pygame.display.update()
     pygame.quit()
 
