@@ -1,6 +1,6 @@
 import pygame
-import logging
 
+from data.chess_logger import *
 from data.chessboard import GameState
 from data.constants import GRID_SIZE
 from data.game_logic import get_game_coord_from_mouse, handling_players_order, \
@@ -9,14 +9,8 @@ from data.graphic import drawing_board, drawing_pieces, draw_markers_in_game_coo
 from data.players import Player
 from data.settings import FPS
 
-
-LOG_FORMAT = '%(levelname)-5s | %(message)s'
-logging.basicConfig(filename= 'szachy.log', level=logging.DEBUG, format=LOG_FORMAT, filemode='w')
-logger = logging.getLogger()
-
-logger.info("START")
-
 pygame.init()
+
 
 # SETTING INSTANCES OF IMPORTED CLASSES
 game = GameState()
@@ -72,8 +66,15 @@ def main():
                             # logger.info(f'Wybrano coord{coord} mozliwe ruchy na pola {list(possible_moves.keys())}')
 
                 elif coord in possible_moves:  # Wchodzi jezeli jest mozliwosc ruchu dla zaznaczonej figury
+                    logger.info(f'{str(active_player)}'
+                                f' {str(piece_selected)}'
+                                f' {coord=}'
+                                f' {coord_selected}')
                     game.new_en_passant_coord = None
                     """WYKONYWANIE RUCHU"""
+                    # print(inactive_player.pieces[])
+                    if game.board[coord[1]][coord[0]] in inactive_player.pieces:
+                        inactive_player.pieces.remove(game.board[coord[1]][coord[0]])
                     game.making_move((coord_selected, coord))
                     consequenceFunc = possible_moves[coord]
                     piece_selected.coord = coord
@@ -81,8 +82,8 @@ def main():
                         consequenceFunc(game, piece_selected, coord_selected, coord, player=active_player)
                     game.en_passant_coord = game.new_en_passant_coord
                     game.move_counter+=1
-                    drawing_board()
-                    drawing_pieces(game.board)
+
+                    logger.info(f'\n{game}')
 
                     '''CZYSZCZENIE ZWIAZAN I SZACHOWANYCH POL'''
                     active_player.clear_checks_and_pins()
@@ -92,7 +93,10 @@ def main():
                                                                                   active_player=active_player,
                                                                                   inactive_player=inactive_player)
 
-
+                    logger.info(f'{active_player.checks.items()=}'
+                                f' {active_player.pins.items()=}'
+                                f'{inactive_player.checks.items()=}'
+                                f' {inactive_player.pins.items()=}')
                     print('CHECK!!!') if inactive_player.checks else ''
                     '''ZMIANA TUR'''
                     active_player, inactive_player = handling_players_order(players_dict, player_order_list)

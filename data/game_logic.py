@@ -111,6 +111,7 @@ def generating_all_moves_for_piece(game, piece, inactive_player=None, check=Fals
         if piece.tag == 'K':
             moves_list = {k : moves_list[k] for k in set(moves_list) - set(active_player.all_attacked_tiles) }
         else:
+
             moves_list = validating_moves(moves_list, *inactive_player.checks.values())
     elif piece.tag == 'K':
         moves_list = {k : moves_list[k] for k in set(moves_list) - set(active_player.all_attacked_tiles) }
