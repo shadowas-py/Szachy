@@ -106,7 +106,7 @@ def _castlingCondition(gameState, piece, new_coord, attacked_tiles):
     return gameState.castling_flags[piece.color + ("_long" if new_coord[0] < piece.coord[0]
                                                    else "_short")
            ] and not any(map((lambda x: gameState.board[x[1]][x[0]]), neededEmpty)
-                         )and any(neededUnAttacked.intersection(attacked_tiles))
+                         )and not(neededUnAttacked.intersection(attacked_tiles))
 
 
 def _castlingConsequence_copyt(gameState, piece, coord, new_coord, player):

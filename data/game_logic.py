@@ -1,4 +1,5 @@
 import pygame
+from .chess_logger import *
 
 from .constants import BOARD_POSITION, TILE_SIZE, BOARD_END_POSITION, GRID_SIZE
 from .functions import sum_directions, multiply_direction
@@ -89,6 +90,8 @@ def generating_all_moves_for_piece(game, piece, inactive_player=None, check=Fals
     if check and inactive_player.pins and piece.coord in inactive_player.pins.keys():
         return moves_list
     for movePack in piece.movement:
+        # print(f'{inactive_player.all_attacked_tiles=}')
+        # print(f'{active_player.all_attacked_tiles=}')
         singleMove, scalable, conditionFunc, consequenceFunc = movePack
         for multiplier in range(1, GRID_SIZE if scalable else 2):
             new_coord = sum_directions(piece.coord, multiply_direction(singleMove, multiplier))
@@ -102,14 +105,14 @@ def generating_all_moves_for_piece(game, piece, inactive_player=None, check=Fals
                     if targetPiece.color != piece.color:
                         moves_list[new_coord] = consequenceFunc
                     break
-            elif conditionFunc(game, piece, new_coord=new_coord, attacked_tiles=inactive_player.all_attacked_tiles):
+            elif conditionFunc(game, piece, new_coord=new_coord, attacked_tiles=active_player.all_attacked_tiles):
                 moves_list[new_coord] = consequenceFunc
     if check:
         if piece.tag == 'K':
             moves_list = {k : moves_list[k] for k in set(moves_list) - set(active_player.all_attacked_tiles) }
         else:
-
             moves_list = validating_moves(moves_list, *inactive_player.checks.values())
+
     elif piece.tag == 'K':
         moves_list = {k : moves_list[k] for k in set(moves_list) - set(active_player.all_attacked_tiles) }
     if inactive_player.pins and piece.coord in inactive_player.pins.keys():
