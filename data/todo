@@ -1,12 +1,12 @@
 TODO
-0. Logging...
-1. Naprawic warunki robienia roszady
+
 5.Dodac czas dla graczy
-- podswietlanie atakowanych pol i ew zwiazan
+- cos jest nie tak z przy wyswietlaniu zwiazan
 podswietlanie wybranej bierki
 podswietlanie ostatnio wykonanego ruchu
 dodac troche grafiki (wspolrzedne, tlo, ui)
 TODO dodać narzędzie zarządzające eventami kliknięć itp, na przyszłości do obsługi UI
+
 
 later
 2.interfejs wyboru promowanej figury
