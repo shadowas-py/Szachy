@@ -1,5 +1,6 @@
 import pygame
-from .chess_logger import *
+
+from logs.loggers import debug_pins
 
 from .constants import BOARD_POSITION, TILE_SIZE, BOARD_END_POSITION, GRID_SIZE
 from .functions import sum_directions, multiply_direction
@@ -24,20 +25,30 @@ def get_attacked_tiles(vector,start_coord,end_coord): #  end_coord to krol
     return attacked_tiles
 
 def looking_absolute_pins(game, singleMove, occupied_coord, attacking_piece, inactive_player, multiplier):
+    debug_pins.info(f'{singleMove=},'
+                    f' FIRST OCCUPIED: {occupied_coord} {game.board[occupied_coord[1]][occupied_coord[0]].get_full_name()}'
+                    f' ATTACKER: {attacking_piece.get_full_name()},'
+                    f' {inactive_player.color=}, {multiplier=}')
+
     for _multiplier in range(multiplier + 1, GRID_SIZE):
         new_coord = sum_directions(attacking_piece.coord, multiply_direction(singleMove, _multiplier))
         if max(new_coord) > 7 or min(new_coord) < 0:
             break
         newPiece = game.board[new_coord[1]][new_coord[0]]
+        debug_pins.info(f'  {new_coord=}, {newPiece.get_full_name() if newPiece else None}')
+
         if newPiece is None:
+            debug_pins.info(f'  CONTINUE')
             continue
+
         elif newPiece.tag == 'K' and newPiece.color != attacking_piece.color:
             inactive_player.pins[occupied_coord] = get_attacked_tiles(vector=singleMove,
                                                                       start_coord=attacking_piece.coord,
                                                                       end_coord=sum_directions(
                                                                           attacking_piece.coord,
                                                                           multiply_direction(singleMove, _multiplier-1)))
-            break
+            debug_pins.info(f'  SETTING PIN')
+        break
 
 def looking_for_attacked_tiles(game, active_player, inactive_player):
     attacked_tiles = set()
@@ -90,8 +101,6 @@ def generating_all_moves_for_piece(game, piece, inactive_player=None, check=Fals
     if check and inactive_player.pins and piece.coord in inactive_player.pins.keys():
         return moves_list
     for movePack in piece.movement:
-        logger.debug(f'{inactive_player.all_attacked_tiles=}')
-        logger.debug(f'{active_player.all_attacked_tiles=}')
         singleMove, scalable, conditionFunc, consequenceFunc = movePack
         for multiplier in range(1, GRID_SIZE if scalable else 2):
             new_coord = sum_directions(piece.coord, multiply_direction(singleMove, multiplier))

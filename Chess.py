@@ -1,10 +1,10 @@
 import pygame
 
-from data.chess_logger import *
+from logs.loggers import logger
+
 from data.chessboard import GameState
-from data.constants import GRID_SIZE
 from data.game_logic import get_game_coord_from_mouse, handling_players_order, \
-    generating_all_moves_for_piece, looking_for_attacked_tiles, selecting_piece, all_possible_player_moves
+    looking_for_attacked_tiles, selecting_piece, all_possible_player_moves
 from data.graphic import drawing_board, drawing_pieces, draw_markers_in_game_coords
 from data.players import Player
 from data.settings import FPS
@@ -16,6 +16,7 @@ pygame.init()
 game = GameState()
 players_dict = {'player1': Player(color='w'), 'player2': Player(color='b')}
 
+logger.info('START LOG')
 
 def main():
     # INITAL SETTINGS
@@ -25,22 +26,10 @@ def main():
     coord_selected = None
     active_player, inactive_player = handling_players_order(players_dict, player_order_list,
                                                             player_tag=game.nextMoveColor)
-    # def name_value_log(*args, **kwargs):
-    #     vars()['coord']
-    #     return (arg for arg in args)
-
-
-    logger.info('START LOG')
-    logger.debug(f'{active_player=} init Player instance')
-    logger.debug(f'{inactive_player=} init Player instance')
 
     active_player.pieces = list(Player.pieces_list(active_player,game))
-    logger.debug(f'{active_player.pieces=} len={len(active_player.pieces)}')
     inactive_player.pieces = list(Player.pieces_list(inactive_player,game))
-    logger.debug(f'{inactive_player.pieces=} len={len(inactive_player.pieces)}')
     active_player.all_possible_moves = all_possible_player_moves(game, active_player, inactive_player)
-    logger.debug(f'{active_player.all_possible_moves}')
-
 
     clock = pygame.time.Clock()
     drawing_board()
@@ -58,21 +47,17 @@ def main():
                 if piece_selected is None:
                     if piece_selected := selecting_piece(game.board, coord, active_player):
                         if possible_moves := active_player.all_possible_moves[piece_selected.coord]:
-                            # DRAW ALL ON CHESSBOARD
                             refresh_flag = True
                             coord_selected = coord
                             # translate_to_chess_notation(possible_moves)
-                            # logger.info(f'----{possible_moves=}, {active_player.pins=}')
-                            # logger.info(f'Wybrano coord{coord} mozliwe ruchy na pola {list(possible_moves.keys())}')
 
-                elif coord in possible_moves:  # Wchodzi jezeli jest mozliwosc ruchu dla zaznaczonej figury
+                elif coord in possible_moves:
                     logger.info(f'{str(active_player)}'
                                 f' {str(piece_selected)}'
                                 f' {coord=}'
                                 f' {coord_selected}')
                     game.new_en_passant_coord = None
                     """WYKONYWANIE RUCHU"""
-                    # print(inactive_player.pieces[])
                     if game.board[coord[1]][coord[0]] in inactive_player.pieces:
                         inactive_player.pieces.remove(game.board[coord[1]][coord[0]])
                     game.making_move((coord_selected, coord))
@@ -83,7 +68,7 @@ def main():
                     game.en_passant_coord = game.new_en_passant_coord
                     game.move_counter+=1
 
-                    logger.info(f'\n{game}')
+                    logger.info(f'RUCH NR {game.move_counter} \n{game}')
 
                     '''CZYSZCZENIE ZWIAZAN I SZACHOWANYCH POL'''
                     active_player.clear_checks_and_pins()
@@ -94,9 +79,9 @@ def main():
                                                                                   inactive_player=inactive_player)
 
                     logger.info(f'{active_player.checks.items()=}'
-                                f' {active_player.pins.items()=}'
+                                f' {active_player.pins.items()=}\n'
                                 f'{inactive_player.checks.items()=}'
-                                f' {inactive_player.pins.items()=}')
+                                f' {inactive_player.pins.items()=}\n')
                     print('CHECK!!!') if inactive_player.checks else ''
                     '''ZMIANA TUR'''
                     active_player, inactive_player = handling_players_order(players_dict, player_order_list)
